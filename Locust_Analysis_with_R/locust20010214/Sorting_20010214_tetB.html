@@ -1,0 +1,4824 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2016-12-07 mer. 21:16 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sorting data set 20010214 tetrode B (channels 2, 3, 5, 7)</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Christophe Pouzat" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Sorting data set 20010214 tetrode B (channels 2, 3, 5, 7)</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org51855d2">1. Introduction</a>
+<ul>
+<li><a href="#org2972256">1.1. Getting the data</a></li>
+<li><a href="#org74764ae">1.2. Getting the code</a></li>
+</ul>
+</li>
+<li><a href="#orged9ec65">2. Tetrode B (channels 2, 3, 5, 7) analysis</a>
+<ul>
+<li><a href="#org2648b8c">2.1. Loading the data</a></li>
+<li><a href="#orgb7e7a50">2.2. Five number summary</a></li>
+<li><a href="#org5780ef7">2.3. Plot the data</a></li>
+<li><a href="#org688e61a">2.4. Data normalization</a></li>
+<li><a href="#org85a38e4">2.5. Spike detection</a></li>
+<li><a href="#org0117dd2">2.6. Cuts</a></li>
+<li><a href="#org771b528">2.7. Events</a></li>
+<li><a href="#org6c27619">2.8. Removing obvious superposition</a></li>
+<li><a href="#org5f66995">2.9. Dimension reduction</a></li>
+<li><a href="#orgcabfae5">2.10. Exporting for <code>GGobi</code></a></li>
+<li><a href="#orgaad100e">2.11. kmeans clustering with 10</a></li>
+<li><a href="#org9cc91c7">2.12. Long cuts creation</a></li>
+<li><a href="#orge22fa57">2.13. Peeling</a>
+<ul>
+<li><a href="#org00ffd1f">2.13.1. Round 0</a></li>
+<li><a href="#org44befa7">2.13.2. Round 1</a></li>
+</ul>
+</li>
+<li><a href="#org01d7714">2.14. Getting the spike trains</a></li>
+<li><a href="#org61c6ca6">2.15. Getting the inter spike intervals and the forward and backward recurrence times</a>
+<ul>
+<li><a href="#org42387be">2.15.1. ISI distributions</a></li>
+<li><a href="#org9518e6b">2.15.2. Forward and Backward Recurrence Times</a></li>
+</ul>
+</li>
+<li><a href="#org7c890f1">2.16. Making "all at once"</a>
+<ul>
+<li><a href="#orgdcc916d">2.16.1. What should our "all at once" function do?</a></li>
+<li><a href="#org72eb31c">2.16.2. <code>all_at_once</code> definition</a></li>
+<li><a href="#org88c2dcc">2.16.3. Test</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org178aa49">3. Analyzing a sequence of trials</a>
+<ul>
+<li><a href="#orgd92064b">3.1. Create a directory were results get saved</a></li>
+<li><a href="#org82cfa48">3.2. Create a data loading function</a></li>
+<li><a href="#org0198afc">3.3. <code>sort_many_trials</code> definition</a></li>
+<li><a href="#orga278acd">3.4. Diagnostic plot function definitions</a></li>
+</ul>
+</li>
+<li><a href="#org6307755">4. Systematic analysis of the 30 trials from <code>Spontaneous_2</code> backwards</a>
+<ul>
+<li><a href="#orgd5973f4">4.1. Doing the job</a></li>
+<li><a href="#org5eeab98">4.2. Diagnostic plots</a></li>
+<li><a href="#org26c9fbb">4.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orge3fc102">5. 30 trials of <code>Spontaenous_1</code> backwards</a>
+<ul>
+<li><a href="#orge21f5b5">5.1. Do the job</a></li>
+<li><a href="#org2c47be4">5.2. Diagnostic plots</a></li>
+<li><a href="#org805b86b">5.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgc9eabf3">6. 25 trials with <code>Cis-3-Hexen-1-ol</code> (<code>C3H_1</code>)</a>
+<ul>
+<li><a href="#orga81bd2f">6.1. Do the job</a></li>
+<li><a href="#orge16ce70">6.2. Diagnostic plots</a></li>
+<li><a href="#org41299de">6.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgf95496e">7. 25 trials with <code>Citral</code></a>
+<ul>
+<li><a href="#orgc579288">7.1. Do the job</a></li>
+<li><a href="#org1db5534">7.2. Diagnostic plots</a></li>
+<li><a href="#orgff24f3e">7.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgd876eee">8. 25 trials with <code>Vanilla</code></a>
+<ul>
+<li><a href="#org860345d">8.1. Do the job</a></li>
+<li><a href="#org504b576">8.2. Diagnostic plots</a></li>
+<li><a href="#org07b119d">8.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org3c88004">9. 25 trials with <code>Octanol</code></a>
+<ul>
+<li><a href="#org9beff4e">9.1. Do the job</a></li>
+<li><a href="#org6c03172">9.2. Diagnostic plots</a></li>
+<li><a href="#org29d1884">9.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org0be2e49">10. 25 trials with <code>Mint</code></a>
+<ul>
+<li><a href="#org615db9b">10.1. Do the job</a></li>
+<li><a href="#orgb2311d4">10.2. Diagnostic plots</a></li>
+<li><a href="#org6ba1019">10.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org9ca2496">11. 25 trials with <code>C3H_2</code></a>
+<ul>
+<li><a href="#org1b572e2">11.1. Do the job</a></li>
+<li><a href="#org608eaf4">11.2. Diagnostic plots</a></li>
+<li><a href="#orgb706b35">11.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgdc38acf">12. 30 trials of <code>Spontaneous_3</code></a>
+<ul>
+<li><a href="#org2f15f93">12.1. Redefine <code>get_tetrode_data</code></a></li>
+<li><a href="#org6e37a1a">12.2. Do the job</a></li>
+<li><a href="#org83afcde">12.3. Diagnostic plots</a></li>
+<li><a href="#org08562b3">12.4. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org522af8d">13. 30 trials of <code>Spontaneous_4</code></a>
+<ul>
+<li><a href="#org7555369">13.1. Do the job</a></li>
+<li><a href="#orgc665781">13.2. Diagnostic plots</a></li>
+<li><a href="#org9a22525">13.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgbfaa131">14. 30 trials of <code>C3H_3</code></a>
+<ul>
+<li><a href="#orga88e169">14.1. Do the job</a></li>
+<li><a href="#org7cdba24">14.2. Diagnostic plots</a></li>
+<li><a href="#org6a2f958">14.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgde9064f">15. 10 trials of <code>C3H_4</code></a>
+<ul>
+<li><a href="#org279320d">15.1. Do the job</a></li>
+<li><a href="#org75e4c23">15.2. Diagnostic plots</a></li>
+<li><a href="#org78fa65f">15.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org30615a4">16. 30 trials of <code>C3H_5</code></a>
+<ul>
+<li><a href="#org3c80ccf">16.1. Do the job</a></li>
+<li><a href="#org5da0cd3">16.2. Diagnostic plots</a></li>
+<li><a href="#orge2977cb">16.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org4d4f167">17. 30 trials of <code>C3H_6</code></a>
+<ul>
+<li><a href="#orgd1992e3">17.1. Do the job</a></li>
+<li><a href="#orge5c47e2">17.2. Diagnostic plots</a></li>
+<li><a href="#orgdb429db">17.3. Save results</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org51855d2" class="outline-2">
+<h2 id="org51855d2"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This is the description of how to do the (spike) sorting of tetrode B (channels 2, 3, 5, 7) from data set <code>locust20010214</code>.
+</p>
+</div>
+
+<div id="outline-container-org2972256" class="outline-3">
+<h3 id="org2972256"><span class="section-number-3">1.1</span> Getting the data</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+The data are in file <code>locust20010214.hdf5</code> located on <a href="https://zenodo.org/record/21589">zenodo</a> and can be downloaded interactivelly with a web browser or by typing at the command line:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh" id="org3c375cd">wget https://zenodo.org/record/21589/files/locust20010214_part1.hdf5
+wget https://zenodo.org/record/21589/files/locust20010214_part2.hdf5
+</pre>
+</div>
+
+<p>
+In the sequel I will assume that <code>R</code> has been started in the directory where the data were downloaded (in other words, the working direcory should be the one containing the data.
+</p>
+
+<p>
+The data are in <a href="https://support.hdfgroup.org/HDF5/">HDF5</a> format and the easiest way to get them into <code>R</code> is to install the <code>rhdf5</code> package from <a href="http://www.bioconductor.org/packages/release/bioc/html/rhdf5.html">Bioconductor</a>. Once the installation is done, the library is loaded into <code>R</code> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org41a3e7f">library(rhdf5)
+</pre>
+</div>
+
+<p>
+We can then get a (long and detailed) listing of our data file content with (result not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org04badee">h5ls("locust20010214_part1.hdf5")
+</pre>
+</div>
+
+<p>
+We can get the content of <code>LabBook</code> <code>metadata</code> <i>from the shell</i> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org69e554c">h5dump -a "LabBook" locust20010214_part1.hdf5
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org74764ae" class="outline-3">
+<h3 id="org74764ae"><span class="section-number-3">1.2</span> Getting the code</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+The code can be sourced as follows:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7616f71">
+source("https://raw.githubusercontent.com/christophe-pouzat/zenodo-locust-datasets-analysis/master/R_Sorting_Code/sorting_with_r.R")
+</pre>
+</div>
+
+<p>
+A description of the functions contained in this file can be found at the following address: <a href="http://xtof.perso.math.cnrs.fr/locust.html">http://xtof.perso.math.cnrs.fr/locust.html</a>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orged9ec65" class="outline-2">
+<h2 id="orged9ec65"><span class="section-number-2">2</span> Tetrode B (channels 2, 3, 5, 7) analysis</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We now want to get our "model", that is a dictionnary of waveforms (one waveform per neuron and per recording site). To that end we are going to use the <i>last</i> 60 s of data contained in the <code>Spontaneous_2</code> <code>Group</code> (in <code>HDF5</code> jargon). 
+</p>
+</div>
+
+<div id="outline-container-org2648b8c" class="outline-3">
+<h3 id="org2648b8c"><span class="section-number-3">2.1</span> Loading the data</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+So we start by loading the data from channels 2, 3, 5, 7 into <code>R</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org9ed9dd1">lD = rbind(cbind(h5read("locust20010214_part1.hdf5", "/Spontaneous_2/trial_30/ch02"),
+                 h5read("locust20010214_part1.hdf5", "/Spontaneous_2/trial_30/ch03"),
+                 h5read("locust20010214_part1.hdf5", "/Spontaneous_2/trial_30/ch05"),
+                 h5read("locust20010214_part1.hdf5", "/Spontaneous_2/trial_30/ch07")))
+dim(lD)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">431548</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-orgb7e7a50" class="outline-3">
+<h3 id="orgb7e7a50"><span class="section-number-3">2.2</span> Five number summary</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+We get the <a href="https://en.wikipedia.org/wiki/Five-number_summary">Five number summary</a> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge4339ce">summary(lD,digits=2)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Min.   :  98</td>
+<td class="org-left">Min.   : 610</td>
+<td class="org-left">Min.   : 762</td>
+<td class="org-left">Min.   : 475</td>
+</tr>
+
+<tr>
+<td class="org-left">1st Qu.:2011</td>
+<td class="org-left">1st Qu.:2015</td>
+<td class="org-left">1st Qu.:2017</td>
+<td class="org-left">1st Qu.:2014</td>
+</tr>
+
+<tr>
+<td class="org-left">Median :2058</td>
+<td class="org-left">Median :2057</td>
+<td class="org-left">Median :2057</td>
+<td class="org-left">Median :2059</td>
+</tr>
+
+<tr>
+<td class="org-left">Mean   :2055</td>
+<td class="org-left">Mean   :2055</td>
+<td class="org-left">Mean   :2054</td>
+<td class="org-left">Mean   :2056</td>
+</tr>
+
+<tr>
+<td class="org-left">3rd Qu.:2105</td>
+<td class="org-left">3rd Qu.:2099</td>
+<td class="org-left">3rd Qu.:2095</td>
+<td class="org-left">3rd Qu.:2102</td>
+</tr>
+
+<tr>
+<td class="org-left">Max.   :3634</td>
+<td class="org-left">Max.   :3076</td>
+<td class="org-left">Max.   :2887</td>
+<td class="org-left">Max.   :3143</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+It shows that the channels have very similar properties as far as the median and the inter-quartile range (IQR) are concerned. The minimum is much smaller on the first channel. This suggests that the largest spikes are going to be found here (remember that spikes are going mainly downwards).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5780ef7" class="outline-3">
+<h3 id="org5780ef7"><span class="section-number-3">2.3</span> Plot the data</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+We "convert" the data matrix <code>lD</code> into a <code>time series</code> object with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4b76d74">lD = ts(lD,start=0,freq=15e3)
+</pre>
+</div>
+
+<p>
+We can then plot the whole data with (not shown since it makes a very figure):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgcb69b0a">plot(lD)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org688e61a" class="outline-3">
+<h3 id="org688e61a"><span class="section-number-3">2.4</span> Data normalization</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+As always we normalize such that the <a href="https://en.wikipedia.org/wiki/Median_absolute_deviation">median absolute deviation</a> (MAD) becomes 1:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org6cb1115">lD.mad = apply(lD,2,mad)
+lD = t((t(lD)-apply(lD,2,median))/lD.mad)
+lD = ts(lD,start=0,freq=15e3)
+</pre>
+</div>
+
+<p>
+Once this is done we explore interactively the data with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org621f735">explore(lD,col=c("black","grey70"))
+</pre>
+</div>
+
+<p>
+Most spikes can be seen on the 4 recording sites, there are many different spike waveform and the signal to noise ratio is really good!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org85a38e4" class="outline-3">
+<h3 id="org85a38e4"><span class="section-number-3">2.5</span> Spike detection</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+Since the spikes are mainly going downwards, we will detect valleys instead of peaks:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org32cd40e">lDf = -lD
+filter_length = 5
+threshold_factor = 4
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf.mad = apply(lDf,2,mad)
+lDf_mad_original = lDf.mad
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) &lt; thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp0 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp0
+</pre>
+</div>
+
+<pre class="example">
+eventsPos object with indexes of 1950 events. 
+  Mean inter event interval: 221.2 sampling points, corresponding SD: 204.2 sampling points 
+  Smallest and largest inter event intervals: 16 and 2904 sampling points.
+</pre>
+
+
+
+<p>
+Every time a filter length / threshold combination is tried, the detection is checked interactively with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf6bf49c">explore(sp0,lD,col=c("black","grey50"))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0117dd2" class="outline-3">
+<h3 id="org0117dd2"><span class="section-number-3">2.6</span> Cuts</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+We proceed as usual to get the cut length right:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org00167e2">evts = mkEvents(sp0,lD,49,50)
+evts.med = median(evts)
+evts.mad = apply(evts,1,mad)
+plot_range = range(c(evts.med,evts.mad))
+plot(evts.med,type="n",ylab="Amplitude",
+     ylim=plot_range)
+abline(v=seq(0,400,10),col="grey")
+abline(h=c(0,1),col="grey")
+lines(evts.med,lwd=2)
+lines(evts.mad,col=2,lwd=2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/tetB_cut_length.png" alt="tetB_cut_length.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Setting the cut length for the data from tetrode B (channels 2, 3, 5, 7). We see that we need 20 points before the peak and 30 after.</p>
+</div>
+
+<p>
+We see that we need roughly 20 points before the peak and 30 after.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org771b528" class="outline-3">
+<h3 id="org771b528"><span class="section-number-3">2.7</span> Events</h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+We now cut our events:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgbcc109c">evts = mkEvents(sp0,lD,19,30)
+summary(evts)
+</pre>
+</div>
+
+<pre class="example">
+events object deriving from data set: lD.
+ Events defined as cuts of 50 sampling points on each of the 4 recording sites.
+ The 'reference' time of each event is located at point 20 of the cut.
+ There are 1950 events in the object.
+</pre>
+
+
+<p>
+We can as usual visualize the first 200 events with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org6b9e423">evts[,1:200]
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/first_200_evts_tetB.png" alt="first_200_evts_tetB.png" />
+</p>
+<p><span class="figure-number">Figure 2: </span>First 200 events for the data from tetrode B (channels 1, 3, 5, 7).</p>
+</div>
+
+<p>
+There are few superpositions so we try to remove the most obvious ones before doing the dimension reduction.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6c27619" class="outline-3">
+<h3 id="org6c27619"><span class="section-number-3">2.8</span> Removing obvious superposition</h3>
+<div class="outline-text-3" id="text-2-8">
+<p>
+We define function <code>goodEvtsFct</code> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4c67643">goodEvtsFct = function(samp,thr=3) {
+    samp.med = apply(samp,1,median)
+    samp.mad = apply(samp,1,mad)
+    below = samp.med &lt; 0
+    samp.r = apply(samp,2,function(x) {x[below] = 0;x})
+    apply(samp.r,2,function(x) all(abs(x-samp.med) &lt; thr*samp.mad))
+}
+</pre>
+</div>
+
+<p>
+We apply it with a threshold of 8 times the MAD:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge234ec8">goodEvts = goodEvtsFct(evts,8)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org5f66995" class="outline-3">
+<h3 id="org5f66995"><span class="section-number-3">2.9</span> Dimension reduction</h3>
+<div class="outline-text-3" id="text-2-9">
+<p>
+We do a <code>PCA</code> on our good events set:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3c61ae6">evts.pc = prcomp(t(evts[,goodEvts]))
+</pre>
+</div>
+
+<p>
+We look at the projections on the first 4 principle components:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgdce194f">panel.dens = function(x,...) {
+  usr = par("usr")
+  on.exit(par(usr))
+  par(usr = c(usr[1:2], 0, 1.5) )
+  d = density(x, adjust=0.5)
+  x = d$x
+  y = d$y
+  y = y/max(y)
+  lines(x, y, col="grey50", ...)
+}
+pairs(evts.pc$x[,1:4],pch=".",gap=0,diag.panel=panel.dens)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/evts-proj-first-4-pc-tetB.png" alt="evts-proj-first-4-pc-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 3: </span>Events from tetrode B (channels 2, 3, 5, 7) projected onto the first 4 PCs.</p>
+</div>
+
+<p>
+I see at least 10 clusters. We can also look at the projections on the PC pairs defined by the next 4 PCs:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org9f1a09c">pairs(evts.pc$x[,5:8],pch=".",gap=0,diag.panel=panel.dens)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/evts-proj-next-4-pc-tetB.png" alt="evts-proj-next-4-pc-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 4: </span>Events from tetrode B (channels 2, 3, 5, 7) projected onto PC 5 to 8.</p>
+</div>
+
+<p>
+There is not much structure left beyond the 4th PC.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcabfae5" class="outline-3">
+<h3 id="orgcabfae5"><span class="section-number-3">2.10</span> Exporting for <code>GGobi</code></h3>
+<div class="outline-text-3" id="text-2-10">
+<p>
+We export the events projected onto the first 8 principle components in <code>csv</code> format:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1c6838a">write.csv(evts.pc$x[,1:8],file="tetB_evts.csv")
+</pre>
+</div>
+
+<p>
+Using the <code>rotation</code> display of <code>GGobi</code> with the first 3 principle components and the <code>2D tour</code> with the first 4 components I see at least 10. So we will start with a <code>kmeans</code> with 10 centers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaad100e" class="outline-3">
+<h3 id="orgaad100e"><span class="section-number-3">2.11</span> kmeans clustering with 10</h3>
+<div class="outline-text-3" id="text-2-11">
+<div class="org-src-container">
+<pre class="src src-R" id="org90ea1d2">nbc=10
+set.seed(20110928,kind="Mersenne-Twister")
+km = kmeans(evts.pc$x[,1:4],centers=nbc,iter.max=100,nstart=100)
+label = km$cluster
+cluster.med = sapply(1:nbc, function(cIdx) median(evts[,goodEvts][,label==cIdx]))
+sizeC = sapply(1:nbc,function(cIdx) sum(abs(cluster.med[,cIdx])))
+newOrder = sort.int(sizeC,decreasing=TRUE,index.return=TRUE)$ix
+cluster.mad = sapply(1:nbc, function(cIdx) {ce = t(evts[,goodEvts]);ce = ce[label==cIdx,];apply(ce,2,mad)})
+cluster.med = cluster.med[,newOrder]
+cluster.mad = cluster.mad[,newOrder]
+labelb = sapply(1:nbc, function(idx) (1:nbc)[newOrder==idx])[label]
+</pre>
+</div>
+
+
+<p>
+We write a new <code>csv</code> file with the data and the labels:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org6580215">write.csv(cbind(evts.pc$x[,1:4],labelb),file="tetB_sorted.csv")
+</pre>
+</div>
+
+<p>
+It gives what was expected.
+</p>
+
+<p>
+We get a plot showing the events attributed to each of the first 5 units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb59cdc1">layout(matrix(1:5,nr=5))
+par(mar=c(1,1,1,1))
+for (i in (1:5)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/kmeans-10-evts-from-each-of-first-5-tetB.png" alt="kmeans-10-evts-from-each-of-first-5-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 5: </span>The events of the first five clusters of tetrode B</p>
+</div>
+
+<p>
+We get a plot showing the events attributed to each of the last 5 units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org62413dc">layout(matrix(1:5,nr=5))
+par(mar=c(1,1,1,1))
+for (i in (6:10)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/kmeans-10-evts-from-each-of-last-5-tetB.png" alt="kmeans-10-evts-from-each-of-last-5-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 6: </span>The events of the last five clusters of tetrode B</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org9cc91c7" class="outline-3">
+<h3 id="org9cc91c7"><span class="section-number-3">2.12</span> Long cuts creation</h3>
+<div class="outline-text-3" id="text-2-12">
+<p>
+For the peeling process we need templates that start and end at 0 (we will otherwise generate artifacts when we subtract). We proceed "as usual" with (I tried first with the default value for parameters <code>before</code> and <code>after</code> but I reduced their values after looking at the centers, see the next figure):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfc3fbd6">c_before = 49
+c_after = 80
+centers = lapply(1:nbc, function(i)
+    mk_center_list(sp0[goodEvts][labelb==i],lD,
+                   before=c_before,after=c_after))
+names(centers) = paste("Cluster",1:nbc)
+</pre>
+</div>
+
+
+<p>
+We then make sure that our cuts are long enough by looking at them (the first 5):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3fa0056">layout(matrix(1:5,nr=5))
+par(mar=c(1,4,1,1))
+the_range=c(min(sapply(centers,function(l) min(l$center))),
+            max(sapply(centers,function(l) max(l$center))))
+for (i in 1:5) {
+    template = centers[[i]]$center
+    plot(template,lwd=2,col=2,
+         ylim=the_range,type="l",ylab="")
+    abline(h=0,col="grey50")
+    abline(v=(1:2)*(c_before+c_after)+1,col="grey50")
+    lines(filter(template,rep(1,filter_length)/filter_length),
+          col=1,lty=3,lwd=2)
+    abline(h=-threshold_factor,col="grey",lty=2,lwd=2)
+    lines(centers[[i]]$centerD,lwd=2,col=4)
+}
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/centers-10u-first-5-tetB.png" alt="centers-10u-first-5-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 7: </span>The first five templates (red) together with their first derivative (blue) all with the same scale. The dashed black curve show the templates filtered with the filter used during spike detection and the horizontal dashed grey line shows the detection threshold.</p>
+</div>
+
+<p>
+The last five:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7dcfde6">layout(matrix(1:5,nr=5))
+par(mar=c(1,4,1,1))
+the_range=c(min(sapply(centers,function(l) min(l$center))),
+            max(sapply(centers,function(l) max(l$center))))
+for (i in 6:10) {
+    template = centers[[i]]$center
+    plot(template,lwd=2,col=2,
+         ylim=the_range,type="l",ylab="")
+    abline(h=0,col="grey50")
+    abline(v=(1:2)*(c_before+c_after)+1,col="grey50")
+    lines(filter(template,rep(1,filter_length)/filter_length),
+          col=1,lty=3,lwd=2)
+    abline(h=-threshold_factor,col="grey",lty=2,lwd=2)
+    lines(centers[[i]]$centerD,lwd=2,col=4)
+}
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/centers-10u-last-5-tetB.png" alt="centers-10u-last-5-tetB.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/centers-10u-last-4-tetB.png" alt="centers-10u-last-4-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 9: </span>The last five templates (red) together with their first derivative (blue) all with the same scale. The dashed black curve show the templates filtered with the filter used during spike detection and the horizontal dashed grey line shows the detection threshold.</p>
+</div>
+
+<p>
+We see that the last three units won't reliably pass our threshold&#x2026;
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge22fa57" class="outline-3">
+<h3 id="orge22fa57"><span class="section-number-3">2.13</span> Peeling</h3>
+<div class="outline-text-3" id="text-2-13">
+<p>
+We can now do the peeling.
+</p>
+</div>
+
+<div id="outline-container-org00ffd1f" class="outline-4">
+<h4 id="org00ffd1f"><span class="section-number-4">2.13.1</span> Round 0</h4>
+<div class="outline-text-4" id="text-2-13-1">
+<p>
+We classify, predict, subtract and check how many non-classified events we get:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga975abb">round0 = lapply(as.vector(sp0),classify_and_align_evt,
+                data=lD,centers=centers,
+                before=c_before,after=c_after)
+pred0 = predict_data(round0,centers,data_length = dim(lD)[1])
+lD_1 = lD - pred0
+sum(sapply(round0, function(l) l[[1]] == '?'))
+</pre>
+</div>
+
+<pre class="example">
+19
+</pre>
+
+<p>
+We can see the difference before / after peeling for the data between 0.9 and 1.0 s:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga789f0a">ii = 1:1500 + 0.9*15000
+tt = ii/15000
+par(mar=c(1,1,1,1))
+plot(tt, lD[ii,1], axes = FALSE,
+     type="l",ylim=c(-100,20),
+     xlab="",ylab="")
+lines(tt, lD_1[ii,1], col='red')
+lines(tt, lD[ii,2]-30, col='black')
+lines(tt, lD_1[ii,2]-30, col='red')
+lines(tt, lD[ii,3]-50, col='black')
+lines(tt, lD_1[ii,3]-50, col='red')
+lines(tt, lD[ii,4]-80, col='black')
+lines(tt, lD_1[ii,4]-80, col='red')
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/peeling-0-10u-tetB.png" alt="peeling-0-10u-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 10: </span>The first peeling illustrated on 100 ms of data, the raw data are in black and the first subtration in red.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org44befa7" class="outline-4">
+<h4 id="org44befa7"><span class="section-number-4">2.13.2</span> Round 1</h4>
+<div class="outline-text-4" id="text-2-13-2">
+<p>
+We keep going, using the subtracted data <code>lD_1</code> as "raw data", detecting on all sites using the original <code>MAD</code> for normalization:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf2acfef">lDf = -lD_1
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) &lt; thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp1 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp1
+</pre>
+</div>
+
+<pre class="example">
+eventsPos object with indexes of 216 events. 
+  Mean inter event interval: 1974.81 sampling points, corresponding SD: 2223.81 sampling points 
+  Smallest and largest inter event intervals: 16 and 15982 sampling points.
+</pre>
+
+
+<p>
+We classify, predict, subtract and check how many non-classified events we get:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgec05414">round1 = lapply(as.vector(sp1),classify_and_align_evt,
+                data=lD_1,centers=centers,
+                before=c_before,after=c_after)
+pred1 = predict_data(round1,centers,data_length = dim(lD)[1])
+lD_2 = lD_1 - pred1
+sum(sapply(round1, function(l) l[[1]] == '?'))
+</pre>
+</div>
+
+<pre class="example">
+21
+</pre>
+
+<p>
+We look at what's left with (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb8dac5a">explore(sp1,lD_2,col=c("black","grey50"))
+</pre>
+</div>
+
+<p>
+There is some stuff left but the big guys have disappeared so we decide to stop here.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org01d7714" class="outline-3">
+<h3 id="org01d7714"><span class="section-number-3">2.14</span> Getting the spike trains</h3>
+<div class="outline-text-3" id="text-2-14">
+<div class="org-src-container">
+<pre class="src src-R" id="org9a04536">round_all = c(round0,round1)
+spike_trains = lapply(paste("Cluster",1:nbc),
+                      function(cn) sort(sapply(round_all[sapply(round_all,
+                                                           function(l) l[[1]]==cn)],
+                                          function(l) l[[2]]+l[[3]])))
+names(spike_trains) = paste("Cluster",1:nbc)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org61c6ca6" class="outline-3">
+<h3 id="org61c6ca6"><span class="section-number-3">2.15</span> Getting the inter spike intervals and the forward and backward recurrence times</h3>
+<div class="outline-text-3" id="text-2-15">
+</div><div id="outline-container-org42387be" class="outline-4">
+<h4 id="org42387be"><span class="section-number-4">2.15.1</span> ISI distributions</h4>
+<div class="outline-text-4" id="text-2-15-1">
+<p>
+We first get the <code>ISI</code> (inter spike intervals) of each unit:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc75064f">isi = sapply(spike_trains, diff)
+names(isi) = names(spike_trains)
+</pre>
+</div>
+
+<p>
+We define a <code>plot_isi</code> function that plots the <code>ECDF</code> (empirical cumulative distribution function) of the <code>ISI</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org8907886">plot_isi = function(isi, ## vector of ISIs
+                    xlab="ISI (s)",
+                    ylab="ECFD",
+                    xlim=c(0,0.5), 
+                    sampling_frequency=15000,
+                    ... ## additional arguments passed to plot
+                    ) {
+    isi = sort(isi)/sampling_frequency
+    n = length(isi)
+    plot(isi,(1:n)/n,type="s",
+         xlab=xlab,ylab=ylab,
+         xlim=xlim,...)
+}
+</pre>
+</div>
+
+<p>
+We get the ISI ECDF for the units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org22e8837">layout(matrix(1:(nbc+nbc %% 2),nr=ceiling(nbc/2)))
+par(mar=c(4,5,6,1))
+for (cn in names(isi)) plot_isi(isi[[cn]],main=cn)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/isi-ecdf-10u-tetB.png" alt="isi-ecdf-10u-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 11: </span>ISI ECDF for the ten units.</p>
+</div>
+
+<p>
+The first 7 look great the last three  are clearly multi-unit.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9518e6b" class="outline-4">
+<h4 id="org9518e6b"><span class="section-number-4">2.15.2</span> Forward and Backward Recurrence Times</h4>
+<div class="outline-text-4" id="text-2-15-2">
+<p>
+The forward recurrence time (<code>FRT</code>) between neuron A and B is the elapsed time between a spike in A and the next spike in B. The backward recurrence time (<code>BRT</code>) is the same thing except that we look for the former spike in B. If A and B are not correlated, the expected density of the FRT is the survival function (1-CDF) of the ISI from B divided by the mean ISI of B (the same holds for the BRT under the null hypothesis after taking the opposite). All that is correct if the data are <i>stationary</i>.
+</p>
+
+<p>
+We define a function <code>get_rt</code> that returns the <code>FRT</code> and <code>BRT</code> given two spike trains:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd257523">get_rt = function(ref_train, 
+                  test_train
+                  ) {
+    res=sapply(ref_train,
+               function(t) c(max(test_train[test_train&lt;=t])-t,
+                             min(test_train[test_train&gt;=t])-t)
+               )
+    res[,!apply(res,2,function(x) any(is.infinite(x)))]
+}
+</pre>
+</div>
+
+<p>
+We define next a function <code>test_rt</code> that plots a variance stabilized version of the histograms of the FRT and BRT minus the variance stabilized version under the null. The variance stabilization version is replacing the histogram bin counts \(y\) by \(\sqrt{y} + \sqrt{y+1}\). This transformation stabilizes the variance at 1.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org51c91e3">test_rt = function(ref_train, 
+                   test_train,
+                   sampling_frequency=15000,
+                   nbins=50, ## the number of breaks in the histogram
+		   single_trial_duration = ceiling(max(c(ref_train,test_train))/sampling_frequency), 
+                   xlab="Recurrence time (s)",
+                   ylab="Stabilized counts - stabilized expected counts",
+		   subdivisions = 10000, ## argument of integrate
+                   ... ## additional parameters passed to plot
+                   ) {
+    rt = ref_train/sampling_frequency
+    tt = test_train/sampling_frequency
+    rt_L = vector("list",0)
+    tt_L = vector("list",0)
+    idx_max = max(c(rt,tt))%/%single_trial_duration
+    if ( idx_max == 0) {
+        rt_L = list(rt)
+        tt_L = list(tt)
+    } else {
+        idx = 0
+        while (idx &lt;= idx_max) {
+            start_trial_time = idx*single_trial_duration
+            end_trial_time = start_trial_time + single_trial_duration
+            rt_t = rt[start_trial_time &lt;= rt &amp; rt &lt; end_trial_time]
+            tt_t = tt[start_trial_time &lt;= tt &amp; tt &lt; end_trial_time]
+            if (length(rt_t) &gt; 0 &amp;&amp; length(tt_t) &gt; 0) {
+                rt_L = c(rt_L,list(rt_t-start_trial_time))
+                tt_L = c(tt_L,list(tt_t-start_trial_time))
+            }
+            idx = idx + 1
+        }
+    }
+    tt_isi_L = lapply(tt_L,diff)
+    it = unlist(tt_isi_L)
+    p_it=ecdf(it) ## ECDF of ISI from test
+    mu_it=mean(it)
+    s_it=function(t) (1-p_it(t))/mu_it ## expected density of FRT/BRT under the null
+    ## Get the BRT and FRT
+    res = lapply(1:length(rt_L),
+                 function(idx) {
+                     rt_t = rt_L[[idx]]
+                     tt_t = tt_L[[idx]]
+                     rt_t = rt_t[min(tt_t) &lt; rt_t &amp; rt_t &lt; max(tt_t)]
+                     RT = sapply(rt_t,
+                                 function(t) c(max(tt_t[tt_t&lt;=t])-t,
+                                               min(tt_t[tt_t&gt;=t])-t)
+                                 )
+                 })
+    frt = sort(unlist(lapply(res, function(l) l[2,])))
+    brt = sort(-unlist(lapply(res, function(l) l[1,])))
+    n = length(frt)
+    frt_h = hist(frt,breaks=nbins,plot=FALSE)
+    frt_c_s = sqrt(frt_h$counts)+sqrt(frt_h$counts+1) ## stabilized version of the FRT counts
+    ## expected FRT counts under the null
+    frt_c_e = sapply(1:(length(frt_h$breaks)-1),
+                     function(i) integrate(s_it,frt_h$breaks[i],frt_h$breaks[i+1],subdivisions = subdivisions)$value
+                     )
+    frt_c_e_s = sqrt(frt_c_e*n) + sqrt(frt_c_e*n+1) ## stabilized version of the expected FRT counts
+    brt_h = hist(brt,breaks=nbins,plot=FALSE)
+    brt_c_s = sqrt(brt_h$counts)+sqrt(brt_h$counts+1) ## stabilized version of the BRT counts
+    ## expected BRT counts under the null
+    brt_c_e = sapply(1:(length(brt_h$breaks)-1),
+                     function(i) integrate(s_it,brt_h$breaks[i],brt_h$breaks[i+1],subdivisions = subdivisions)$value
+                     )
+    brt_c_e_s = sqrt(brt_c_e*n) + sqrt(brt_c_e*n+1) ## stabilized version of the expected BRT counts
+    X = c(rev(-brt_h$mids),frt_h$mids)
+    Y = c(rev(brt_c_s-brt_c_e_s),frt_c_s-frt_c_e_s)
+    plot(X,Y,type="n",
+         xlab=xlab,
+         ylab=ylab,
+         ...)
+    abline(h=0,col="grey")
+    abline(v=0,col="grey")
+    lines(X,Y,type="s")
+}
+</pre>
+</div>
+
+<p>
+Notice that <code>get_rt</code> is included in <code>test_rt</code> so we don't really need the former anymore.
+</p>
+
+<p>
+On the data at hand that gives for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org9247c58">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(spike_trains[[i]],
+                    spike_trains[[j]],
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/rt-test-10u-tetB.png" alt="rt-test-10u-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 12: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distrution agaisnt the null hypothesis (no interaction). If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+
+<p>
+On this time scale with this number of events, we do not see signs of interactions.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7c890f1" class="outline-3">
+<h3 id="org7c890f1"><span class="section-number-3">2.16</span> Making "all at once"</h3>
+<div class="outline-text-3" id="text-2-16">
+<p>
+Now that we have classified a single trial we would like to classify the subsequent ones (from the same experiment and the same tetrode) without re-estimating the model every time. If the recording conditions were perfectly stable we could proceed rather easily and in fact to the job in parallel. There are nevertheless few sources of variability we should be ready to cope with:
+</p>
+
+<ul class="org-ul">
+<li>First and foremost we can observe a slow drift of the electrodes inducing a change in the relative positions of the neurons and the electrodes. This results in a change of the waveform generated by the neurons on the different recording sites. Since these drifts usually occur on a slow time scale (several minutes) the easiest way to deal with them is to <i>process the data sequentially, in the order in which they were recorded</i> (that precludes the parallel processing alluded to above) and to make the templates evolve slowly by computing, at the end of each trial a weighted average of the templates just used and of the ones obtained by averaging the well isolated events that were just classified.</li>
+<li>A neuron can disappear (because it dies&#x2013;don't forget that our probes are large and damage the neurons upon insertion&#x2013;or because of the drift) or appear (because of the drift or "something else" like an hormonal regulation). In the latter case, the model (list of templates) should be updated to include a new element. In any case, the way to detect these appearances / disappearances is to monitor at the end of each trial classification the number of spikes attributed to each neuron of the model as well as the number of unclassified events.</li>
+</ul>
+</div>
+
+<div id="outline-container-orgdcc916d" class="outline-4">
+<h4 id="orgdcc916d"><span class="section-number-4">2.16.1</span> What should our "all at once" function do?</h4>
+<div class="outline-text-4" id="text-2-16-1">
+<p>
+The first thing is to print the five-number summary so that if something went really wrong (amplifier saturation, large noise increase) it will be readily detected. It is then a good idea to print after each peeling round the total number of detected events, the number of events attributed to each neuron and the number of unclassified events. At the end we want to print these same numbers obtained from the whole peeling procedure. The function will also return in a list the following elements:
+</p>
+
+<ul class="org-ul">
+<li><b>prediction</b>: A predicted trace (the overall version of the previous <code>predX</code>).</li>
+<li><b>residual</b>: A residual trace (the data minus the prediction).</li>
+<li><b>classification</b>: The <code>round_all</code> object above.</li>
+<li><b>unknown</b>: An <code>events</code> object containing the unclassified events (for quick monitoring in case of problems).</li>
+<li><b>centers</b>: A version of <code>centers</code> computed from the data just analyzed (so that the user can make a weighted average at will).</li>
+<li><b>counts</b>: A vector with the total number of events, the number of events from each neuron and the number of unclassified events.</li>
+</ul>
+
+<p>
+Argument <code>verbose</code> controls the verbosity: if 0 nothing is printed to the <code>stdout</code>; if 1 the final results are printed; if 2 (default) the final and intermediate (following each peeling round) results are printed. A distinction is made between the first peeling round and the subsequent ones that can have different filter lengths (<code>filter_length_1</code> and <code>filter_length</code>) and different <code>minimalDist</code> arguments for the <code>peaks</code> function that is called internally. The channels on which the detection is performed at each peeling round is controlled by the corresponding element of vector <code>detection_cycle</code> (a value 0 for an element means that the detection is performed on all channels). 
+</p>
+</div>
+</div>
+
+<div id="outline-container-org72eb31c" class="outline-4">
+<h4 id="org72eb31c"><span class="section-number-4">2.16.2</span> <code>all_at_once</code> definition</h4>
+<div class="outline-text-4" id="text-2-16-2">
+<p>
+So let us define our function:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga418a80">all_at_once = function(data, ## an unormalized data matrix
+                       centers, ## a list of centers
+                       thres=4*c(1,1), ## threshold vector
+                       filter_length_1=5, ## length of first filter
+                       filter_length=5, ## length of subsequent filters
+                       minimalDist_1=15, ## dead time length imposed at first detection
+                       minimalDist=10, ## dead time length imposed at subsequent detection
+                       before=c_before, ## parameter of centers
+                       after=c_after, ## parameter of centers
+                       detection_cycle=c(0,1,2,3,4), ## where is detection done during the peeling
+                       verbose=2 ## verbosity level
+                       ) {
+    n_samples = dim(data)[1] ## Number of sample points
+    n_chan = dim(data)[2] ## Number of channels
+    n_rounds = length(detection_cycle)
+    if (verbose &gt; 0) {
+        ## print five number summary
+        cat("The five number summary is:\n")
+        print(summary(data,digits=2))
+        cat("\n")
+    }
+    ## normalize the data
+    data.mad = apply(data,2,mad)
+    data = t((t(data)-apply(data,2,median))/data.mad)
+    filtered_data_mad = sapply(c(filter_length_1,filter_length),
+                               function(l) {
+                                   lDf = -data
+                                   lDf = filter(lDf,rep(1,l)/l)
+                                   lDf[is.na(lDf)] = 0
+                                   apply(lDf,2,mad)
+                               })
+    ## Define local function detecting spikes
+    get_sp = function(dataM,
+                      f_length,
+                      MAD,
+                      site_idx=0,
+                      minimalDist=15) {
+        lDf = -dataM
+        lDf = filter(lDf,rep(1,f_length)/f_length)
+        lDf[is.na(lDf)] = 0
+        lDf = t(t(lDf)/MAD)
+        bellow.thrs = t(t(lDf) &lt; thres)
+        lDfr = lDf
+        lDfr[bellow.thrs] = 0
+        if (site_idx == 0)
+            res = peaks(apply(lDfr,1,sum),minimalDist)
+        else
+            res = peaks(lDfr[,site_idx],minimalDist)
+        res[res&gt;before &amp; res &lt; dim(dataM)[1]-after]
+    }
+    
+    out_names = c(names(centers),"?") ## Possible names for classification
+    data0 = data ## The normalized version of the data
+    for (r_idx in 1:n_rounds) {
+        s_idx = detection_cycle[r_idx]
+        if (verbose &gt; 1 &amp;&amp; s_idx==0)
+            cat(paste("Doing now round",r_idx-1,"detecting on all sites\n"))
+        if (verbose &gt; 1 &amp;&amp; s_idx!=0)
+            cat(paste("Doing now round",r_idx-1,"detecting on site",s_idx,"\n"))
+        sp = get_sp(dataM=data,
+                    f_length=ifelse(r_idx==1,filter_length_1,filter_length),
+                    MAD=filtered_data_mad[,ifelse(r_idx==1,1,2)],
+                    site_idx=s_idx,
+                    minimalDist=ifelse(r_idx==1,minimalDist_1,minimalDist))
+        if (length(sp)==0) next
+        new_round = lapply(as.vector(sp),classify_and_align_evt,
+                           data=data,centers=centers,
+                           before=before,after=after)
+        pred = predict_data(new_round,centers,
+                            nb_channels = n_chan,
+                            data_length = n_samples)
+        data = data - pred
+        res = sapply(out_names,
+                     function(n) sum(sapply(new_round, function(l) l[[1]] == n)))
+        res = c(length(sp),res)
+        names(res) = c("Total",out_names)
+        if (verbose &gt; 1) {
+            print(res)
+            cat("\n")
+        }
+        if (r_idx==1)
+            round_all = new_round
+        else
+            round_all = c(round_all,new_round)
+    }
+
+    ## Get the global prediction
+    pred = predict_data(round_all,centers,
+                        nb_channels=n_chan,
+                        data_length=n_samples)
+    ## Get the residuals
+    resid = data0 - pred
+    ## Repeat inital detection on resid
+    sp = get_sp(dataM=resid,
+                f_length=filter_length_1,
+		MAD=filtered_data_mad[,1],
+                site_idx=detection_cycle[1],
+                minimalDist=minimalDist_1)
+    ## make events objects from this stuff
+    unknown = mkEvents(sp,resid,before,after)
+    ## get global counts
+    res = sapply(out_names,
+                 function(n) sum(sapply(round_all, function(l) l[[1]] == n)))
+    res["?"] = length(sp)
+    res=c(sum(res),res)
+    names(res) = c("Total",out_names)
+    if (verbose &gt; 0) {
+        cat("Global counts at classification's end:\n")
+        print(res)
+    }
+    ## Get centers
+    obs_nb = lapply(out_names[-length(out_names)],
+                    function(cn) sum(sapply(round_all, function(l) l[[1]]==cn)))
+    names(obs_nb) = out_names[-length(out_names)]
+    spike_trains = lapply(out_names[-length(out_names)],
+                          function(cn) {
+                              if (obs_nb[cn] &lt;= 1)
+                                  return(numeric(0))
+                              else
+                                  res = sapply(round_all[sapply(round_all, function(l) l[[1]]==cn)],
+                                               function(l)
+                                                   round(l[[2]]+l[[3]]))
+                              res[res&gt;0 &amp; res&lt;n_samples]
+                          }
+                              )    
+    centersN = lapply(1:length(spike_trains),
+                      function(st_idx) {
+                          if (length(spike_trains[[st_idx]]) == 0)
+                              centers[[st_idx]]
+                          else
+                              mk_center_list(spike_trains[[st_idx]],data0,
+                                             before=before,after=after)
+                      }
+                      )
+    names(centersN) = out_names[-length(out_names)]
+    list(prediction=pred,
+         residual=resid,
+         counts=res,
+         unknown=unknown,
+         centers=centersN,
+         classification=round_all)
+}
+</pre>
+</div>
+
+<p>
+Argument <code>verbose</code> controls the level of "verbosity": if 0 nothing is printed to the <code>stdout</code>; if 1 the final results are printed; if 2 (default) the final and intermediate (following each peeling round) results are printed.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org88c2dcc" class="outline-4">
+<h4 id="org88c2dcc"><span class="section-number-4">2.16.3</span> Test</h4>
+<div class="outline-text-4" id="text-2-16-3">
+<p>
+We test the function with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org45c6a80">## We need again an un-normalized version of the data
+ref_data = rbind(cbind(h5read("locust20010214_part1.hdf5", "/Spontaneous_2/trial_30/ch02"),
+                       h5read("locust20010214_part1.hdf5", "/Spontaneous_2/trial_30/ch03"),
+                       h5read("locust20010214_part1.hdf5", "/Spontaneous_2/trial_30/ch05"),
+                       h5read("locust20010214_part1.hdf5", "/Spontaneous_2/trial_30/ch07")))
+## We can now use our function
+aao=all_at_once(data=ref_data, centers, thres=threshold_factor*c(1,1,1,1), 
+                filter_length_1=filter_length, filter_length=filter_length, 
+                minimalDist_1=15, minimalDist=15, 
+                before=c_before, after=c_after, 
+                detection_cycle=c(0,0), verbose=2)
+</pre>
+</div>
+
+<pre class="example">
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   :  98   Min.   : 610   Min.   : 762   Min.   : 475  
+ 1st Qu.:2011   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2099   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :3634   Max.   :3076   Max.   :2887   Max.   :3143  
+
+Doing now round 0 detecting on all sites
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1950        156        119         84         77        202         48 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       126        285        401        433         19 
+
+Doing now round 1 detecting on all sites
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+       216          0          1          1          2          9          6 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+         3         44         51         78         21 
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2185        156        120         85         79        211         54 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       129        329        452        511         59
+</pre>
+
+
+
+
+<p>
+We see that we are getting back the numbers we obtained before step by step.
+</p>
+
+<p>
+We can compare the "old" and "new" centers with (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3a5c656">layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,4,1,1))
+for (i in 1:nbc) {
+    plot(centers[[i]]$center,lwd=2,col=2,
+         ylim=the_range,type="l")
+    abline(h=0,col="grey50")
+    abline(v=(c_before+c_after)+1,col="grey50")
+    lines(aao$centers[[i]]$center,lwd=1,col=4)
+}
+</pre>
+</div>
+
+<p>
+They are not exactly identical since the new version is computed with all events (superposed or not) attributed to each neuron.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org178aa49" class="outline-2">
+<h2 id="org178aa49"><span class="section-number-2">3</span> Analyzing a sequence of trials</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-orgd92064b" class="outline-3">
+<h3 id="orgd92064b"><span class="section-number-3">3.1</span> Create a directory were results get saved</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+We will carry out an analysis of sequences of 30/25 trials with a given odor. At the end of the analysis of the sequence we will save some intermediate <code>R</code> object in a directory we are now creating.:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgff5d913">if (!dir.exists("tetB_analysis"))
+    dir.create("tetB_analysis")
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org82cfa48" class="outline-3">
+<h3 id="org82cfa48"><span class="section-number-3">3.2</span> Create a data loading function</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+We want to write a function that takes a trial number and stimulus name and returns a matrix containing stereode Ca  (channels 9, 11) data for this trial. The only little trick the function must include is the fact that a number <code>x</code> smaller than 10 appears in the data set name as <code>0x</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org05bf8ee">get_tetrode_data = function(trial_idx,stim="Spontaneous_1") {
+    prefix = ifelse(trial_idx&lt;10,
+                    paste0("/",stim,"/trial_0",trial_idx),
+                    paste0("/",stim,"/trial_",trial_idx)
+                    )
+    cbind(h5read("locust20010214_part1.hdf5", paste0(prefix,"/ch02")),
+          h5read("locust20010214_part1.hdf5", paste0(prefix,"/ch03")),
+          h5read("locust20010214_part1.hdf5", paste0(prefix,"/ch05")),
+          h5read("locust20010214_part1.hdf5", paste0(prefix,"/ch07")))
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0198afc" class="outline-3">
+<h3 id="org0198afc"><span class="section-number-3">3.3</span> <code>sort_many_trials</code> definition</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+We define now function <code>sort_many_trials</code>. This function takes the following formal parameters:
+</p>
+
+<ul class="org-ul">
+<li><b>inter_trial_time</b>: the time (<i>in sample points</i>) between two successive trials. Example <code>10*15000</code>.</li>
+<li><b>get_data_fct</b>: a function loading the data of a single trial (like <code>get_stereode_data</code> we just defined). This function should take a trial number as its first argument and a sequence name as its second. Example <code>get_stereode_data</code>.</li>
+<li><b>stim_name</b>: the sequence name making the second argument of function <code>get_data_fct</code>. Example "1-Hexanol".</li>
+<li><b>trial_nbs</b>: a vector containing the indices of the trials to sort. Example <code>1:30</code>.</li>
+<li><b>centers</b>: a list like the <code>centers</code> list above. Example <code>aao$centers</code>.</li>
+<li><b>counts</b>:  a vector with the number of counts each unit got at the previous stage. Example <code>aao$counts</code>.</li>
+<li><b>all_at_once_call_list</b>: a named list with the arguments used in the previous call to all at once except the first two.</li>
+<li><b>layout_matrix</b>: a matrix controlling the layout of the diagnostic plots generated while the function is running.</li>
+<li><b>new_weight_in_update</b>: the maximal weight of the new template in the estimation of the current one.</li>
+</ul>
+
+<p>
+The function returns a list with the following elements:
+</p>
+
+<ul class="org-ul">
+<li><b>centers</b>: the last estimation of the templates.</li>
+<li><b>counts</b>: the last counts.</li>
+<li><b>centers_L</b>: a list of matrices. Each matrix contains the successive template for each neuron (used to track template evolution).</li>
+<li><b>counts_M</b>: a matrix with the successive counts.</li>
+<li><b>spike_trains</b>: a list of spike trains, one per neuron.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc5ed276">sort_many_trials = function(inter_trial_time,
+                            get_data_fct,
+                            stim_name,
+                            trial_nbs,
+                            centers,
+                            counts,
+                            all_at_once_call_list=list(thres=4*c(1,1), 
+                                                       filter_length_1=5, filter_length=3, 
+                                                       minimalDist_1=15, minimalDist=10, 
+                                                       before=c_before, after=c_after, 
+                                                       detection_cycle=c(0,0), verbose=1),
+                            layout_matrix=matrix(1:10,nr=5),
+                            new_weight_in_update=0.01
+                            ) {
+    centers_old = centers
+    counts_old = counts
+    counts_M = matrix(0,nr=length(trial_nbs),nc=length(counts_old))
+    centers_L = lapply(centers,
+                       function(c) {
+                           res = matrix(0,nr=length(c$center),nc=length(trial_nbs))
+                           res[,1] = c$center
+                           res
+                       }
+                       )
+    names(centers_L) = names(centers)
+    nbc = length(centers)
+    spike_trains = vector("list",nbc)
+    names(spike_trains) = paste("Cluster",1:nbc)
+    idx=1
+    for (trial_idx in trial_nbs) {
+        ref_data = get_data_fct(trial_idx,stim_name)
+        cat(paste0("***************\nDoing now trial ",trial_idx," of ",stim_name,"\n"))
+        analysis = do.call(all_at_once,
+                           c(list(data=ref_data,centers=centers),all_at_once_call_list))
+        cat(paste0("Trial ",trial_idx," done!\n******************\n"))
+        centers_new = analysis$centers
+        counts_new = analysis$counts
+        counts_M[idx,] = counts_new
+        centers = centers_new
+        for (c_idx in 1:length(centers)){
+            n = counts_new[c_idx+1]
+            o = counts_old[c_idx+1]
+            w = new_weight_in_update*ifelse(o&gt;0,min(1,n/o),0) ## New template weight
+            centers[[c_idx]]$center=w*centers_new[[c_idx]]$center+(1-w)*centers_old[[c_idx]]$center
+            centers[[c_idx]]$centerD=w*centers_new[[c_idx]]$centerD+(1-w)*centers_old[[c_idx]]$centerD
+            centers[[c_idx]]$centerDD=w*centers_new[[c_idx]]$centerDD+(1-w)*centers_old[[c_idx]]$centerDD
+            centers[[c_idx]]$centerD_norm2=sum(centers[[c_idx]]$centerD^2)
+            centers[[c_idx]]$centerDD_norm2=sum(centers[[c_idx]]$centerDD^2)
+            centers[[c_idx]]$centerD_dot_centerDD=sum(centers[[c_idx]]$centerD*centers[[c_idx]]$centerDD)
+            centers_L[[c_idx]][,idx] = centers[[c_idx]]$center
+        }
+        layout(layout_matrix)
+        par(mar=c(1,3,3,1))
+        the_pch = if (nbc&lt;10) c(paste(1:nbc),"?")
+                  else c(paste(1:9),letters[1:(nbc-9)],"?")
+        matplot(counts_M[,2:length(counts_old)],type="b",
+                pch=the_pch)
+        c_range = range(sapply(centers_L,
+                               function(m) range(m[,1:idx])))
+        for (i in 1:nbc) {
+            if (idx&lt;3)
+                matplot(centers_L[[i]][,1:idx],type="l",col=1,lty=1,lwd=0.5,
+                        main=paste("Unit",i),ylim=c_range)
+            else
+                matplot(centers_L[[i]][,1:idx],type="l",col=c(4,rep(1,idx-2),2),
+                        lty=1,lwd=0.5,main=paste("Unit",i),ylim=c_range)
+        }
+        centers_old = centers
+        counts_old = counts_new
+        round_all = analysis$classification
+        st = lapply(paste("Cluster",1:nbc),
+                    function(cn) sapply(round_all[sapply(round_all,
+                                                         function(l) l[[1]]==cn)],
+                                        function(l) l[[2]]+l[[3]]))
+        names(st) = paste("Cluster",1:nbc)
+        for (cn in paste("Cluster",1:nbc)) {
+            if (length(st[[cn]]) &gt; 0)
+                spike_trains[[cn]] = c(spike_trains[[cn]],
+                (trial_idx-1)*inter_trial_time + sort(st[[cn]]))
+        }
+        idx = idx+1
+    }
+    spike_trains = lapply(spike_trains,sort)
+    list(centers=centers,
+         counts=counts_new,
+         spike_trains=spike_trains,
+         counts_M=counts_M,
+         centers_L=centers_L,
+         trial_nbs=trial_nbs,
+	 call=match.call())
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga278acd" class="outline-3">
+<h3 id="orga278acd"><span class="section-number-3">3.4</span> Diagnostic plot function definitions</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+We define next three functions defining diagnostic plots at the end of a sequence analysis:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfe1fb5c">counts_evolution = function(smt_res ## result of a sort_many_trials call
+                           ) {
+    nbc = length(smt_res$centers)
+    the_pch = if (nbc&lt;10) c(paste(1:nbc),"?")
+                  else c(paste(1:9),letters[1:(nbc-9)],"?")
+    matplot(smt_res$trial_nbs,
+            smt_res$counts_M[,2:(nbc+2)],
+            type="b",pch=the_pch,
+            main="Counts evolution",xlab="Trial index",ylab="Number of events")
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org37e703d">waveform_evolution = function(smt_res, ## result of a sort_many_trials call
+                              threshold_factor=4, ## threshold used
+                              layout_matrix=matrix(1:nbc,nr=nbc)
+                              ) {
+    nbc = length(smt_res$centers)
+    nt = length(smt_res$trial_nbs)
+    layout(layout_matrix)
+    par(mar=c(1,3,4,1))
+    for (i in 1:nbc) {
+        matplot(smt_res$centers_L[[i]],
+                type="l",col=c(4,rep(1,nt-2),2),lty=1,lwd=0.5,
+                main=paste("Unit",i),ylab="")
+        abline(h=-threshold_factor,col="grey")
+        }
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf53dae7">cp_isi=function(smt_res, ## result of a sort_many_trials call
+                inter_trial_time=10, ## time between trials in seconds
+                sampling_rate=15000, ## sampling rate in Hz
+                nbins=50, ## number of bins for isi histogram
+                isi_max=1, ## largest isi in isi histogram
+                layout_matrix=matrix(1:(2*still_there),nr=still_there,byrow=TRUE)
+                ) {
+    t_duration = inter_trial_time
+    n_trials = length(smt_res$trial_nbs)
+    nbc = length(smt_res$centers)
+    still_there = nbc - sum(sapply(smt_res$spike_trains,
+                                   function(l)
+                                       is.null(l) || length(l) &lt;= n_trials))
+    layout(layout_matrix)
+    par(mar=c(4,4,4,1))
+    for (cn in names(smt_res$spike_trains)) {
+        if (is.null(smt_res$spike_trains[[cn]]) || length(smt_res$spike_trains[[cn]]) &lt;= n_trials) next
+        st = smt_res$spike_trains[[cn]]/sampling_rate
+        plot(st,1:length(st),
+             main=paste("Observed CP for unit",cn),
+             xlab="Time (s)",ylab="Nb of evts",type="s")
+        isi = diff(st)
+        isi = isi[isi &lt;= isi_max]
+        hist(isi,breaks=nbins,
+             prob=TRUE,xlim=c(0,0.5),
+             main=paste("ISI dist for unit",cn),
+             xlab="Interval (s)",ylab="Density (1/s)")
+    } 
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgff57114">cp_isi_raster=function(smt_res, ## result of a sort_many_trials call
+                      inter_trial_time=10, ## time between trials in seconds
+                      sampling_rate=15000, ## sampling rate in Hz
+                      nbins=50, ## number of bins for isi histogram
+                      isi_max=1, ## largest isi in isi histogram
+                      layout_matrix=matrix(1:(3*still_there),nr=still_there,byrow=TRUE)
+                      ) {
+    t_duration = inter_trial_time
+    n_trials = length(smt_res$trial_nbs)
+    nbc = length(smt_res$centers)
+    still_there = nbc - sum(sapply(smt_res$spike_trains,
+                                   function(l)
+                                       is.null(l) || length(l) &lt;= n_trials))
+    layout(layout_matrix)
+    par(mar=c(4,4,4,1))
+    for (cn in names(smt_res$spike_trains)) {
+        if (is.null(smt_res$spike_trains[[cn]]) || length(smt_res$spike_trains[[cn]]) &lt;= n_trials) next
+        st = smt_res$spike_trains[[cn]]/sampling_rate
+        plot(st,1:length(st),
+             main=paste("Observed CP for unit",cn),
+             xlab="Time (s)",ylab="Nb of evts",type="s")
+        isi = diff(st)
+        isi = isi[isi &lt;= isi_max]
+        hist(isi,breaks=nbins,
+             prob=TRUE,xlim=c(0,0.5),
+             main=paste("ISI dist for unit",cn),
+             xlab="Interval (s)",ylab="Density (1/s)")
+        plot(c(0,t_duration),c(0,n_trials+1),type="n",axes=FALSE,
+             xlab="",ylab="",main=paste("Raster of unit",cn))
+        for (t_idx in 1:n_trials) {
+            sub_st = st[(t_idx-1)*t_duration &lt;= st &amp;
+                        st &lt; t_idx*t_duration] - (t_idx-1)*t_duration
+            if (length(sub_st) &gt; 0)
+                points(sub_st, rep(t_idx,length(sub_st)), pch=".")
+        }
+    } 
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6307755" class="outline-2">
+<h2 id="org6307755"><span class="section-number-2">4</span> Systematic analysis of the 30 trials from <code>Spontaneous_2</code> backwards</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+We will carry out an analysis of the 30 trials of <code>Spontaenous_2</code> <i>backwards</i> since the model was estimated from the last trial. The <code>LabBook</code> mentions that that noise is present at trials 23, 24 and 25 so we skip these trials.
+</p>
+</div>
+
+
+<div id="outline-container-orgd5973f4" class="outline-3">
+<h3 id="orgd5973f4"><span class="section-number-3">4.1</span> Doing the job</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org86c6b58">a_Spontaneous_2_tetB=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=get_tetrode_data,
+                                      stim_name="Spontaneous_2",
+                                      trial_nbs=rev(c(1:22,26:30)),
+                                      centers=aao$centers,
+                                      counts=aao$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+
+<pre class="example">
+***************
+Doing now trial 30 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   :  98   Min.   : 610   Min.   : 762   Min.   : 475  
+ 1st Qu.:2011   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2099   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :3634   Max.   :3076   Max.   :2887   Max.   :3143  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2193        156        120         85         78        208         53 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       130        337        447        517         62 
+Trial 30 done!
+******************
+***************
+Doing now trial 29 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 229   Min.   : 663   Min.   :1029   Min.   : 786  
+ 1st Qu.:2010   1st Qu.:2014   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2099   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :3339   Max.   :3083   Max.   :2755   Max.   :3033  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2220        118        119         51        143        232         38 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       154        350        349        570         96 
+Trial 29 done!
+******************
+***************
+Doing now trial 28 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 265   Min.   : 652   Min.   : 960   Min.   : 889  
+ 1st Qu.:2011   1st Qu.:2014   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2099   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :3260   Max.   :3137   Max.   :2837   Max.   :2871  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2100        110        164         42        124        284         63 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       137        300        306        493         77 
+Trial 28 done!
+******************
+***************
+Doing now trial 27 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 412   Min.   : 533   Min.   :1025   Min.   : 742  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2018   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2099   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3304   Max.   :3133   Max.   :2742   Max.   :3102  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2038        120        123         58         60        231         23 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       146        366        368        466         77 
+Trial 27 done!
+******************
+***************
+Doing now trial 26 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 442   Min.   : 715   Min.   : 988   Min.   : 789  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2098   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3263   Max.   :3140   Max.   :2924   Max.   :3014  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2024         92        111         56        123        176         33 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       160        240        414        543         76 
+Trial 26 done!
+******************
+***************
+Doing now trial 22 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 287   Min.   : 529   Min.   : 656   Min.   : 795  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2018   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2103   3rd Qu.:2098   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3253   Max.   :3077   Max.   :3046   Max.   :3202  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1942        111        140         59        116        202         23 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       123        289        325        476         78 
+Trial 22 done!
+******************
+***************
+Doing now trial 21 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 141   Min.   : 642   Min.   :1081   Min.   : 937  
+ 1st Qu.:2011   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2056   Median :2059  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2099   3rd Qu.:2094   3rd Qu.:2102  
+ Max.   :3474   Max.   :3006   Max.   :2838   Max.   :3148  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1914        128        107         65        122        246         29 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       115        283        282        451         86 
+Trial 21 done!
+******************
+***************
+Doing now trial 20 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 343   Min.   : 645   Min.   : 830   Min.   : 834  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2056   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2099   3rd Qu.:2094   3rd Qu.:2102  
+ Max.   :3295   Max.   :3059   Max.   :2915   Max.   :2951  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2004        172        112         79         72        232         42 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       151        348        220        475        101 
+Trial 20 done!
+******************
+***************
+Doing now trial 19 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 527   Min.   : 642   Min.   : 830   Min.   : 796  
+ 1st Qu.:2011   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2099   3rd Qu.:2094   3rd Qu.:2102  
+ Max.   :3199   Max.   :3136   Max.   :2914   Max.   :3006  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2117        135        138         23        144        193         24 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       180        299        309        562        110 
+Trial 19 done!
+******************
+***************
+Doing now trial 18 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 449   Min.   : 617   Min.   : 800   Min.   : 825  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2018   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2098   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :3136   Max.   :2970   Max.   :2887   Max.   :2921  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2050        138        145         69         65        215         37 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       134        282        372        519         74 
+Trial 18 done!
+******************
+***************
+Doing now trial 17 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 270   Min.   : 580   Min.   :1061   Min.   : 598  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2099   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3323   Max.   :3047   Max.   :2830   Max.   :3172  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2109        139        134         71        132        204         42 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       116        255        441        479         96 
+Trial 17 done!
+******************
+***************
+Doing now trial 16 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 397   Min.   : 600   Min.   : 818   Min.   : 684  
+ 1st Qu.:2011   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2099   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :3343   Max.   :3116   Max.   :2995   Max.   :3070  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2149        143        136         78        123        236         61 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       153        302        312        512         93 
+Trial 16 done!
+******************
+***************
+Doing now trial 15 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 392   Min.   : 691   Min.   : 763   Min.   : 736  
+ 1st Qu.:2012   1st Qu.:2016   1st Qu.:2018   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2103   3rd Qu.:2098   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3264   Max.   :2989   Max.   :2960   Max.   :2984  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1901        118        132         49         90        178         30 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       144        280        360        432         88 
+Trial 15 done!
+******************
+***************
+Doing now trial 14 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 270   Min.   : 592   Min.   :1018   Min.   : 604  
+ 1st Qu.:2012   1st Qu.:2016   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2098   3rd Qu.:2095   3rd Qu.:2101  
+ Max.   :3213   Max.   :3061   Max.   :2801   Max.   :3016  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1959        135        109         66         69        216         21 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       105        231        441        498         68 
+Trial 14 done!
+******************
+***************
+Doing now trial 13 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   :   0   Min.   :   0   Min.   :  24   Min.   :  78  
+ 1st Qu.:2011   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2058   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2100   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :4073   Max.   :4073   Max.   :4073   Max.   :4072  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2098        110        133         88         66        244         39 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       151        318        382        465        102 
+Trial 13 done!
+******************
+***************
+Doing now trial 12 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 133   Min.   : 487   Min.   : 785   Min.   : 487  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2103   3rd Qu.:2098   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3344   Max.   :2981   Max.   :2864   Max.   :3228  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2050        141        112         58         62        208         28 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       117        258        335        587        144 
+Trial 12 done!
+******************
+***************
+Doing now trial 11 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 197   Min.   : 522   Min.   : 720   Min.   : 632  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2103   3rd Qu.:2098   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3292   Max.   :3067   Max.   :2885   Max.   :3102  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1963        114        112         74         85        193         37 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       127        259        303        526        133 
+Trial 11 done!
+******************
+***************
+Doing now trial 10 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 314   Min.   : 715   Min.   : 924   Min.   : 797  
+ 1st Qu.:2011   1st Qu.:2014   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2099   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :3434   Max.   :3140   Max.   :2998   Max.   :3197  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2022        144        152         64        110        222         37 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       150        280        324        438        101 
+Trial 10 done!
+******************
+***************
+Doing now trial 9 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 332   Min.   : 669   Min.   :1046   Min.   : 721  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2103   3rd Qu.:2098   3rd Qu.:2095   3rd Qu.:2101  
+ Max.   :3206   Max.   :2984   Max.   :2869   Max.   :3094  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1995         94        152         66         98        208         49 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       145        210        381        462        130 
+Trial 9 done!
+******************
+***************
+Doing now trial 8 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 103   Min.   : 415   Min.   : 887   Min.   : 572  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2103   3rd Qu.:2098   3rd Qu.:2095   3rd Qu.:2101  
+ Max.   :3433   Max.   :3069   Max.   :2863   Max.   :3104  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1903        110        111         66         68        177         24 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       141        233        437        433        103 
+Trial 8 done!
+******************
+***************
+Doing now trial 7 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 151   Min.   : 613   Min.   : 769   Min.   : 670  
+ 1st Qu.:2011   1st Qu.:2014   1st Qu.:2017   1st Qu.:2014  
+ Median :2059   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2100   3rd Qu.:2096   3rd Qu.:2102  
+ Max.   :3575   Max.   :3074   Max.   :3080   Max.   :3132  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2161        174        138         76         92        272         18 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       157        349        304        458        123 
+Trial 7 done!
+******************
+***************
+Doing now trial 6 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 263   Min.   : 680   Min.   : 932   Min.   : 472  
+ 1st Qu.:2011   1st Qu.:2014   1st Qu.:2016   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2100   3rd Qu.:2096   3rd Qu.:2102  
+ Max.   :3283   Max.   :2953   Max.   :2937   Max.   :3205  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2091        159        143         90        101        234         18 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       138        301        375        425        107 
+Trial 6 done!
+******************
+***************
+Doing now trial 5 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 334   Min.   : 737   Min.   : 956   Min.   : 478  
+ 1st Qu.:2011   1st Qu.:2014   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2099   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :3238   Max.   :2998   Max.   :2817   Max.   :3235  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1970        167        106         47         99        245         22 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       149        272        322        423        118 
+Trial 5 done!
+******************
+***************
+Doing now trial 4 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 215   Min.   : 471   Min.   : 640   Min.   : 677  
+ 1st Qu.:2011   1st Qu.:2014   1st Qu.:2016   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2100   3rd Qu.:2096   3rd Qu.:2102  
+ Max.   :3639   Max.   :3093   Max.   :3016   Max.   :3076  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2086        199        166         65        118        237         32 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       126        329        304        384        126 
+Trial 4 done!
+******************
+***************
+Doing now trial 3 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 340   Min.   : 704   Min.   :1059   Min.   : 418  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2103   3rd Qu.:2098   3rd Qu.:2095   3rd Qu.:2101  
+ Max.   :3381   Max.   :3048   Max.   :2805   Max.   :3035  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1858        142        127         38         87        211         41 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       154        242        369        360         87 
+Trial 3 done!
+******************
+***************
+Doing now trial 2 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 121   Min.   : 686   Min.   :1029   Min.   : 627  
+ 1st Qu.:2011   1st Qu.:2015   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2104   3rd Qu.:2099   3rd Qu.:2095   3rd Qu.:2101  
+ Max.   :3561   Max.   :3051   Max.   :2812   Max.   :3213  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2009        137        149         57        131        212         49 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       101        281        411        374        107 
+Trial 2 done!
+******************
+***************
+Doing now trial 1 of Spontaneous_2
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   :   0   Min.   : 661   Min.   :1099   Min.   : 459  
+ 1st Qu.:2011   1st Qu.:2014   1st Qu.:2017   1st Qu.:2014  
+ Median :2058   Median :2058   Median :2057   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2105   3rd Qu.:2099   3rd Qu.:2095   3rd Qu.:2102  
+ Max.   :3560   Max.   :3035   Max.   :2869   Max.   :3329  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      2122        151        160         44        131        246         42 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       147        311        415        380         95 
+Trial 1 done!
+******************
+</pre>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-org5eeab98" class="outline-3">
+<h3 id="org5eeab98"><span class="section-number-3">4.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc4fcf7d">counts_evolution(a_Spontaneous_2_tetB)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_2-count-evolution-tetB.png" alt="Spontaneous_2-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 13: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 30 trials of <code>Spontaneous_2</code> for tetrode B.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb6fd1e7">waveform_evolution(a_Spontaneous_2_tetB,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_2-waveform-evolution-tetB.png" alt="Spontaneous_2-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 14: </span>Evolution of the templates of each unit during the 30 trials with <code>Spontaneous_2</code> for tetrode B.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7eede23">cp_isi(a_Spontaneous_2_tetB,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_2-CP-and-ISI-dist-tetB.png" alt="Spontaneous_2-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 15: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Spontaneous_1.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 6 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb5fb4d8">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_2_tetB$spike_trains[[i]],
+                    a_Spontaneous_2_tetB$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_2-rt-test-tetB.png" alt="Spontaneous_2-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 16: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_2. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+
+<p>
+Still no clear signs of interactions.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org26c9fbb" class="outline-3">
+<h3 id="org26c9fbb"><span class="section-number-3">4.3</span> Save results</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc4bf204">save(a_Spontaneous_2_tetB,
+     file=paste0("tetB_analysis/tetB_","Spontaneous_2","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge25d510">for (c_idx in 1:length(a_Spontaneous_2_tetB$spike_trains))
+    cat(a_Spontaneous_2_tetB$spike_trains[[c_idx]],
+        file=paste0("locust20010214_spike_trains/locust20010214_Spontaneous_2_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge3fc102" class="outline-2">
+<h2 id="orge3fc102"><span class="section-number-2">5</span> 30 trials of <code>Spontaenous_1</code> backwards</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+We will carry out an analysis of the 30 trials of <code>Spontaneous_2</code> <i>backwards</i>. The <code>LabBook</code> mentions that that noise is present at trials 11 and 21 so we skip these trials.
+</p>
+</div>
+
+<div id="outline-container-orge21f5b5" class="outline-3">
+<h3 id="orge21f5b5"><span class="section-number-3">5.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-5-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgff70fc3">a_Spontaneous_1_tetB=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=get_tetrode_data,
+                                      stim_name="Spontaneous_1",
+                                      trial_nbs=rev(c(1:10,12:20,22:30)),
+                                      centers=a_Spontaneous_2_tetB$centers,
+                                      counts=a_Spontaneous_2_tetB$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+
+<pre class="example">
+***************
+Doing now trial 30 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 394   Min.   : 741   Min.   :1073   Min.   : 737  
+ 1st Qu.:2013   1st Qu.:2015   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2098   3rd Qu.:2095   3rd Qu.:2101  
+ Max.   :3212   Max.   :2986   Max.   :2984   Max.   :3085  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1930        145        147         62         68        186         23 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       113        244        411        401        130 
+Trial 30 done!
+******************
+***************
+Doing now trial 29 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 343   Min.   : 530   Min.   : 749   Min.   : 821  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2098   3rd Qu.:2095   3rd Qu.:2101  
+ Max.   :3292   Max.   :3109   Max.   :2958   Max.   :3077  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1790        100        182         61         69        192         32 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       130        214        342        368        100 
+Trial 29 done!
+******************
+***************
+Doing now trial 28 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 382   Min.   : 739   Min.   :1006   Min.   : 359  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2018   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3197   Max.   :3089   Max.   :2865   Max.   :3317  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1819        118        153         52         78        205         31 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       186        239        303        353        101 
+Trial 28 done!
+******************
+***************
+Doing now trial 27 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 412   Min.   : 671   Min.   : 888   Min.   : 483  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3267   Max.   :3011   Max.   :2821   Max.   :3266  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1718        126        115         58         56        200         46 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       136        238        312        331        100 
+Trial 27 done!
+******************
+***************
+Doing now trial 26 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 369   Min.   : 566   Min.   : 900   Min.   : 855  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2059  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2103   3rd Qu.:2098   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3242   Max.   :3101   Max.   :2916   Max.   :3095  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1923        128        128         61        118        227         55 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       152        260        359        318        117 
+Trial 26 done!
+******************
+***************
+Doing now trial 25 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 587   Min.   : 877   Min.   :1091   Min.   : 743  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2103   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3188   Max.   :2939   Max.   :2733   Max.   :3093  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1767        127        138         57         80        221         27 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       159        243        310        313         92 
+Trial 25 done!
+******************
+***************
+Doing now trial 24 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 492   Min.   : 702   Min.   :1130   Min.   : 596  
+ 1st Qu.:2013   1st Qu.:2017   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3233   Max.   :3007   Max.   :2723   Max.   :3095  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1738         91        110         75         68        182         29 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       171        261        333        337         81 
+Trial 24 done!
+******************
+***************
+Doing now trial 23 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 362   Min.   : 736   Min.   :1065   Min.   : 430  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2018   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3241   Max.   :3003   Max.   :2790   Max.   :3203  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1746        103        114         85         75        172         28 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       151        223        409        314         72 
+Trial 23 done!
+******************
+***************
+Doing now trial 22 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 517   Min.   : 779   Min.   :1170   Min.   : 759  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2098   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3290   Max.   :3095   Max.   :2769   Max.   :3131  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1744        139        104         34        100        238         29 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       122        276        346        283         73 
+Trial 22 done!
+******************
+***************
+Doing now trial 20 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 552   Min.   : 792   Min.   : 970   Min.   : 830  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2017   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2098   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3186   Max.   :2980   Max.   :2858   Max.   :3093  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1851        133        138         73         47        175         44 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       117        329        390        269        136 
+Trial 20 done!
+******************
+***************
+Doing now trial 19 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 473   Min.   : 656   Min.   : 869   Min.   : 864  
+ 1st Qu.:2013   1st Qu.:2015   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2098   3rd Qu.:2095   3rd Qu.:2101  
+ Max.   :3273   Max.   :3158   Max.   :2926   Max.   :3241  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1859        149        140         17        104        275         30 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       120        243        332        284        165 
+Trial 19 done!
+******************
+***************
+Doing now trial 18 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 518   Min.   : 781   Min.   :1089   Min.   : 377  
+ 1st Qu.:2013   1st Qu.:2015   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2098   3rd Qu.:2095   3rd Qu.:2101  
+ Max.   :3261   Max.   :3000   Max.   :2751   Max.   :3275  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1835        129        148         38         58        246         57 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       194        255        330        239        141 
+Trial 18 done!
+******************
+***************
+Doing now trial 17 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 691   Min.   : 813   Min.   :1043   Min.   : 865  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3154   Max.   :2910   Max.   :2679   Max.   :3093  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1728        129        133         30         48        210         41 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       140        263        356        268        110 
+Trial 17 done!
+******************
+***************
+Doing now trial 16 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 545   Min.   : 990   Min.   :1203   Min.   : 663  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2017   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3104   Max.   :2898   Max.   :2648   Max.   :3121  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1688        113        139         33         59        207         42 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       163        206        366        246        114 
+Trial 16 done!
+******************
+***************
+Doing now trial 15 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 644   Min.   : 986   Min.   :1138   Min.   : 754  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2055   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3180   Max.   :3002   Max.   :2687   Max.   :3088  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1724        119        130         39         55        200         25 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       141        237        387        275        116 
+Trial 15 done!
+******************
+***************
+Doing now trial 14 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 541   Min.   : 778   Min.   : 975   Min.   : 882  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2018   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2057   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3174   Max.   :3040   Max.   :2734   Max.   :3133  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1730        110        130         53         51        180         30 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       140        264        398        269        105 
+Trial 14 done!
+******************
+***************
+Doing now trial 13 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 531   Min.   : 815   Min.   :1188   Min.   : 797  
+ 1st Qu.:2013   1st Qu.:2017   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3179   Max.   :2946   Max.   :2670   Max.   :3213  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1760        104        124         33         85        202         35 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       192        222        383        264        116 
+Trial 13 done!
+******************
+***************
+Doing now trial 12 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 490   Min.   : 771   Min.   : 975   Min.   : 647  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2018   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2102   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2101  
+ Max.   :3396   Max.   :3005   Max.   :2709   Max.   :3251  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1867        161        122         45        119        203         27 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       154        270        325        322        119 
+Trial 12 done!
+******************
+***************
+Doing now trial 10 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 721   Min.   : 993   Min.   :1250   Min.   : 808  
+ 1st Qu.:2014   1st Qu.:2017   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2100   3rd Qu.:2096   3rd Qu.:2093   3rd Qu.:2099  
+ Max.   :3103   Max.   :2868   Max.   :2631   Max.   :3095  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1765         88        124         35         34        125         29 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       134        333        341        327        195 
+Trial 10 done!
+******************
+***************
+Doing now trial 9 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 637   Min.   : 921   Min.   : 976   Min.   : 315  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :4071   Max.   :4071   Max.   :4074   Max.   :4074  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1926        154        129         60         50        153         34 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       133        309        303        361        240 
+Trial 9 done!
+******************
+***************
+Doing now trial 8 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 552   Min.   : 789   Min.   : 977   Min.   : 690  
+ 1st Qu.:2014   1st Qu.:2017   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2096   3rd Qu.:2094   3rd Qu.:2099  
+ Max.   :3106   Max.   :2880   Max.   :2813   Max.   :3236  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1720        113        104         40         68        140         22 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       155        257        319        336        166 
+Trial 8 done!
+******************
+***************
+Doing now trial 7 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 492   Min.   : 957   Min.   :1112   Min.   : 587  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2018   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3367   Max.   :3004   Max.   :2744   Max.   :3156  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1835        116        145         47         47        158         31 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       149        298        316        345        183 
+Trial 7 done!
+******************
+***************
+Doing now trial 6 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 672   Min.   :1002   Min.   :1264   Min.   : 763  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2096   3rd Qu.:2094   3rd Qu.:2099  
+ Max.   :3060   Max.   :2879   Max.   :2704   Max.   :3255  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1810        106        100         52         65        116         37 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       129        282        328        412        183 
+Trial 6 done!
+******************
+***************
+Doing now trial 5 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 600   Min.   : 801   Min.   :1080   Min.   : 738  
+ 1st Qu.:2015   1st Qu.:2017   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2100   3rd Qu.:2096   3rd Qu.:2093   3rd Qu.:2099  
+ Max.   :3162   Max.   :2985   Max.   :2854   Max.   :3103  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1701        107         88         43         64        100         34 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       142        327        323        308        165 
+Trial 5 done!
+******************
+***************
+Doing now trial 4 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 712   Min.   : 971   Min.   :1088   Min.   : 763  
+ 1st Qu.:2014   1st Qu.:2017   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2096   3rd Qu.:2094   3rd Qu.:2100  
+ Max.   :3196   Max.   :2883   Max.   :2740   Max.   :3245  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1795        128        137         66         65         99         20 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       138        273        376        308        185 
+Trial 4 done!
+******************
+***************
+Doing now trial 3 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 726   Min.   : 985   Min.   :1354   Min.   : 829  
+ 1st Qu.:2014   1st Qu.:2017   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2054   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2096   3rd Qu.:2094   3rd Qu.:2099  
+ Max.   :3118   Max.   :2873   Max.   :2659   Max.   :3056  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1801         99        152         38         67        101         24 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       163        303        383        313        158 
+Trial 3 done!
+******************
+***************
+Doing now trial 2 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 699   Min.   : 972   Min.   :1209   Min.   : 466  
+ 1st Qu.:2014   1st Qu.:2017   1st Qu.:2018   1st Qu.:2016  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2056   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2100   3rd Qu.:2096   3rd Qu.:2094   3rd Qu.:2099  
+ Max.   :3178   Max.   :2922   Max.   :2651   Max.   :3164  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1718        102        103         48         54         88         44 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       178        287        383        315        116 
+Trial 2 done!
+******************
+***************
+Doing now trial 1 of Spontaneous_1
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   : 566   Min.   : 890   Min.   :1158   Min.   : 758  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2017   1st Qu.:2015  
+ Median :2058   Median :2057   Median :2056   Median :2058  
+ Mean   :2055   Mean   :2055   Mean   :2055   Mean   :2056  
+ 3rd Qu.:2101   3rd Qu.:2097   3rd Qu.:2094   3rd Qu.:2099  
+ Max.   :3159   Max.   :2914   Max.   :2696   Max.   :3179  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1807         94        125         32         66        139         31 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       181        280        387        350        122 
+Trial 1 done!
+******************
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-org2c47be4" class="outline-3">
+<h3 id="org2c47be4"><span class="section-number-3">5.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf617498">counts_evolution(a_Spontaneous_1_tetB)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_1-count-evolution-tetB.png" alt="Spontaneous_1-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 17: </span>Evolution of the number of events attributed to each unit (1 to 9and "a") or unclassified ("?") during the 30 trials of <code>Spontaneous_1</code> for tetrode B.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org44c326c">waveform_evolution(a_Spontaneous_1_tetB,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_1-waveform-evolution-tetB.png" alt="Spontaneous_1-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 18: </span>Evolution of the templates of each unit during the 30-2 trials of <code>Spontaneous_1</code> for tetrode B.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org787a36f">cp_isi(a_Spontaneous_1_tetB,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_1-CP-and-ISI-dist-tetB.png" alt="Spontaneous_1-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 19: </span>Observed counting processes and empirical inter spike interval distributions for Spontaneous_1.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5d44dc6">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_1_tetB$spike_trains[[i]],
+                    a_Spontaneous_1_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_1-rt-test-tetB.png" alt="Spontaneous_1-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 20: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org805b86b" class="outline-3">
+<h3 id="org805b86b"><span class="section-number-3">5.3</span> Save results</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org17864e5">save(a_Spontaneous_1_tetB,
+     file=paste0("tetB_analysis/tetB_","Spontaneous_1","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org2bfa407">for (c_idx in 1:length(a_Spontaneous_1_tetB$spike_trains))
+    cat(a_Spontaneous_1_tetB$spike_trains[[c_idx]],
+        file=paste0("locust20010214_spike_trains/locust20010214_Spontaneous_1_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc9eabf3" class="outline-2">
+<h2 id="orgc9eabf3"><span class="section-number-2">6</span> 25 trials with <code>Cis-3-Hexen-1-ol</code> (<code>C3H_1</code>)</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+We will carry out an analysis of the 25 trials from <code>C3H_1</code>.   
+</p>
+</div>
+
+<div id="outline-container-orga81bd2f" class="outline-3">
+<h3 id="orga81bd2f"><span class="section-number-3">6.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+We do not print out the output to save space.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc0f40ba">a_C3H_1_tetB=sort_many_trials(inter_trial_time=30*15000,
+                              get_data_fct=get_tetrode_data,
+                              stim_name="C3H_1",
+                              trial_nbs=1:25,
+                              centers=aao$centers,
+                              counts=aao$counts,
+                              all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                         filter_length_1=filter_length, filter_length=filter_length, 
+                                                         minimalDist_1=15, minimalDist=15, 
+                                                         before=c_before, after=c_after, 
+                                                         detection_cycle=c(0,0), verbose=1),
+                              layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                              )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge16ce70" class="outline-3">
+<h3 id="orge16ce70"><span class="section-number-3">6.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_1-count-evolution-tetB.png" alt="C3H_1-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 21: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 30 trials of <code>C3H_1</code> for tetrode B.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd81bab6">waveform_evolution(a_C3H_1_tetB,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_1-waveform-evolution-tetB.png" alt="C3H_1-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 22: </span>Evolution of the templates of each unit during the 25 trials of <code>C3H_1</code> for stereode Ca.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_1-CP-and-ISI-dist-tetB.png" alt="C3H_1-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 23: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for C3H_1.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgad89047">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_C3H_1_tetB$spike_trains[[i]],
+                    a_C3H_1_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_1-rt-test-tetB.png" alt="C3H_1-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 24: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org41299de" class="outline-3">
+<h3 id="org41299de"><span class="section-number-3">6.3</span> Save results</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org85cef0b">save(a_C3H_1_tetB,
+     file=paste0("tetB_analysis/tetB_","C3H_1","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org49537b3">for (c_idx in 1:length(a_C3H_1_tetB$spike_trains))
+    if (!is.null(a_C3H_1_tetB$spike_trains[[c_idx]]))
+        cat(a_C3H_1_tetB$spike_trains[[c_idx]],
+	    file=paste0("locust20010214_spike_trains/locust20010214_C3H_1_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf95496e" class="outline-2">
+<h2 id="orgf95496e"><span class="section-number-2">7</span> 25 trials with <code>Citral</code></h2>
+<div class="outline-text-2" id="text-7">
+<p>
+We will carry out an analysis of the 25 trials from <code>Citral_1</code>. 
+</p>
+</div>
+<div id="outline-container-orgc579288" class="outline-3">
+<h3 id="orgc579288"><span class="section-number-3">7.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-7-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org4007442">stim_name = "Citral_1"
+a_Citral_1_tetB=sort_many_trials(inter_trial_time=30*15000,
+                                 get_data_fct=get_tetrode_data,
+                                 stim_name=stim_name,
+                                 trial_nbs=1:25,
+                                 centers=a_C3H_1_tetB$centers,
+                                 counts=a_C3H_1_tetB$counts,
+                                 all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                            filter_length_1=filter_length, filter_length=filter_length, 
+                                                            minimalDist_1=15, minimalDist=15, 
+                                                            before=c_before, after=c_after, 
+                                                            detection_cycle=c(0,0), verbose=1),
+                                 layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                 )
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org1db5534" class="outline-3">
+<h3 id="org1db5534"><span class="section-number-3">7.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Citral-count-evolution-tetB.png" alt="Citral-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 25: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 25 trials of <code>Citral_1</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Citral-waveform-evolution-tetB.png" alt="Citral-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 26: </span>Evolution of the templates of each unit during the 25 trials of <code>Citral</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Citral-CP-and-ISI-dist-tetB.png" alt="Citral-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 27: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Citral.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb3dc836">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Citral_1_tetB$spike_trains[[i]],
+                    a_Citral_1_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Citral_1-rt-test-tetB.png" alt="Citral_1-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 28: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgff24f3e" class="outline-3">
+<h3 id="orgff24f3e"><span class="section-number-3">7.3</span> Save results</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc1988ee">save(a_Citral_1_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3dc6fed">for (c_idx in 1:length(a_Citral_1_tetB$spike_trains))
+    if (!is.null(a_Citral_1_tetB$spike_trains[[c_idx]]))
+        cat(a_Citral_1_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_Citral_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgd876eee" class="outline-2">
+<h2 id="orgd876eee"><span class="section-number-2">8</span> 25 trials with <code>Vanilla</code></h2>
+<div class="outline-text-2" id="text-8">
+<p>
+We will carry out an analysis of the 25 trials from <code>Vanilla_1</code>. 
+</p>
+</div>
+
+<div id="outline-container-org860345d" class="outline-3">
+<h3 id="org860345d"><span class="section-number-3">8.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-8-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgc85d96a">stim_name = "Vanilla_1"
+a_Vanilla_1_tetB=sort_many_trials(inter_trial_time=30*15000,
+                                 get_data_fct=get_tetrode_data,
+                                 stim_name=stim_name,
+                                 trial_nbs=1:25,
+                                 centers=a_Citral_1_tetB$centers,
+                                 counts=a_Citral_1_tetB$counts,
+                                 all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                            filter_length_1=filter_length, filter_length=filter_length, 
+                                                            minimalDist_1=15, minimalDist=15, 
+                                                            before=c_before, after=c_after, 
+                                                            detection_cycle=c(0,0), verbose=1),
+                                 layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                 )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org504b576" class="outline-3">
+<h3 id="org504b576"><span class="section-number-3">8.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Vanilla_1-count-evolution-tetB.png" alt="Vanilla_1-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 29: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 25 trials of <code>Vanilla_1</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Vanilla_1-waveform-evolution-tetB.png" alt="Vanilla_1-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 30: </span>Evolution of the templates of each unit during the 25 trials of <code>Vanilla_1</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Vanilla_1-CP-and-ISI-dist-tetB.png" alt="Vanilla_1-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 31: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Vanilla.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4a0bb49">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Vanilla_1_tetB$spike_trains[[i]],
+                    a_Vanilla_1_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Vanilla_1-rt-test-tetB.png" alt="Vanilla_1-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 32: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org07b119d" class="outline-3">
+<h3 id="org07b119d"><span class="section-number-3">8.3</span> Save results</h3>
+<div class="outline-text-3" id="text-8-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org6255ed8">save(a_Vanilla_1_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfbfd534">for (c_idx in 1:length(a_Vanilla_1_tetB$spike_trains))
+    if (!is.null(a_Vanilla_1_tetB$spike_trains[[c_idx]]))
+        cat(a_Vanilla_1_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_Vanilla_1_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3c88004" class="outline-2">
+<h2 id="org3c88004"><span class="section-number-2">9</span> 25 trials with <code>Octanol</code></h2>
+<div class="outline-text-2" id="text-9">
+<p>
+We will carry out an analysis of the 25 trials from <code>Octanol_1</code>. The <code>LabBook</code> mentions the presence of noise in trials 10, 11 and 12, so we skip those.
+</p>
+</div>
+
+<div id="outline-container-org9beff4e" class="outline-3">
+<h3 id="org9beff4e"><span class="section-number-3">9.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-9-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgfd72f18">stim_name = "Octanol_1"
+a_Octanol_1_tetB=sort_many_trials(inter_trial_time=30*15000,
+                                  get_data_fct=get_tetrode_data,
+                                  stim_name=stim_name,
+                                  trial_nbs=c(1:9,13:25),
+                                  centers=a_Vanilla_1_tetB$centers,
+                                  counts=a_Vanilla_1_tetB$counts,
+                                  all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                             filter_length_1=filter_length, filter_length=filter_length, 
+                                                             minimalDist_1=15, minimalDist=15, 
+                                                             before=c_before, after=c_after, 
+                                                             detection_cycle=c(0,0), verbose=1),
+                                  layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                  )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6c03172" class="outline-3">
+<h3 id="org6c03172"><span class="section-number-3">9.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-9-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Octanol_1-count-evolution-tetB.png" alt="Octanol_1-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 33: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 25 trials of <code>Octanol_1</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Octanol_1-waveform-evolution-tetB.png" alt="Octanol_1-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 34: </span>Evolution of the templates of each unit during the 25 trials of <code>Octanol_1</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Octanol_1-CP-and-ISI-dist-tetB.png" alt="Octanol_1-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 35: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Octanol.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4002e59">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Octanol_1_tetB$spike_trains[[i]],
+                    a_Octanol_1_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Octanol_1-rt-test-tetB.png" alt="Octanol_1-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 36: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org29d1884" class="outline-3">
+<h3 id="org29d1884"><span class="section-number-3">9.3</span> Save results</h3>
+<div class="outline-text-3" id="text-9-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1746d4d">save(a_Octanol_1_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga57642e">for (c_idx in 1:length(a_Octanol_1_tetB$spike_trains))
+    if (!is.null(a_Octanol_1_tetB$spike_trains[[c_idx]]))
+        cat(a_Octanol_1_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_Octanol_1_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0be2e49" class="outline-2">
+<h2 id="org0be2e49"><span class="section-number-2">10</span> 25 trials with <code>Mint</code></h2>
+<div class="outline-text-2" id="text-10">
+<p>
+We will carry out an analysis of the 25 trials from <code>Mint_1</code>. 
+</p>
+</div>
+
+<div id="outline-container-org615db9b" class="outline-3">
+<h3 id="org615db9b"><span class="section-number-3">10.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-10-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgaf00420">stim_name = "Mint_1"
+a_Mint_1_tetB=sort_many_trials(inter_trial_time=30*15000,
+                               get_data_fct=get_tetrode_data,
+                               stim_name=stim_name,
+                               trial_nbs=1:25,
+                               centers=a_Octanol_1_tetB$centers,
+                               counts=a_Octanol_1_tetB$counts,
+                               all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                          filter_length_1=filter_length, filter_length=filter_length, 
+                                                          minimalDist_1=15, minimalDist=15, 
+                                                          before=c_before, after=c_after, 
+                                                          detection_cycle=c(0,0), verbose=1),
+                               layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                               )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb2311d4" class="outline-3">
+<h3 id="orgb2311d4"><span class="section-number-3">10.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-10-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Mint_1-count-evolution-tetB.png" alt="Mint_1-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 37: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 25 trials of <code>Mint_1</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Mint_1-waveform-evolution-tetB.png" alt="Mint_1-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 38: </span>Evolution of the templates of each unit during the 25 trials of <code>Mint_1</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Mint_1-CP-and-ISI-dist-tetB.png" alt="Mint_1-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 39: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Mint.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org51bae59">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Mint_1_tetB$spike_trains[[i]],
+                    a_Mint_1_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Mint_1-rt-test-tetB.png" alt="Mint_1-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 40: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org6ba1019" class="outline-3">
+<h3 id="org6ba1019"><span class="section-number-3">10.3</span> Save results</h3>
+<div class="outline-text-3" id="text-10-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd8866d1">save(a_Mint_1_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd439400">for (c_idx in 1:length(a_Mint_1_tetB$spike_trains))
+    if (!is.null(a_Mint_1_tetB$spike_trains[[c_idx]]))
+        cat(a_Mint_1_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_Mint_1_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9ca2496" class="outline-2">
+<h2 id="org9ca2496"><span class="section-number-2">11</span> 25 trials with <code>C3H_2</code></h2>
+<div class="outline-text-2" id="text-11">
+<p>
+We will carry out an analysis of the second set of 25 trials with Cis-3-Hexen-1-ol from <code>C3H_2</code>. 
+</p>
+</div>
+
+<div id="outline-container-org1b572e2" class="outline-3">
+<h3 id="org1b572e2"><span class="section-number-3">11.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-11-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org232eae4">stim_name = "C3H_2"
+a_C3H_2_tetB=sort_many_trials(inter_trial_time=30*15000,
+                              get_data_fct=get_tetrode_data,
+                              stim_name=stim_name,
+                              trial_nbs=1:25,
+                              centers=a_Mint_1_tetB$centers,
+                              counts=a_Mint_1_tetB$counts,
+                              all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                         filter_length_1=filter_length, filter_length=filter_length, 
+                                                         minimalDist_1=15, minimalDist=15, 
+                                                         before=c_before, after=c_after, 
+                                                         detection_cycle=c(0,0), verbose=1),
+                              layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                              )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org608eaf4" class="outline-3">
+<h3 id="org608eaf4"><span class="section-number-3">11.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-11-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_2-count-evolution-tetB.png" alt="C3H_2-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 41: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 25 trials of <code>C3H_2</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_2-waveform-evolution-tetB.png" alt="C3H_2-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 42: </span>Evolution of the templates of each unit during the 25 trials of <code>C3H_2</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_2-CP-and-ISI-dist-tetB.png" alt="C3H_2-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 43: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Mint.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org21d2451">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_C3H_2_tetB$spike_trains[[i]],
+                    a_C3H_2_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_2-rt-test-tetB.png" alt="C3H_2-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 44: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgb706b35" class="outline-3">
+<h3 id="orgb706b35"><span class="section-number-3">11.3</span> Save results</h3>
+<div class="outline-text-3" id="text-11-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7f96ff4">save(a_C3H_2_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0341bf4">for (c_idx in 1:length(a_C3H_2_tetB$spike_trains))
+    if (!is.null(a_C3H_2_tetB$spike_trains[[c_idx]]))
+        cat(a_C3H_2_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_C3H_2_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdc38acf" class="outline-2">
+<h2 id="orgdc38acf"><span class="section-number-2">12</span> 30 trials of <code>Spontaneous_3</code></h2>
+<div class="outline-text-2" id="text-12">
+<p>
+We must redefine our <code>get_tetrode_data</code> function since the <code>HDF5</code> containing the data is not the one where the previous data were stored:
+</p>
+</div>
+
+<div id="outline-container-org2f15f93" class="outline-3">
+<h3 id="org2f15f93"><span class="section-number-3">12.1</span> Redefine <code>get_tetrode_data</code></h3>
+<div class="outline-text-3" id="text-12-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orga3d64f1">get_tetrode_data = function(trial_idx,stim="Spontaneous_1") {
+    prefix = ifelse(trial_idx&lt;10,
+                    paste0("/",stim,"/trial_0",trial_idx),
+                    paste0("/",stim,"/trial_",trial_idx)
+                    )
+    cbind(h5read("locust20010214_part2.hdf5", paste0(prefix,"/ch02")),
+          h5read("locust20010214_part2.hdf5", paste0(prefix,"/ch03")),
+          h5read("locust20010214_part2.hdf5", paste0(prefix,"/ch05")),
+          h5read("locust20010214_part2.hdf5", paste0(prefix,"/ch07")))
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6e37a1a" class="outline-3">
+<h3 id="org6e37a1a"><span class="section-number-3">12.2</span> Do the job</h3>
+<div class="outline-text-3" id="text-12-2">
+<div class="org-src-container">
+<pre class="src src-R" id="org1513d8a">stim_name = "Spontaneous_3"
+a_Spontaneous_3_tetB=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=get_tetrode_data,
+                                      stim_name=stim_name,
+                                      trial_nbs=1:30,
+                                      centers=a_C3H_2_tetB$centers,
+                                      counts=a_C3H_2_tetB$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org83afcde" class="outline-3">
+<h3 id="org83afcde"><span class="section-number-3">12.3</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-12-3">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_3-count-evolution-tetB.png" alt="Spontaneous_3-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 45: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 30 trials of <code>Spontaneous_3</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_3-waveform-evolution-tetB.png" alt="Spontaneous_3-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 46: </span>Evolution of the templates of each unit during the 30 trials of <code>Spontaneous_3</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_3-CP-and-ISI-dist-tetB.png" alt="Spontaneous_3-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 47: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for <code>Spontaneous_3</code>.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4fcf95e">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_3_tetB$spike_trains[[i]],
+                    a_Spontaneous_3_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_3-rt-test-tetB.png" alt="Spontaneous_3-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 48: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org08562b3" class="outline-3">
+<h3 id="org08562b3"><span class="section-number-3">12.4</span> Save results</h3>
+<div class="outline-text-3" id="text-12-4">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc6b2455">save(a_Spontaneous_3_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org2465bc1">for (c_idx in 1:length(a_Spontaneous_3_tetB$spike_trains))
+    if (!is.null(a_Spontaneous_3_tetB$spike_trains[[c_idx]]))
+        cat(a_Spontaneous_3_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_Spontaneous_3_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org522af8d" class="outline-2">
+<h2 id="org522af8d"><span class="section-number-2">13</span> 30 trials of <code>Spontaneous_4</code></h2>
+<div class="outline-text-2" id="text-13">
+<p>
+We now analyze the 30 trials from <code>Spontaneous_4</code>.
+</p>
+</div>
+
+<div id="outline-container-org7555369" class="outline-3">
+<h3 id="org7555369"><span class="section-number-3">13.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-13-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org0d80ef4">stim_name = "Spontaneous_4"
+a_Spontaneous_4_tetB=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=get_tetrode_data,
+                                      stim_name=stim_name,
+                                      trial_nbs=1:30,
+                                      centers=a_Spontaneous_3_tetB$centers,
+                                      counts=a_Spontaneous_3_tetB$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc665781" class="outline-3">
+<h3 id="orgc665781"><span class="section-number-3">13.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-13-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_4-count-evolution-tetB.png" alt="Spontaneous_4-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 49: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 30 trials of <code>Spontaneous_4</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_4-waveform-evolution-tetB.png" alt="Spontaneous_4-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 50: </span>Evolution of the templates of each unit during the 30 trials of <code>Spontaneous_4</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_4-CP-and-ISI-dist-tetB.png" alt="Spontaneous_4-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 51: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for <code>Spontaneous_4</code>.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org62466cb">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_4_tetB$spike_trains[[i]],
+                    a_Spontaneous_4_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/Spontaneous_4-rt-test-tetB.png" alt="Spontaneous_4-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 52: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9a22525" class="outline-3">
+<h3 id="org9a22525"><span class="section-number-3">13.3</span> Save results</h3>
+<div class="outline-text-3" id="text-13-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgab34184">save(a_Spontaneous_4_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org6b54c43">for (c_idx in 1:length(a_Spontaneous_4_tetB$spike_trains))
+    if (!is.null(a_Spontaneous_4_tetB$spike_trains[[c_idx]]))
+        cat(a_Spontaneous_4_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_Spontaneous_4_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgbfaa131" class="outline-2">
+<h2 id="orgbfaa131"><span class="section-number-2">14</span> 30 trials of <code>C3H_3</code></h2>
+<div class="outline-text-2" id="text-14">
+</div><div id="outline-container-orga88e169" class="outline-3">
+<h3 id="orga88e169"><span class="section-number-3">14.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-14-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org75da9e8">stim_name = "C3H_3"
+a_C3H_3_tetB=sort_many_trials(inter_trial_time=30*15000,
+                              get_data_fct=get_tetrode_data,
+                              stim_name=stim_name,
+                              trial_nbs=1:30,
+                              centers=a_Spontaneous_4_tetB$centers,
+                              counts=a_Spontaneous_4_tetB$counts,
+                              all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                         filter_length_1=filter_length, filter_length=filter_length, 
+                                                         minimalDist_1=15, minimalDist=15, 
+                                                         before=c_before, after=c_after, 
+                                                         detection_cycle=c(0,0), verbose=1),
+                              layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                              )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7cdba24" class="outline-3">
+<h3 id="org7cdba24"><span class="section-number-3">14.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-14-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_3-count-evolution-tetB.png" alt="C3H_3-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 53: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 30 trials of <code>C3H_3</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_3-waveform-evolution-tetB.png" alt="C3H_3-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 54: </span>Evolution of the templates of each unit during the 30 trials of <code>C3H_3</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_3-CP-and-ISI-dist-tetB.png" alt="C3H_3-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 55: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for <code>C3H_3</code>.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4ededa1">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_C3H_3_tetB$spike_trains[[i]],
+                    a_C3H_3_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_3-rt-test-tetB.png" alt="C3H_3-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 56: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6a2f958" class="outline-3">
+<h3 id="org6a2f958"><span class="section-number-3">14.3</span> Save results</h3>
+<div class="outline-text-3" id="text-14-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org657c74b">save(a_C3H_3_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3037923">for (c_idx in 1:length(a_C3H_3_tetB$spike_trains))
+    if (!is.null(a_C3H_3_tetB$spike_trains[[c_idx]]))
+        cat(a_C3H_3_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_C3H_3_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgde9064f" class="outline-2">
+<h2 id="orgde9064f"><span class="section-number-2">15</span> 10 trials of <code>C3H_4</code></h2>
+<div class="outline-text-2" id="text-15">
+<p>
+The <code>LabBook</code> mentions that the disk got filled up during trial 11 (30 were planed ) so we stop at trial 10.
+</p>
+</div>
+
+<div id="outline-container-org279320d" class="outline-3">
+<h3 id="org279320d"><span class="section-number-3">15.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-15-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgebab0f6">stim_name = "C3H_4"
+a_C3H_4_tetB=sort_many_trials(inter_trial_time=30*15000,
+                              get_data_fct=get_tetrode_data,
+                              stim_name=stim_name,
+                              trial_nbs=1:10,
+                              centers=a_C3H_3_tetB$centers,
+                              counts=a_C3H_3_tetB$counts,
+                              all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                         filter_length_1=filter_length, filter_length=filter_length, 
+                                                         minimalDist_1=15, minimalDist=15, 
+                                                         before=c_before, after=c_after, 
+                                                         detection_cycle=c(0,0), verbose=1),
+                              layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                              )
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org75e4c23" class="outline-3">
+<h3 id="org75e4c23"><span class="section-number-3">15.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-15-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_4-count-evolution-tetB.png" alt="C3H_4-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 57: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 10 trials of <code>C3H_4</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_4-waveform-evolution-tetB.png" alt="C3H_4-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 58: </span>Evolution of the templates of each unit during the 10 trials of <code>C3H_4</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_4-CP-and-ISI-dist-tetB.png" alt="C3H_4-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 59: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for <code>C3H_4</code>.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org564196f">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_C3H_4_tetB$spike_trains[[i]],
+                    a_C3H_4_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_4-rt-test-tetB.png" alt="C3H_4-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 60: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org78fa65f" class="outline-3">
+<h3 id="org78fa65f"><span class="section-number-3">15.3</span> Save results</h3>
+<div class="outline-text-3" id="text-15-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org29ad484">save(a_C3H_4_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga24ed21">for (c_idx in 1:length(a_C3H_4_tetB$spike_trains))
+    if (!is.null(a_C3H_4_tetB$spike_trains[[c_idx]]))
+        cat(a_C3H_4_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_C3H_4_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org30615a4" class="outline-2">
+<h2 id="org30615a4"><span class="section-number-2">16</span> 30 trials of <code>C3H_5</code></h2>
+<div class="outline-text-2" id="text-16">
+<p>
+The <code>LabBook</code> mentions noise in trials 21, 22 and 23 so we do not consider them.
+</p>
+</div>
+
+<div id="outline-container-org3c80ccf" class="outline-3">
+<h3 id="org3c80ccf"><span class="section-number-3">16.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-16-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orga4427c1">stim_name = "C3H_5"
+a_C3H_5_tetB=sort_many_trials(inter_trial_time=30*15000,
+                              get_data_fct=get_tetrode_data,
+                              stim_name=stim_name,
+                              trial_nbs=c(1:20,24:30),
+                              centers=a_C3H_4_tetB$centers,
+                              counts=a_C3H_4_tetB$counts,
+                              all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                         filter_length_1=filter_length, filter_length=filter_length, 
+                                                         minimalDist_1=15, minimalDist=15, 
+                                                         before=c_before, after=c_after, 
+                                                         detection_cycle=c(0,0), verbose=1),
+                              layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                              )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5da0cd3" class="outline-3">
+<h3 id="org5da0cd3"><span class="section-number-3">16.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-16-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_5-count-evolution-tetB.png" alt="C3H_5-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 61: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 27 trials of <code>C3H_5</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_5-waveform-evolution-tetB.png" alt="C3H_5-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 62: </span>Evolution of the templates of each unit during the 27 trials of <code>C3H_5</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_5-CP-and-ISI-dist-tetB.png" alt="C3H_5-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 63: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for <code>C3H_5</code>.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge703bdf">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_C3H_5_tetB$spike_trains[[i]],
+                    a_C3H_5_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_5-rt-test-tetB.png" alt="C3H_5-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 64: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orge2977cb" class="outline-3">
+<h3 id="orge2977cb"><span class="section-number-3">16.3</span> Save results</h3>
+<div class="outline-text-3" id="text-16-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgeb3fd41">save(a_C3H_5_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge050d82">for (c_idx in 1:length(a_C3H_5_tetB$spike_trains))
+    if (!is.null(a_C3H_5_tetB$spike_trains[[c_idx]]))
+        cat(a_C3H_5_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_C3H_5_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org4d4f167" class="outline-2">
+<h2 id="org4d4f167"><span class="section-number-2">17</span> 30 trials of <code>C3H_6</code></h2>
+<div class="outline-text-2" id="text-17">
+</div><div id="outline-container-orgd1992e3" class="outline-3">
+<h3 id="orgd1992e3"><span class="section-number-3">17.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-17-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgff99c1f">stim_name = "C3H_6"
+a_C3H_6_tetB=sort_many_trials(inter_trial_time=30*15000,
+                              get_data_fct=get_tetrode_data,
+                              stim_name=stim_name,
+                              trial_nbs=1:30,
+                              centers=a_C3H_5_tetB$centers,
+                              counts=a_C3H_5_tetB$counts,
+                              all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                         filter_length_1=filter_length, filter_length=filter_length, 
+                                                         minimalDist_1=15, minimalDist=15, 
+                                                         before=c_before, after=c_after, 
+                                                         detection_cycle=c(0,0), verbose=1),
+                              layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                              )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge5c47e2" class="outline-3">
+<h3 id="orge5c47e2"><span class="section-number-3">17.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-17-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_6-count-evolution-tetB.png" alt="C3H_6-count-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 65: </span>Evolution of the number of events attributed to each unit (1 to 9 and "a") or unclassified ("?") during the 30 trials of <code>C3H_6</code> for tetrodeB.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_6-waveform-evolution-tetB.png" alt="C3H_6-waveform-evolution-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 66: </span>Evolution of the templates of each unit during the 30 trials of <code>C3H_6</code> for tetrodeB.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_6-CP-and-ISI-dist-tetB.png" alt="C3H_6-CP-and-ISI-dist-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 67: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for <code>C3H_6</code>.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org51380f5">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_C3H_6_tetB$spike_trains[[i]],
+                    a_C3H_6_tetB$spike_trains[[j]],
+		    nbins=200,single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010214_tetB_fig/C3H_6-rt-test-tetB.png" alt="C3H_6-rt-test-tetB.png" />
+</p>
+<p><span class="figure-number">Figure 68: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaenous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdb429db" class="outline-3">
+<h3 id="orgdb429db"><span class="section-number-3">17.3</span> Save results</h3>
+<div class="outline-text-3" id="text-17-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd682d2f">save(a_C3H_6_tetB,
+     file=paste0("tetB_analysis/tetB_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1fc1409">for (c_idx in 1:length(a_C3H_6_tetB$spike_trains))
+    if (!is.null(a_C3H_6_tetB$spike_trains[[c_idx]]))
+        cat(a_C3H_6_tetB$spike_trains[[c_idx]],file=paste0("locust20010214_spike_trains/locust20010214_C3H_6_tetB_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Christophe Pouzat</p>
+<p class="date">Created: 2016-12-07 mer. 21:16</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
