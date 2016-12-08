@@ -1,0 +1,1682 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2016-12-08 jeu. 20:59 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Functions Sorting with R</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Christophe Pouzat" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Functions Sorting with R</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgac35772">1. Introduction</a></li>
+<li><a href="#org7ff165a">2. Custom developed code</a>
+<ul>
+<li><a href="#org8d16c8b">2.1. Individual function definitions</a>
+<ul>
+<li><a href="#org092ac03">2.1.1. <code>cstValueSgts</code> definition</a></li>
+<li><a href="#org913c8ab">2.1.2. Definitions of generic function and time-series specific method for data exploration</a></li>
+<li><a href="#org42d015c">2.1.3. <code>peaks</code> and associated methods definition</a></li>
+<li><a href="#org3b39c3a">2.1.4. Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</a></li>
+<li><a href="#org6d8f751">2.1.5. Function <code>cutSglEvt</code></a></li>
+<li><a href="#org55443e3">2.1.6. Function <code>mkEvents</code></a></li>
+<li><a href="#org949c75e">2.1.7. <code>events</code> methods</a></li>
+<li><a href="#orgf01ff42">2.1.8. <code>mkNoise</code> definition</a></li>
+<li><a href="#org2979fa9">2.1.9. Definition of an <code>explore</code> method for <code>pca</code> results</a></li>
+<li><a href="#org0f10f85">2.1.10. Definition of <code>get_jitter</code></a></li>
+<li><a href="#orgb00920e">2.1.11. Definition of <code>mk_aligned_events</code></a></li>
+<li><a href="#orgaaf9f29">2.1.12. Definition of <code>mk_center_list</code></a></li>
+<li><a href="#orgb10176c">2.1.13. Definition of <code>classify_and_align_evt</code></a></li>
+<li><a href="#org785a74d">2.1.14. Definition of <code>predict_data</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgac35772" class="outline-2">
+<h2 id="orgac35772"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This file contains function definitions and documentation.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7ff165a" class="outline-2">
+<h2 id="org7ff165a"><span class="section-number-2">2</span> Custom developed code</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-org8d16c8b" class="outline-3">
+<h3 id="org8d16c8b"><span class="section-number-3">2.1</span> Individual function definitions</h3>
+<div class="outline-text-3" id="text-2-1">
+</div><div id="outline-container-org092ac03" class="outline-4">
+<h4 id="org092ac03"><span class="section-number-4">2.1.1</span> <code>cstValueSgts</code> definition</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+Formal parameters:
+</p>
+<ul class="org-ul">
+<li><code>x</code>: a numeric vector.</li>
+</ul>
+<p>
+Returns: an intgeger matrix with as many columns as segments where the derivative is null, the first row contains the index of the beginning of each segment, the second row contains the segments' lengths.
+</p>
+<div class="org-src-container">
+<pre class="src src-R" id="orgb044b78">cstValueSgts &lt;- function(x) {
+    dx &lt;- as.integer(abs(diff(x,2))/2 &lt;= .Machine$double.eps) ## use "order 2" derivative estimates
+    ## ddx is zero where the derivative did not change,
+    ## it is one if the derivative becomes null and -1
+    ## is the derivative stops being null
+    ddx &lt;- diff(dx) 
+    ## s contains the indexes of the first
+    ## points of segments where the
+    ## derivative is null
+    s &lt;- (1:length(ddx))[ddx==1]
+    sapply(s,
+           function(b) {
+               n &lt;- ddx[(b+1):length(ddx)]
+               c(b+1,min((1:length(n))[n==-1]))
+           }
+           )
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org913c8ab" class="outline-4">
+<h4 id="org913c8ab"><span class="section-number-4">2.1.2</span> Definitions of generic function and time-series specific method for data exploration</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+Definition of the generic function:
+</p>
+<div class="org-src-container">
+<pre class="src src-R" id="orga1d9483">explore &lt;- function(x,...) {
+  UseMethod("explore")
+}
+</pre>
+</div>
+
+<p>
+Definition of the corresponding method for time series:
+Formal arguments:
+</p>
+<ul class="org-ul">
+<li><code>x</code>: a <code>ts</code> (time series) object.</li>
+<li><code>offsetFactor</code>: a numeric controlling the the spacing between the recording sites on the plot. Smaller values lead to closer spacing.</li>
+<li><code>...</code>: additional arguments passed to <code>matplot</code> and <code>plot</code> functions called inernally.</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-R" id="orga17b57b">explore.ts &lt;- function(x,
+                       offsetFactor=0.5, 
+                       ...) {
+
+    stopifnot(inherits(x,"ts"))
+    yRange &lt;- range(x,na.rm=TRUE)
+    plotPara &lt;- list(tlim = start(x)[1] + c(0,0.1),
+                     ylim = yRange,
+                     yMin = yRange[1],
+                     yMax = yRange[2],
+                     firstTime = start(x)[1],
+                     lastTime = end(x)[1],
+                     keepGoing = TRUE)
+    
+    nFct &lt;- function() {
+        leftTime &lt;- plotPara$tlim[1]
+        rightTime &lt;- plotPara$tlim[2]
+        timeRange &lt;- rightTime - leftTime
+        rightTime &lt;- rightTime + timeRange
+        if (rightTime &gt; plotPara$lastTime) {
+            cat("Recording end reached.\n ")
+            rightTime &lt;- plotPara$lastTime
+        }
+        plotPara$tlim &lt;- c(rightTime - timeRange, rightTime)
+        plotPara
+    }
+    fFct &lt;- function() {
+        leftTime &lt;- plotPara$tlim[1]
+        rightTime &lt;- plotPara$tlim[2]
+        timeRange &lt;- rightTime - leftTime
+        leftTime &lt;- leftTime - timeRange
+        if (leftTime &lt; plotPara$firstTime) {
+            cat("Recording end reached.\n ")
+            leftTime &lt;- plotPara$firstTime
+        }
+        plotPara$tlim &lt;- c(leftTime, leftTime + timeRange)
+        plotPara
+    }
+    qFct &lt;- function() {
+        plotPara$keepGoing &lt;- FALSE
+        plotPara
+    }
+    ## Function tFct definition
+    ## Allows the user to change the recording duration displayed on the window
+    ## The user is invited to enter a factor which will be used to multiply the
+    ## present duration displayed.
+    ## If the resulting duration is too long a warning is given and the whole
+    ## recording is shown.
+    ## If possible the center of the displayed window is conserved.
+    tFct &lt;- function() {
+        
+        presentWindowLength &lt;- diff(range(plotPara$tlim))
+        tMessage &lt;- paste("Present duration displayed: ", presentWindowLength, " \n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "By what factor do you want to multiply it? \n", sep = "")
+        
+        theFactor &lt;- as.numeric(readline(tMessage))
+        
+        if (theFactor &lt;= 0) {
+            cat("A negative or null factor does not make sense.\n")
+            return(plotPara)
+        } ## End of conditional on theFactor &lt;= 0
+        
+        ## Check that the new display length is reasonable
+        totalLength &lt;- plotPara$lastTime - plotPara$firstTime
+        if (theFactor * presentWindowLength &gt;= totalLength) {
+            cat("Cannot show more data than available but only the entire record.\n ")
+            plotPara$tlim[1] &lt;- plotPara$firstTime
+            plotPara$tlim[2] &lt;- plotPara$lastTime
+            return(plotPara)
+        }
+
+        windowCenter &lt;- plotPara$tlim[1] + presentWindowLength / 2
+        newLeft &lt;- windowCenter - theFactor * presentWindowLength / 2
+        newRight &lt;- windowCenter + theFactor * presentWindowLength / 2
+        
+        if (!(newLeft &gt;= plotPara$firstTime &amp; newRight &lt;= plotPara$lastTime)) {
+            if (newLeft &lt;= plotPara$firstTime) {
+                cat("Cannot show data before the recording started, the displayed center wont be conserved.\n ")
+                plotPara$tlim[1] &lt;- plotPara$firstTime
+                plotPara$tlim[2] &lt;- plotPara$tlim[1] + theFactor * presentWindowLength
+            }
+            if (newRight &gt;= plotPara$lastTime) {
+                cat("Cannot show data after the recording ended, the displayed center wont be conserved.\n ")
+                plotPara$tlim[2] &lt;- plotPara$lastTime
+                plotPara$tlim[1] &lt;- plotPara$tlim[2] - theFactor * presentWindowLength
+            }
+            return(plotPara)
+        } ## End of conditional on !(newLeft &gt;= plotPara$firstTime &amp; newRight &lt;= plotPara$lastTime)
+
+        plotPara$tlim[1] &lt;- newLeft
+        plotPara$tlim[2] &lt;- newRight
+        return(plotPara)
+        
+    }
+    ## End of function tFct definition
+
+    ## Function rFct definition
+    ## Allows the user to change the maximal value displayed on the abscissa
+    ## The user is invited to enter a value.
+    rFct &lt;- function() {
+        
+        leftTime &lt;- plotPara$tlim[1]
+        rightTime &lt;- plotPara$tlim[2]
+        timeRange &lt;- rightTime - leftTime
+        tMessage &lt;- paste("Present latest time displayed: ",
+                          rightTime,
+                          "\n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "What new latest time do want (return leaves things unchanged)? \n", sep = "")
+        
+        theNewTime &lt;- as.numeric(readline(tMessage))
+        
+        if (is.na(theNewTime)) { ## Nothing entered, leave things unchanged 
+            return(plotPara)
+        } ## End of conditional on is.na(theFactor)
+        
+        if (theNewTime &lt;= plotPara$firstTime) {
+            ## This choice does not make sense
+            cat("Cannot display data before recording started.\n")
+            return(plotPara)
+        }
+
+        if (theNewTime &gt; plotPara$lastTime) {
+            cat("Recording end reached.\n ")
+            rightTime &lt;- plotPara$lastTime
+        } else {
+            if (theNewTime &lt;= leftTime) {
+                ## The new latest time entered is smaller that the earliest time displayed
+                cat("The new latest time is smaller than the earliest, adjustement will be made.\n")
+                leftTime &lt;- theNewTime - timeRange
+                if (leftTime &lt; plotPara$firstTime) {
+                    cat("Adjustment requires a change in displayed duration.\n")
+                    leftTime &lt;- plotPara$firstTime
+                }
+            } ## End of conditional on theNewTime &lt;= leftTime 
+            rightTime &lt;- theNewTime
+        } ## End of conditional on theNewTime &gt; plotPara$lastTime
+        
+        plotPara$tlim &lt;- c(leftTime, rightTime)
+        plotPara
+        
+    }
+
+    ## Function lFct definition
+    ## Allows the user to change the minimal value displayed on the abscissa
+    ## The user is invited to enter a value.
+    lFct &lt;- function() {
+        
+        leftTime &lt;- plotPara$tlim[1]
+        rightTime &lt;- plotPara$tlim[2]
+        timeRange &lt;- rightTime - leftTime
+        tMessage &lt;- paste("Present earliest time displayed: ",
+                          leftTime,
+                          "\n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "What new earliest time do want (return leaves things unchanged)? \n", sep = "")
+        
+        theNewTime &lt;- as.numeric(readline(tMessage))
+        
+        if (is.na(theNewTime)) { ## Nothing entered, leave things unchanged 
+            return(plotPara)
+        } ## End of conditional on is.na(theFactor)
+        
+        if (theNewTime &gt;= plotPara$lastTime) {
+            ## This choice does not make sense
+            cat("Cannot display data after recording ended.\n")
+            return(plotPara)
+        }
+
+        if (theNewTime &lt; plotPara$firstTime) {
+            cat("Recording start reached.\n ")
+            leftTime &lt;- plotPara$firstTime
+        } else {
+            if (theNewTime &gt;= rightTime) {
+                ## The new earliest time entered is larger that the latest time displayed
+                cat("The new earliest time is larger than the latest, adjustement will be made.\n")
+                rightTime &lt;- theNewTime + timeRange
+                if (rightTime &gt; plotPara$lastTime) {
+                    cat("Adjustment requires a change in displayed duration.\n")
+                    rightTime &lt;- plotPara$lastTime
+                }
+            } ## End of conditional on theNewTime &lt;= leftTime 
+            leftTime &lt;- theNewTime
+        } ## End of conditional on theNewTime &gt; plotPara$lastTime
+        
+        plotPara$tlim &lt;- c(leftTime, rightTime)
+        plotPara
+        
+    }
+    
+
+    ## Function yMaxFct definition
+    ## Allows the user to change the maximal value displayed on the ordinate
+    ## The user is invited to enter a value.
+    yMaxFct &lt;- function() {
+        
+        presentWindowRange &lt;- range(plotPara$ylim)
+        tMessage &lt;- paste("Present range displayed: [",
+                          paste(presentWindowRange, collapse = ","),
+                          "] \n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "What new maximal ordinate value do want (return goes back to maximum)? \n", sep = "")
+        
+        theFactor &lt;- as.numeric(readline(tMessage))
+
+        if (is.na(theFactor)) {
+            plotPara$ylim &lt;- c(presentWindowRange[1],plotPara$yMax) 
+            return(plotPara)
+        } ## End of conditional on is.na(theFactor)
+        
+        if (theFactor &lt;= plotPara$ylim[1]) {
+            cat("The maximum should be larger than the minimum.\n")
+            return(plotPara)
+        } ## End of conditional on theFactor &lt;= plotPara$ylim[1]
+
+        plotPara$ylim &lt;- c(presentWindowRange[1],theFactor) 
+        return(plotPara)
+        
+    }
+    ## End of function yMaxFct definition
+
+    ## Function yMinFct definition
+    ## Allows the user to change the minimal value displayed on the ordinate
+    ## The user is invited to enter a value.
+    yMinFct &lt;- function() {
+
+        presentWindowRange &lt;- range(plotPara$ylim)
+        tMessage &lt;- paste("Present range displayed: [",
+                          paste(presentWindowRange, collapse = ","),
+                          "] \n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "What new minimal ordinate value do want (return goes back to minimum)? \n", sep = "")
+        
+        theFactor &lt;- as.numeric(readline(tMessage))
+
+        if (is.na(theFactor)) {
+            plotPara$ylim &lt;- c(plotPara$yMin, presentWindowRange[2]) 
+            return(plotPara)
+        } ## End of conditional on is.na(theFactor)
+        
+        if (theFactor &gt;= plotPara$ylim[2]) {
+            cat("The minimum should be smaller than the maximum.\n")
+            return(plotPara)
+        } ## End of conditional on theFactor &gt;= plotPara$ylim[2]
+
+        plotPara$ylim &lt;- c(theFactor, presentWindowRange[2]) 
+        return(plotPara)
+        
+    }
+    ## End of function yMinFct definition
+
+    show &lt;- function(x,
+                     plotPara,
+                     ...) {
+
+        s &lt;- plotPara$tlim[1]
+        e &lt;- plotPara$tlim[2]
+        y.m &lt;- plotPara$ylim[1]
+        y.M &lt;- plotPara$ylim[2]
+        m &lt;- unclass(window(x,start=s,end=e))
+        if (class(m) == "matrix") {
+            m &lt;- apply(m,2,function(x) ifelse(x &lt; y.m, y.m,x))
+            m &lt;- apply(m,2,function(x) ifelse(x &gt; y.M, y.M,x))
+            ns &lt;- dim(m)[2]
+            offset &lt;- c(0,-(1:(ns-1))*(y.M-y.m))
+            m &lt;- t(t(m)+offset*offsetFactor)
+            matplot(m,type="l",lty=1,axes=FALSE,xlab="",ylab="",...)
+        } else {
+            m[m&lt;y.m] &lt;- y.m
+            m[m&gt;y.M] &lt;- y.M
+            plot(m,type="l",lty=1,axes=FALSE,xlab="",ylab="",ylim=c(y.m,y.M),...)
+        }
+    }
+
+    plot.new()
+    par(mar=c(0.5,0.5,0.5,0.5))
+    show(x,plotPara,...)
+    
+    myMessage &lt;- "Make a choice:\n n or 'return' (next); f (former); l (lower abscissa limit); r (upper abscissa limit) \n t (time scale); Y (upper ordinate limit); y (lower ordinate limit); q (quit) \n "
+
+    while(plotPara$keepGoing) {
+        
+        myChoice &lt;- readline(myMessage)
+
+        plotPara &lt;- switch(myChoice,
+                           n = nFct(),
+                           f = fFct(),
+                           l = lFct(),
+                           r = rFct(),
+                           t = tFct(),
+                           Y = yMaxFct(),
+                           y = yMinFct(),
+                           q = qFct(),
+                           nFct()
+                           )
+
+        show(x,plotPara,...)
+        
+    } ## End of while loop on keepGoing
+
+    dev.off()
+    invisible()
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org42d015c" class="outline-4">
+<h4 id="org42d015c"><span class="section-number-4">2.1.3</span> <code>peaks</code> and associated methods definition</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<p>
+Function <code>peaks</code> returns an object (essentially a vector of indices) of class <code>eventsPos</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-R" id="org7a9d142">peaks &lt;- function(x,
+                  minimalDist=15,
+                  notZero=1e-3) {
+    dx &lt;- c(0,diff(x,2)/2,0)
+    dx[abs(dx) &lt; notZero] &lt;- 0
+    dx &lt;- diff(sign(dx))
+    res &lt;- (1:length(dx))[dx &lt; 0]
+    res &lt;- res[-length(res)][diff(res) &gt; minimalDist]
+    attr(res,"call") &lt;- match.call()
+    attr(res,"nIDx") &lt;- length(x)
+    class(res) &lt;- "eventsPos"
+    res
+}
+</pre>
+</div>
+
+<p>
+Method <code>as.eventsPos</code> transforms a vector into an <code>eventsPos</code> object, its formal arguments are:
+</p>
+<ul class="org-ul">
+<li><code>x</code>: an integer vector with strictly increasing elements.</li>
+<li><code>start</code>: an integer, the sampling point at which observation started.</li>
+<li><code>end</code>: an integer, the sampling point at which observation ended.</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-R" id="org7f2af45">as.eventsPos &lt;- function(x,
+                         start,
+                         end
+                         ) {
+    x &lt;- as.integer(x)
+    stopifnot(all(diff(x)&gt;0))
+    if (missing(start)) start &lt;- floor(x)
+    if (missing(end)) end &lt;- ceiling(x)
+    stopifnot(all(x&gt;=start))
+    stopifnot(all(x&lt;=end))
+    attr(x,"call") &lt;- match.call()
+    attr(x,"nIDx") &lt;- end-start+1
+    class(x) &lt;- "eventsPos"
+    x
+}
+</pre>
+</div>
+
+<p>
+Method <code>print.eventsPos</code> prints an <code>eventsPos</code> object:
+</p>
+<div class="org-src-container">
+<pre class="src src-R" id="orgea5b8e3">print.eventsPos &lt;- function(x, ...) {
+  cat("\neventsPos object with indexes of ", length(x)," events. \n", sep = "")
+  cat("  Mean inter event interval: ", round(mean(diff(x)),digits=2), " sampling points, corresponding SD: ", round(sd(diff(x)),digits=2), " sampling points \n", sep = "")
+  cat("  Smallest and largest inter event intervals: ", paste(range(diff(x)),collapse=" and "), " sampling points. \n\n",sep= "")
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3b39c3a" class="outline-4">
+<h4 id="org3b39c3a"><span class="section-number-4">2.1.4</span> Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</h4>
+<div class="outline-text-4" id="text-2-1-4">
+<p>
+The formal parameters of the method are:
+</p>
+<ul class="org-ul">
+<li><code>x</code>: an <code>eventsPos</code> object.</li>
+<li><code>y</code>: a <code>ts</code> (time series) object.</li>
+<li><code>offsetFactor</code>: a numeric controlling the the spacing between the recording sites on the plot. Smaller values lead to closer spacing.</li>
+<li><code>events.pch</code>: an integer of a character: the ploting character used to indicate events.</li>
+<li><code>events.col</code>: an integer or a character string coding the color used to indicate the event.</li>
+<li><code>...</code>: additional arguments passed to <code>matplot</code> and <code>plot</code> functions called inernally.</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-R" id="org6aa84c5">explore.eventsPos &lt;- function(x,y,
+                              offsetFactor=0.5,
+                              events.pch=16,
+                              events.col=2,
+                              ...) {
+    stopifnot(inherits(y,"ts"))
+    yRange &lt;- range(y,na.rm=TRUE)
+    plotPara &lt;- list(tlim = start(y)[1] + c(0,0.1),
+                     ylim = yRange,
+                     yMin = yRange[1],
+                     yMax = yRange[2],
+                     firstTime = start(y)[1],
+                     lastTime = end(y)[1],
+                     keepGoing = TRUE)
+    
+    nFct &lt;- function() {
+        leftTime &lt;- plotPara$tlim[1]
+        rightTime &lt;- plotPara$tlim[2]
+        timeRange &lt;- rightTime - leftTime
+        rightTime &lt;- rightTime + timeRange
+        if (rightTime &gt; plotPara$lastTime) {
+            cat("Recording end reached.\n ")
+            rightTime &lt;- plotPara$lastTime
+        }
+        plotPara$tlim &lt;- c(rightTime - timeRange, rightTime)
+        plotPara
+    }
+    fFct &lt;- function() {
+        leftTime &lt;- plotPara$tlim[1]
+        rightTime &lt;- plotPara$tlim[2]
+        timeRange &lt;- rightTime - leftTime
+        leftTime &lt;- leftTime - timeRange
+        if (leftTime &lt; plotPara$firstTime) {
+            cat("Recording end reached.\n ")
+            leftTime &lt;- plotPara$firstTime
+        }
+        plotPara$tlim &lt;- c(leftTime, leftTime + timeRange)
+        plotPara
+    }
+    qFct &lt;- function() {
+        plotPara$keepGoing &lt;- FALSE
+        plotPara
+    }
+    ## Function tFct definition
+    ## Allows the user to change the recording duration displayed on the window
+    ## The user is invited to enter a factor which will be used to multiply the
+    ## present duration displayed.
+    ## If the resulting duration is too long a warning is given and the whole
+    ## recording is shown.
+    ## If possible the center of the displayed window is conserved.
+    tFct &lt;- function() {
+
+        presentWindowLength &lt;- diff(range(plotPara$tlim))
+        tMessage &lt;- paste("Present duration displayed: ", presentWindowLength, " \n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "By what factor do you want to multiply it? \n", sep = "")
+        
+        theFactor &lt;- as.numeric(readline(tMessage))
+        
+        if (theFactor &lt;= 0) {
+            cat("A negative or null factor does not make sense.\n")
+            return(plotPara)
+        } ## End of conditional on theFactor &lt;= 0
+
+        ## Check that the new display length is reasonable
+        totalLength &lt;- plotPara$lastTime - plotPara$firstTime
+        if (theFactor * presentWindowLength &gt;= totalLength) {
+            cat("Cannot show more data than available but only the entire record.\n ")
+            plotPara$tlim[1] &lt;- plotPara$firstTime
+            plotPara$tlim[2] &lt;- plotPara$lastTime
+            return(plotPara)
+        }
+
+        windowCenter &lt;- plotPara$tlim[1] + presentWindowLength / 2
+        newLeft &lt;- windowCenter - theFactor * presentWindowLength / 2
+        newRight &lt;- windowCenter + theFactor * presentWindowLength / 2
+        
+        if (!(newLeft &gt;= plotPara$firstTime &amp; newRight &lt;= plotPara$lastTime)) {
+            if (newLeft &lt;= plotPara$firstTime) {
+                cat("Cannot show data before the recording started, the displayed center wont be conserved.\n ")
+                plotPara$tlim[1] &lt;- plotPara$firstTime
+                plotPara$tlim[2] &lt;- plotPara$tlim[1] + theFactor * presentWindowLength
+            }
+            if (newRight &gt;= plotPara$lastTime) {
+                cat("Cannot show data after the recording ended, the displayed center wont be conserved.\n ")
+                plotPara$tlim[2] &lt;- plotPara$lastTime
+                plotPara$tlim[1] &lt;- plotPara$tlim[2] - theFactor * presentWindowLength
+            }
+            return(plotPara)
+        } ## End of conditional on !(newLeft &gt;= plotPara$firstTime &amp; newRight &lt;= plotPara$lastTime)
+
+        plotPara$tlim[1] &lt;- newLeft
+        plotPara$tlim[2] &lt;- newRight
+        return(plotPara)
+        
+    }
+    ## End of function tFct definition
+
+    ## Function rFct definition
+    ## Allows the user to change the maximal value displayed on the abscissa
+    ## The user is invited to enter a value.
+    rFct &lt;- function() {
+
+        leftTime &lt;- plotPara$tlim[1]
+        rightTime &lt;- plotPara$tlim[2]
+        timeRange &lt;- rightTime - leftTime
+        tMessage &lt;- paste("Present latest time displayed: ",
+                          rightTime,
+                          "\n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "What new latest time do want (return leaves things unchanged)? \n", sep = "")
+
+        theNewTime &lt;- as.numeric(readline(tMessage))
+        
+        if (is.na(theNewTime)) { ## Nothing entered, leave things unchanged 
+            return(plotPara)
+        } ## End of conditional on is.na(theFactor)
+        
+        if (theNewTime &lt;= plotPara$firstTime) {
+            ## This choice does not make sense
+            cat("Cannot display data before recording started.\n")
+            return(plotPara)
+        }
+
+        if (theNewTime &gt; plotPara$lastTime) {
+            cat("Recording end reached.\n ")
+            rightTime &lt;- plotPara$lastTime
+        } else {
+            if (theNewTime &lt;= leftTime) {
+                ## The new latest time entered is smaller that the earliest time displayed
+                cat("The new latest time is smaller than the earliest, adjustement will be made.\n")
+                leftTime &lt;- theNewTime - timeRange
+                if (leftTime &lt; plotPara$firstTime) {
+                    cat("Adjustment requires a change in displayed duration.\n")
+                    leftTime &lt;- plotPara$firstTime
+                }
+            } ## End of conditional on theNewTime &lt;= leftTime 
+            rightTime &lt;- theNewTime
+        } ## End of conditional on theNewTime &gt; plotPara$lastTime
+        
+        plotPara$tlim &lt;- c(leftTime, rightTime)
+        plotPara
+        
+    }
+
+    ## Function lFct definition
+    ## Allows the user to change the minimal value displayed on the abscissa
+    ## The user is invited to enter a value.
+    lFct &lt;- function() {
+
+        leftTime &lt;- plotPara$tlim[1]
+        rightTime &lt;- plotPara$tlim[2]
+        timeRange &lt;- rightTime - leftTime
+        tMessage &lt;- paste("Present earliest time displayed: ",
+                          leftTime,
+                          "\n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "What new earliest time do want (return leaves things unchanged)? \n", sep = "")
+
+        theNewTime &lt;- as.numeric(readline(tMessage))
+
+        if (is.na(theNewTime)) { ## Nothing entered, leave things unchanged 
+            return(plotPara)
+        } ## End of conditional on is.na(theFactor)
+
+        if (theNewTime &gt;= plotPara$lastTime) {
+            ## This choice does not make sense
+            cat("Cannot display data after recording ended.\n")
+            return(plotPara)
+        }
+
+        if (theNewTime &lt; plotPara$firstTime) {
+            cat("Recording start reached.\n ")
+            leftTime &lt;- plotPara$firstTime
+        } else {
+            if (theNewTime &gt;= rightTime) {
+                ## The new earliest time entered is larger that the latest time displayed
+                cat("The new earliest time is larger than the latest, adjustement will be made.\n")
+                rightTime &lt;- theNewTime + timeRange
+                if (rightTime &gt; plotPara$lastTime) {
+                    cat("Adjustment requires a change in displayed duration.\n")
+                    rightTime &lt;- plotPara$lastTime
+                }
+            } ## End of conditional on theNewTime &lt;= leftTime 
+            leftTime &lt;- theNewTime
+        } ## End of conditional on theNewTime &gt; plotPara$lastTime
+        
+        plotPara$tlim &lt;- c(leftTime, rightTime)
+        plotPara
+        
+    }
+
+
+    ## Function yMaxFct definition
+    ## Allows the user to change the maximal value displayed on the ordinate
+    ## The user is invited to enter a value.
+    yMaxFct &lt;- function() {
+
+        presentWindowRange &lt;- range(plotPara$ylim)
+        tMessage &lt;- paste("Present range displayed: [",
+                          paste(presentWindowRange, collapse = ","),
+                          "] \n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "What new maximal ordinate value do want (return goes back to maximum)? \n", sep = "")
+        
+        theFactor &lt;- as.numeric(readline(tMessage))
+
+        if (is.na(theFactor)) {
+            plotPara$ylim &lt;- c(presentWindowRange[1],plotPara$yMax) 
+            return(plotPara)
+        } ## End of conditional on is.na(theFactor)
+        
+        if (theFactor &lt;= plotPara$ylim[1]) {
+            cat("The maximum should be larger than the minimum.\n")
+            return(plotPara)
+        } ## End of conditional on theFactor &lt;= plotPara$ylim[1]
+
+        plotPara$ylim &lt;- c(presentWindowRange[1],theFactor) 
+        return(plotPara)
+        
+    }
+    ## End of function yMaxFct definition
+
+    ## Function yMinFct definition
+    ## Allows the user to change the minimal value displayed on the ordinate
+    ## The user is invited to enter a value.
+    yMinFct &lt;- function() {
+
+        presentWindowRange &lt;- range(plotPara$ylim)
+        tMessage &lt;- paste("Present range displayed: [",
+                          paste(presentWindowRange, collapse = ","),
+                          "] \n", sep = "")
+        tMessage &lt;- paste(tMessage,
+                          "What new minimal ordinate value do want (return goes back to minimum)? \n", sep = "")
+        
+        theFactor &lt;- as.numeric(readline(tMessage))
+
+        if (is.na(theFactor)) {
+            plotPara$ylim &lt;- c(plotPara$yMin, presentWindowRange[2]) 
+            return(plotPara)
+        } ## End of conditional on is.na(theFactor)
+        
+        if (theFactor &gt;= plotPara$ylim[2]) {
+            cat("The minimum should be smaller than the maximum.\n")
+            return(plotPara)
+        } ## End of conditional on theFactor &gt;= plotPara$ylim[2]
+
+        plotPara$ylim &lt;- c(theFactor, presentWindowRange[2]) 
+        return(plotPara)
+        
+    }
+    ## End of function yMinFct definition
+
+    show &lt;- function(x,
+                     y,
+                     plotPara,
+                     ...) {
+
+        s &lt;- plotPara$tlim[1]
+        e &lt;- plotPara$tlim[2]
+        y.m &lt;- plotPara$ylim[1]
+        y.M &lt;- plotPara$ylim[2]
+        firstIdx &lt;- round(max(1,s*frequency(y)))
+        lastIdx &lt;- round(min(end(y)[1]*frequency(y),e*frequency(y)))
+        ii &lt;- firstIdx:lastIdx
+        xx &lt;- x[firstIdx &lt;= x &amp; x &lt;= lastIdx]
+        if (class(y)[1] == "mts") {
+            m &lt;- y[ii,]
+            if (length(xx) &gt; 0)
+                mAtx &lt;- as.matrix(y)[xx,,drop=FALSE]
+        } else {
+            m &lt;- y[ii]
+            if (length(xx) &gt; 0)
+                mAtx &lt;- y[xx]
+        }
+        if (class(m) == "matrix") {
+            m &lt;- apply(m,2,function(x) ifelse(x &lt; y.m, y.m,x))
+            m &lt;- apply(m,2,function(x) ifelse(x &gt; y.M, y.M,x))
+            ns &lt;- dim(m)[2]
+            offset &lt;- c(0,-(1:(ns-1))*(y.M-y.m))
+            m &lt;- t(t(m)+offset*offsetFactor)
+            matplot(m,type="l",lty=1,axes=FALSE,xlab="",ylab="",...)
+            if (length(xx) &gt; 0) {
+                mAtx &lt;- t(t(mAtx)+offset*offsetFactor)
+                matpoints(xx-ii[1]+1,mAtx,pch=events.pch,col=events.col)
+            }
+        } else {
+            
+            m[m&lt;y.m] &lt;- y.m
+            m[m&gt;y.M] &lt;- y.M
+            plot(m,type="l",lty=1,axes=FALSE,xlab="",ylab="",ylim=c(y.m,y.M),...)
+            if (length(xx) &gt; 0)
+                points(xx-ii[1]+1,mAtx,pch=events.pch,col=events.col)
+        }
+    }
+
+    plot.new()
+    par(mar=c(0.5,0.5,0.5,0.5))
+    show(x,y,plotPara,...)
+    
+    myMessage &lt;- "Make a choice:\n n or 'return' (next); f (former); l (lower abscissa limit); r (upper abscissa limit) \n t (time scale); Y (upper ordinate limit); y (lower ordinate limit); q (quit) \n "
+
+    while(plotPara$keepGoing) {
+        
+        myChoice &lt;- readline(myMessage)
+
+        plotPara &lt;- switch(myChoice,
+                           n = nFct(),
+                           f = fFct(),
+                           l = lFct(),
+                           r = rFct(),
+                           t = tFct(),
+                           Y = yMaxFct(),
+                           y = yMinFct(),
+                           q = qFct(),
+                           nFct()
+                           )
+        show(x,y,plotPara,...)
+        
+    } ## End of while loop on keepGoing
+
+    dev.off()
+    invisible()
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6d8f751" class="outline-4">
+<h4 id="org6d8f751"><span class="section-number-4">2.1.5</span> Function <code>cutSglEvt</code></h4>
+<div class="outline-text-4" id="text-2-1-5">
+<p>
+Its formal parameters are:
+</p>
+<ul class="org-ul">
+<li><code>evtPos</code>: a numeric or integer interpretable as an index, the posistion at which cuts will be produced.</li>
+<li><code>data</code>: a numeric vector of matrix containing the data. If vector the argument is converted as a single column matrix internally. The matrix rows are indexed by sampling points and its columns by recording sites / channels.</li>
+<li><code>before</code>: an integer: the number of sampling points within the cut before the reference time given by evtPos.</li>
+<li><code>after</code>: an integer: the number of sampling points after the reference time.</li>
+</ul>
+<p>
+It returns: 
+</p>
+<ul class="org-ul">
+<li>A numeric vector with the cut(s). When several recording sites are used the cuts of each individual sites are placed one after the other.</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-R" id="org2e00f16">cutSglEvt &lt;- function(evtPos,
+                      data,
+                      before=14,
+                      after=30
+                      ) {
+    evtPos &lt;- as.integer(evtPos) ## make sure evtPos is an integer
+    before &lt;- as.integer(before) ## make sure before is an integer
+    stopifnot(0 &lt;= before) ## make sure before is positive or null
+    after &lt;- as.integer(after)
+    stopifnot(0 &lt;= after) ## make sure after is positive or null
+    if (is.vector(data)) data &lt;- matrix(data,nc=1)
+    ns &lt;- dim(data)[2]
+    dl &lt;- dim(data)[1]
+    stopifnot(0&lt;evtPos, evtPos&lt;=dl) ## make sure evtPos is within range
+    sl &lt;- before+after+1 ## the length of the cut
+    keep &lt;- -before:after + evtPos
+    within &lt;- 1 &lt;= keep &amp; keep &lt;= dl
+    kw &lt;- keep[within]
+    res &lt;- sapply(1:ns,
+                  function(idx) {
+                      v &lt;- numeric(sl)
+                      v[within] &lt;- data[kw,idx]
+                      v
+                  }
+                  )
+    as.vector(res)
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org55443e3" class="outline-4">
+<h4 id="org55443e3"><span class="section-number-4">2.1.6</span> Function <code>mkEvents</code></h4>
+<div class="outline-text-4" id="text-2-1-6">
+<p>
+Its formal parameters are:
+</p>
+<ul class="org-ul">
+<li><code>positions</code>: an integer vector with events' positions as indices / sampling points or an <code>eventsPos</code> object.</li>
+<li><code>data</code>: a numeric vector of matrix containing the data or a 'ts' or 'mts' object. If vector the argument is converted as a single column matrix internally. The matrix rows are indexed by sampling points and its columns by recording sites / channels.</li>
+<li><code>before</code>: an integer, the number of sampling points within the cut before the reference times given by <code>positions</code>.</li>
+<li><code>after</code>: an integer, the number of sampling points within the cut after the reference times given by <code>positions</code>.</li>
+</ul>
+<p>
+It returns a matrix with before + after + 1 rows and as many columns
+as elements in positions. Each column is an "event", that is, a set of
+cuts on the data. Attribute "positions" contains the value of the
+argument with the same name and attribute "data" contains the name of
+the corresponding argument, attribute "before" contains the value of
+the argument with the same name, attribute "after" contains the value
+of the argument with the same name, attribute "numberOfSites" contains
+the number of recording sites. Attribute "delta" is used when events
+are realligned on their mean waveforms (during "jitter
+cancellation"). The returned matrix is given an "events" class.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga6a9ce8">mkEvents &lt;- function(positions,
+                     data,
+                     before=14,
+                     after=30
+                     ) {
+    positions &lt;- unclass(positions)
+    data &lt;- unclass(data)
+    res &lt;- sapply(positions,
+                  cutSglEvt,
+                  data,
+                  before,
+                  after)
+    the.call &lt;- match.call()
+    attr(res,"positions") &lt;- positions
+    attr(res,"delta") &lt;- NULL
+    attr(res,"data") &lt;- the.call[["data"]]
+    attr(res,"before") &lt;- before
+    attr(res,"after") &lt;- after
+    attr(res,"numberOfSites") &lt;- ifelse(is.matrix(data),dim(data)[2],1)
+    attr(res,"call") &lt;- match.call()
+    class(res) &lt;- "events"
+    res
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org949c75e" class="outline-4">
+<h4 id="org949c75e"><span class="section-number-4">2.1.7</span> <code>events</code> methods</h4>
+<div class="outline-text-4" id="text-2-1-7">
+<div class="org-src-container">
+<pre class="src src-R" id="orgc52ea1b">summary.events &lt;- function(object,
+                           ...) {
+  b &lt;- attr(object,"before")
+  a &lt;- attr(object,"after")
+  ns &lt;- attr(object,"numberOfSites")
+  cat("\nevents object deriving from data set: ",attr(object,"data"),".\n",sep="")
+  cat(" Events defined as cuts of ", a+b+1, " sampling points on each of the ",ns, " recording sites.\n",sep="")
+  cat(" The 'reference' time of each event is located at point ", b+1, " of the cut.\n",sep="")
+  if (!is.null(attr(object,"delta"))) {
+    cat(" Events were realigned on median event.\n",sep="")
+  }
+  cat(" There are ", length(attr(object,"positions")), " events in the object.\n\n",sep="")
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org24b0767">"[.events" &lt;- function(x,i,j,drop = FALSE) {
+    y &lt;- NextMethod("[")
+    if (!missing(i)) return(NULL)
+    if (is.matrix(y) &amp;&amp; dim(y)[2] &gt; 1) {
+        attr(y,"positions") &lt;- attr(x,"positions")[j]
+        attr(y,"delta") &lt;- attr(x,"delta")
+        attr(y,"data") &lt;- attr(x,"data")
+        attr(y,"before") &lt;- attr(x,"before")
+        attr(y,"after") &lt;- attr(x,"after")
+        attr(y,"numberOfSites") &lt;- attr(x,"numberOfSites")
+        attr(y,"call") &lt;- match.call()
+        class(y) &lt;- "events"
+    }
+    y
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfdc3c80">t.events &lt;- function(x) {
+  t(unclass(x))
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org441266b">mean.events &lt;- function(x,...) {
+    apply(unclass(x),1,mean,...)
+}
+
+median.events &lt;- function(x,na.rm = FALSE) {
+    apply(unclass(x),1,median,na.rm)
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgbbd02a8">'-.events' &lt;- function(e1,e2) {
+    stopifnot(length(e2) == dim(e1)[1])
+    res &lt;- unclass(e1)-e2
+    attr(res,"positions") &lt;- attr(e1,"positions")
+    attr(res,"delta") &lt;- attr(e1,"delta")
+    attr(res,"data") &lt;- attr(e1,"data")
+    attr(res,"before") &lt;- attr(e1,"before")
+    attr(res,"after") &lt;- attr(e1,"after")
+    attr(res,"numberOfSites") &lt;- attr(e1,"numberOfSites")
+    attr(res,"call") &lt;- match.call()
+    class(res) &lt;- "events"
+    res
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org89305e0">plot.events &lt;- function(x,
+                        y=NULL,
+                        evts.lwd = 0.1,
+                        medAndMad = TRUE,
+                        evts.col = "black",
+                        med.col = "red",
+                        mad.col = "blue",
+                        x.bar = NULL,
+                        y.bar = NULL) {
+
+    nsites &lt;- attr(x,"numberOfSites")
+    ne &lt;- dim(x)[2]
+    cl &lt;- dim(x)[1]/nsites
+    ylim &lt;- range(x)
+    matplot(x,type="n",xlab="",ylab="",axes=FALSE,ylim=ylim)
+    if (nsites &gt; 1) {
+        ii &lt;- 2*(1:(nsites %/% 2))
+        rect((ii-1)*cl,ylim[1],ii*cl,ylim[2],col="grey80",border=NA)
+    }
+    matlines(x,col=evts.col,lty=1,lwd=evts.lwd)
+    if (medAndMad) {
+        med &lt;- apply(x,1,median)
+        mad &lt;- apply(x,1,mad)
+        lines(med,col=med.col)
+        lines(mad,col=mad.col)
+    }
+    if (!is.null(x.bar)) segments(x0=0,y0=ylim[1]+0.1*diff(ylim),x1=x.bar)
+    if (!is.null(y.bar)) segments(x0=0,y0=ylim[1]+0.1*diff(ylim),y1=ylim[1]+0.1*diff(ylim)+y.bar)
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5011b19">lines.events &lt;- function(x,
+                         evts.lwd = 0.1,
+                         evts.col = "black",
+                         ...
+                         ) {
+    matlines(x,col=evts.col,lty=1,lwd=evts.lwd,...)
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org45730f1">print.events &lt;- function(x, 
+                         ... ) {
+    plot.events(x,...)
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf01ff42" class="outline-4">
+<h4 id="orgf01ff42"><span class="section-number-4">2.1.8</span> <code>mkNoise</code> definition</h4>
+<div class="outline-text-4" id="text-2-1-8">
+<div class="org-src-container">
+<pre class="src src-R" id="org66c3a11">mkNoise &lt;- function(positions,
+                    data,
+                    before=14,
+                    after=30,
+                    safetyFactor=2,
+                    size=2000) {
+    positions &lt;- unclass(positions)
+    data &lt;- unclass(data)
+    if (!is.matrix(data)) data &lt;- matrix(data,nc=1)
+    size &lt;- as.integer(size)
+    stopifnot(0 &lt; size) ## make sure size is a positive integer
+    sl &lt;- before+after+1
+    ns &lt;- dim(data)[2]
+    i1 &lt;- diff(positions) ## inter events intervals
+    nbI &lt;- (i1-round(safetyFactor*sl))%/%sl ## number of noise sweeps
+    ## one can cut from each
+    ## interval
+    nbPossible &lt;- min(size,
+                      sum((nbI)[nbI&gt;0])
+                      )
+    ## allocate next the memory for the noise events
+    noiseMatrix &lt;- matrix(0,
+                          nr=ns*sl,
+                          nc=nbPossible
+                          )
+    
+    iV &lt;- (1:length(i1))[nbI&gt;0] ## A vector containing the indexes of
+    ## the (inter event) intervals from
+    ## which at least one noise sweep can be
+    ## cut.
+    iIdx &lt;- 1 ## an index running over the inter event intervals from
+    ## which noise events can be cut.
+    nInI &lt;- nbI[iV[iIdx]] ## the number of noise sweeps that can be cut
+    ## from the "non empty" inter event interval
+    ## iV[iIdx].
+    nIdx &lt;- 1 ## An index running over the noise sweeps.
+    noisePositions &lt;- integer(nbPossible)
+    while (nIdx &lt;= nbPossible) {
+        uInI &lt;- 1 ## An index running over the noise sweeps that will be
+        ## cut from a given "non empty" inter event interval.
+        iPos &lt;- positions[iV[iIdx]] + round(safetyFactor*sl)
+        noisePositions[nIdx] &lt;- iPos
+        while (uInI &lt;= nInI &amp; 
+               nIdx &lt;= nbPossible
+               ) {
+            ii &lt;- (-before:after) + iPos
+            ns &lt;- as.vector(data[ii,])
+            noiseMatrix[,nIdx] &lt;- ns
+            nIdx &lt;- nIdx + 1
+            iPos &lt;- iPos + sl
+            uInI &lt;- uInI + 1
+        } ## End of while loop on uInI
+        iIdx &lt;- iIdx + 1
+        nInI &lt;- nbI[iV[iIdx]]
+    } ## End of while loop on nIdx
+
+    the.call &lt;- match.call()
+    attr(noiseMatrix,"positions") &lt;- noisePositions
+    attr(noiseMatrix,"delta") &lt;- NULL
+    attr(noiseMatrix,"data") &lt;- the.call[["data"]]
+    attr(noiseMatrix,"before") &lt;- before
+    attr(noiseMatrix,"after") &lt;- after
+    attr(noiseMatrix,"numberOfSites") &lt;- ifelse(is.matrix(data),dim(data)[2],1)
+    attr(noiseMatrix,"call") &lt;- match.call()
+    class(noiseMatrix) &lt;- "events"
+    noiseMatrix
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2979fa9" class="outline-4">
+<h4 id="org2979fa9"><span class="section-number-4">2.1.9</span> Definition of an <code>explore</code> method for <code>pca</code> results</h4>
+<div class="outline-text-4" id="text-2-1-9">
+<div class="org-src-container">
+<pre class="src src-R" id="orgcbad540">explore.prcomp &lt;- function(x,
+                           pc=1, ##&lt;&lt; an integer: the pc index to add to the mean.
+                           factor=2, ##&lt;&lt; a numeric, the scaling factor; that is, the plot shows mean +/- factor * pc.
+                           m.col="black", ##&lt;&lt; a character string or an integer, the color used for mean.
+                           u.col="red", ##&lt;&lt; a character string or an integer, the color used for mean + factor * pc.
+                           l.col="blue", ##&lt;&lt; a character string or an integer, the color used for mean - factor * pc.
+                           xlab="Index", ##&lt;&lt; a character string with the abscissa label.
+                           ylab="Amplitude", ##&lt;&lt; a character string with the ordinate label.
+                           main, ##&lt;&lt; a character string with the title. If 'missing' (default) one is automatically generated.
+                           ... ##&lt;&lt; additional arguments passed to 'plot'.
+                           ) {
+    if (missing(main)) {
+        w &lt;- x$sdev[pc]^2/sum(x$sdev^2)
+        main &lt;- paste("PC ",pc," (",round(100*w,digits=1),"%)",sep="")
+    }
+    u &lt;- x$center + factor * x$rotation[,pc]
+    l &lt;- x$center - factor * x$rotation[,pc]
+    ylim=range(c(l,u))
+    plot(x$center,type="l",xlab=xlab,ylab=ylab,col=m.col,main=main,ylim=ylim,...)
+    lines(u,col=u.col,...)
+    lines(l,col=l.col,...)
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0f10f85" class="outline-4">
+<h4 id="org0f10f85"><span class="section-number-4">2.1.10</span> Definition of <code>get_jitter</code></h4>
+<div class="outline-text-4" id="text-2-1-10">
+<p>
+We define  a function that estimates the jitter given:
+</p>
+<ul class="org-ul">
+<li><code>evts</code>: an event&#x2014;or a matrix of events where individual events form the columns.</li>
+<li><code>center</code>: the 'central' (median) event on which the alignment will be performed.</li>
+<li><code>centerD</code>: the first derivative of the central event.</li>
+<li><code>centerDD</code>: the second derivative of the central event.</li>
+</ul>
+<p>
+The functions returns a vector of estimated jitters giving the amount of sampling points by which the central event should be shifted in order to best match each individual events.
+This sampling jitter estimation is performed by a two stages procedure:
+</p>
+<ol class="org-ol">
+<li>Linear regression is first used get a first jitter estimation based on a first order Taylor expansion.</li>
+<li>A Newton-Raphson step is used to refine the first estimation (used as a starting point) based on a second order Taylor expansion.</li>
+</ol>
+<div class="org-src-container">
+<pre class="src src-R" id="orgaadc6bc">get_jitter &lt;- function(evts,
+                       center,
+                       centerD,
+                       centerDD){
+    
+    centerD_norm2 &lt;- sum(centerD^2)
+    centerDD_norm2 &lt;- sum(centerDD^2)
+    centerD_dot_centerDD &lt;- sum(centerD*centerDD)
+    
+    if (is.null(dim(evts))) evts &lt;- matrix(evts, nc=1)
+    
+    evts &lt;- evts - center
+    h_dot_centerD &lt;- centerD %*% evts 
+    delta0 &lt;- h_dot_centerD/centerD_norm2
+    h_dot_centerDD &lt;- centerDD %*% evts
+    first &lt;- -2*h_dot_centerD + 2*delta0*(centerD_norm2 - h_dot_centerDD) + 3*delta0^2*centerD_dot_centerDD + delta0^3*centerDD_norm2 
+    second &lt;- 2*(centerD_norm2 - h_dot_centerDD) + 6*delta0*centerD_dot_centerDD + 3*delta0^2*centerDD_norm2
+    as.vector(delta0 - first/second)
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb00920e" class="outline-4">
+<h4 id="orgb00920e"><span class="section-number-4">2.1.11</span> Definition of <code>mk_aligned_events</code></h4>
+<div class="outline-text-4" id="text-2-1-11">
+<p>
+We define a function taking a vector of spike times, that should all come from the same cluster and correspond to reasonably "clean" events, and three arguments corresponding to the last three arguments of <code>mkEvents</code>, the function returns a <code>events</code> object. The <code>positions</code> attribute of the returned object gives the nearest sampling point to the actual peak. The <code>delta</code> attribute gives the offset between the previous spike position and the "actual" peak position (the actual position is attribute <code>positions</code> <b>minus</b> attribute <code>delta</code>):
+</p>
+<div class="org-src-container">
+<pre class="src src-R" id="orgc2730ee">mk_aligned_events &lt;- function(positions,
+                              data,
+                              before=14,
+                              after=30){
+    dataD = apply(data,2,function(x) c(0,diff(x,2)/2,0))
+    dataDD = apply(dataD,2,function(x) c(0,diff(x,2)/2,0))
+    evts = mkEvents(positions, data, before, after)
+    evtsD = mkEvents(positions, dataD, before, after)
+    evtsDD = mkEvents(positions, dataDD, before, after)
+    evts_median = apply(evts,1,median)
+    evtsD_median = apply(evtsD,1,median)
+    evtsDD_median = apply(evtsDD,1,median)
+    evts_jitter = get_jitter(evts,evts_median,evtsD_median,evtsDD_median)
+    ## positions = positions-[round(x.item(0)) for x in np.nditer(evts_jitter)]
+    positions = positions-round(evts_jitter)
+    evts = mkEvents(positions, data, before, after)
+    evtsD = mkEvents(positions, dataD, before, after)
+    evtsDD = mkEvents(positions, dataDD, before, after)
+    evts_median = apply(evts,1,median)
+    evtsD_median = apply(evtsD,1,median)
+    evtsDD_median = apply(evtsDD,1,median)
+    evts_jitter = get_jitter(evts,evts_median,evtsD_median,evtsDD_median)
+    res = unclass(evts) - evtsD_median %o% evts_jitter - evtsDD_median %o% evts_jitter^2/2
+    attributes(res) = attributes(evts)
+    attr(res,"positions") &lt;-  positions
+    attr(res,"call") &lt;- match.call()
+    attr(res,"delta") &lt;- evts_jitter
+    res
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgaaf9f29" class="outline-4">
+<h4 id="orgaaf9f29"><span class="section-number-4">2.1.12</span> Definition of <code>mk_center_list</code></h4>
+<div class="outline-text-4" id="text-2-1-12">
+<p>
+We define function <code>mk_center_list</code> that given:
+</p>
+<ul class="org-ul">
+<li><code>positions</code>, a vector of spike times, that should all come from the same cluster and correspond to reasonably "clean" events,</li>
+<li><code>data</code>, a data matrix,</li>
+<li><code>before</code>, the number of sampling point to keep before the peak,</li>
+<li><code>after</code>, the number of sampling point to keep after the peak,</li>
+</ul>
+<p>
+returns a nammed list with the following elements and their content:
+</p>
+<ul class="org-ul">
+<li><code>center</code>: the estimate of the center (obtained from the median),</li>
+<li><code>centerD</code>: the estimate of the center's derivative (obtained from the median of events cut on the derivative of data),</li>
+<li><code>centerDD</code>: the estimate of the center's second derivative (obtained from the median of events cut on the second derivative of data),</li>
+<li><code>centerD_norm2</code>: the squared norm of the center's derivative,</li>
+<li><code>centerDD_norm2</code>: the squared norm of the center's second derivative,</li>
+<li><code>centerD_dot_centerDD</code>: the scalar product of the center's first and second derivatives,</li>
+<li><code>center_idx</code>: an array of indices going from <code>-before</code> to <code>after</code>.</li>
+</ul>
+<p>
+The peeling procedure, requiers, for each cluster, estimates of its center and of its first two derivatives. Clusters' centers must moreover be built such that they can be used for subtraction, this implies that we should make them long enough, on both side of the peak, to see them go back to baseline. Formal parameters <code>before</code> and <code>after</code> should therefore be set to larger values than the ones used for clustering.
+</p>
+<div class="org-src-container">
+<pre class="src src-R" id="org8a027f4">mk_center_list = function(positions,
+                           data,
+                           before=49,
+                           after=80) {
+    dataD = apply(data,2,function(x) c(0,diff(x,2)/2,0))
+    dataDD = apply(dataD,2,function(x) c(0,diff(x,2)/2,0))
+    evts = mkEvents(positions, data, before, after)
+    evtsD = mkEvents(positions, dataD, before, after)
+    evtsDD = mkEvents(positions, dataDD, before, after)
+    evts_median = apply(evts,1,median)
+    evtsD_median = apply(evtsD,1,median)
+    evtsDD_median = apply(evtsDD,1,median)
+    list("center" = evts_median, 
+         "centerD" = evtsD_median, 
+         "centerDD" = evtsDD_median, 
+         "centerD_norm2" = sum(evtsD_median^2),
+         "centerDD_norm2" = sum(evtsDD_median^2),
+         "centerD_dot_centerDD" = sum(evtsD_median*evtsDD_median), 
+         "center_idx" = -before:after)
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb10176c" class="outline-4">
+<h4 id="orgb10176c"><span class="section-number-4">2.1.13</span> Definition of <code>classify_and_align_evt</code></h4>
+<div class="outline-text-4" id="text-2-1-13">
+<p>
+The formal parameters of <code>classify_and_align_evt</code> are:
+</p>
+<ul class="org-ul">
+<li>a set of events' positions,</li>
+<li>a data matrix containing the raw (but normalized data),</li>
+<li>a named list of centers,</li>
+<li>arguments <code>before</code> and <code>after</code> corresponding to arguments with those names in <code>mk_center_list</code>,</li>
+</ul>
+<p>
+returns a list with the following element:
+</p>
+<ul class="org-ul">
+<li>the name of the closest center in terms of Euclidean distance or "?" if none of the clusters' waveform does better than a uniformly null one,</li>
+<li>the new position of the event (the previous position corrected by the integer part of the estimated jitter),</li>
+<li>the remaining jitter.</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-R" id="orge9c5bd5">classify_and_align_evt &lt;- function(evt_pos,
+                                   data,
+                                   centers,
+                                   before=14,
+                                   after=30
+                                   ){
+    cluster_names = names(centers)
+    n_sites = dim(data)[2]
+    centersM = sapply(cluster_names,
+        function(cn) centers[[cn]][["center"]][rep(-before &lt;= centers[[cn]][["center_idx"]] &amp;
+                                                   centers[[cn]][["center_idx"]] &lt;= after,
+                                                   n_sites)])
+    
+    evt = cutSglEvt(evt_pos,data=data,before=before, after=after)
+    delta = -(centersM - evt)
+    cluster_idx = which.min(apply(delta^2,2,sum))
+    good_cluster_name = cluster_names[cluster_idx]
+    good_cluster_idx = rep(-before &lt;= centers[[good_cluster_name]][["center_idx"]] &amp;
+        centers[[good_cluster_name]][["center_idx"]] &lt;= after,
+        n_sites)
+    centerD = centers[[good_cluster_name]][["centerD"]][good_cluster_idx]
+    centerD_norm2 = sum(centerD^2)
+    centerDD = centers[[good_cluster_name]][["centerDD"]][good_cluster_idx]
+    centerDD_norm2 = sum(centerDD^2)
+    centerD_dot_centerDD = sum(centerD*centerDD)
+    h = delta[,cluster_idx]
+    h_order0_norm2 = sum(h^2)
+    h_dot_centerD = sum(h*centerD)
+    jitter0 = h_dot_centerD/centerD_norm2
+    h_order1_norm2 = sum((h-jitter0*centerD)^2) 
+    if (h_order0_norm2 &gt; h_order1_norm2) {
+        h_dot_centerDD = sum(h*centerDD)
+        first = -2*h_dot_centerD + 2*jitter0*(centerD_norm2 - h_dot_centerDD) +
+            3*jitter0^2*centerD_dot_centerDD + jitter0^3*centerDD_norm2
+        second = 2*(centerD_norm2 - h_dot_centerDD) + 6*jitter0*centerD_dot_centerDD + 
+            3*jitter0^2*centerDD_norm2
+        jitter1 = jitter0 - first/second
+        h_order2_norm2 = sum((h-jitter1*centerD-jitter1^2/2*centerDD)^2)
+        if (h_order1_norm2 &lt;= h_order2_norm2) {
+            jitter1 = jitter0
+        }
+    } else {
+        jitter1 = 0
+    }
+    if (abs(round(jitter1)) &gt; 0) {
+        evt_pos = evt_pos - round(jitter1)
+        evt = cutSglEvt(evt_pos,data=data,before=before, after=after)
+        h = evt - centers[[good_cluster_name]][["center"]][good_cluster_idx]
+        h_order0_norm2 = sum(h^2)
+        h_dot_centerD = sum(h*centerD)
+        jitter0 = h_dot_centerD/centerD_norm2
+        h_order1_norm2 = sum((h-jitter0*centerD)^2) 
+        if (h_order0_norm2 &gt; h_order1_norm2) {
+            h_dot_centerDD = sum(h*centerDD)
+            first = -2*h_dot_centerD + 2*jitter0*(centerD_norm2 - h_dot_centerDD) + 
+                3*jitter0^2*centerD_dot_centerDD + jitter0^3*centerDD_norm2
+            second = 2*(centerD_norm2 - h_dot_centerDD) + 6*jitter0*centerD_dot_centerDD + 
+                3*jitter0^2*centerDD_norm2
+            jitter1 = jitter0 - first/second
+            h_order2_norm2 = sum((h-jitter1*centerD-jitter1^2/2*centerDD)^2)
+            if (h_order1_norm2 &lt;= h_order2_norm2) {
+                jitter1 = jitter0
+            }
+        } else {
+            jitter1 = 0
+        }
+    }
+    if (sum(evt^2) &gt; sum((h-jitter1*centerD-jitter1^2/2*centerDD)^2)) 
+        return(list(cluster_names[cluster_idx], evt_pos, jitter1))
+    else 
+        return(list('?',evt_pos, jitter1))
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org785a74d" class="outline-4">
+<h4 id="org785a74d"><span class="section-number-4">2.1.14</span> Definition of <code>predict_data</code></h4>
+<div class="outline-text-4" id="text-2-1-14">
+<p>
+The formal parameters of <code>predict_data</code> are:
+</p>
+<ul class="org-ul">
+<li><code>class_pos_jitter_list</code>:  a list of lists. Each sub-list corresponds to a single detected event and as three components: the cluster of origin (or "?" if none was found), the position and the jitter.</li>
+<li><code>centers_list</code>: a list of list. Each sub-list is the result of a call to <code>mk_center_list</code>.</li>
+<li><code>nb_channels</code>: an integer, the number of recording channels.</li>
+<li><code>data_length</code>: an integer, the length of the data.</li>
+</ul>
+<p>
+The function returns a matrix with <code>data_length</code> rows and <code>nb_channels</code> columns with observations predictions based on <code>class_pos_jitter_list</code> and <code>centers_list</code>.  
+</p>
+<div class="org-src-container">
+<pre class="src src-R" id="org5dc3308">predict_data &lt;- function(class_pos_jitter_list,
+                         centers_list,
+                         nb_channels=4,
+                         data_length=300000) {
+    
+    res = matrix(0,nc=nb_channels, nr=data_length)
+    for (class_pos_jitter in class_pos_jitter_list) {
+        cluster_name = class_pos_jitter[[1]]
+        if (cluster_name != '?') {
+            center = centers_list[[cluster_name]][["center"]]
+            centerD = centers_list[[cluster_name]][["centerD"]]
+            centerDD = centers_list[[cluster_name]][["centerDD"]]
+            jitter = class_pos_jitter[[3]]
+            pred = center + jitter*centerD + jitter^2/2*centerDD
+            pred = matrix(pred,nc=nb_channels)
+            idx = centers_list[[cluster_name]][["center_idx"]] + class_pos_jitter[[2]]
+            within = 0 &lt; idx &amp; idx &lt;= data_length
+            kw = idx[within]
+            res[kw,] = res[kw,] + pred[within,]
+        }
+    }
+    res
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Christophe Pouzat</p>
+<p class="date">Created: 2016-12-08 jeu. 20:59</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
