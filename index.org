@@ -27,11 +27,11 @@ There is one directory per experiment on the dedicated [[https://github.com/chri
 The spike trains in directory =locustXXX_spike_trains= are stored in ASCII format with one spike time per line. They are named =locustXXX_StimID_tetY_uZ.txt=, where =XXX= and =Y= are their previous meaning, =StimID= is a stimulation identifier (more precisely a =group= name in the =HDF5= data file) and =Z= is the unit number.
 
 * The experiments
-** locust20010114
+** locust20010214
 
 This is probably the best experiment contained in the zenodo datasets collection. The [[file:Locust_Analysis_with_R/locust20010214/Sorting_20010214_tetB.html][details of the analysis of tetrode B]] are available. 10 units are identified, but only the first seven are well isolated. There is both spontaneous activity and responses to many different odors.
 
-** locust20010117
+** locust20010217
 
 Only spontaneous activity. The [[file:Locust_Analysis_with_R/locust20010217/Sorting_20010217_tetD.html][details of the analysis for tetrode D]] are available. 10 units are identified but only 5 are good.
 
