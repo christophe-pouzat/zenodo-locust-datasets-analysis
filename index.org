@@ -1,0 +1,37 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:nil arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: Sorting of the Locust Olfactory Pathway Datasets from Zenodo
+#+AUTHOR: Christophe Pouzat
+#+EMAIL: christophe.pouzat@parisdescartes.fr
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 25.1.1 (Org mode 9.0)
+
+* Introduction
+
+You will find here the codes necessary for reproducing the sorting of the extracellular recordings from the locust olfactory pathway available on zenodo (https://zenodo.org/record/21589) as well as the sorting results (the spike trains).
+
+For now the analysis is done with [[https://www.r-project.org/][R]] but a =C= version is in preparation. The way the code is applied to the specific datasets can be followed with `html` files that were generated using [[https://www.gnu.org/software/emacs/tour/][Emacs]] [[http://orgmode.org/][Org mode]], especially the [[http://orgmode.org/worg/org-contrib/babel/][Babel]] extension of `Org mode` (the developers of these wonderful tools are warmly thanked! Without their work none of what follows would have been possible--this does not mean that they should be held responsible for my mistakes--). 
+
+There is one directory per experiment on the dedicated [[https://github.com/christophe-pouzat/zenodo-locust-datasets-analysis/tree/master/Locust_Analysis_with_R][GitHub repository]]. In the directory of each experiment you will find:
+
+- A file named =Sorting_XXX_tetY.html=, where =XXX= is the date (corresponding to the dates on the [[https://zenodo.org/record/21589][zenodo repository]]) and =Y= identifies the tetrode (there are four possible ones, A, B, C and D). This is the file you should look at first if you want a description of the sorting /and if you want to judge its quality/.
+- A file named =Sorting_XXX_tetY.org=, this is the source file from which the =html= version was generated.
+- A directory named =locustXXX_spike_trains= that contains the individual spike trains.
+- A directory named =locustXXX_tetY_fig= that contains the figures of the =html= file.
+
+The spike trains in directory =locustXXX_spike_trains= are stored in ASCII format with one spike time per line. They are named =locustXXX_StimID_tetY_uZ.txt=, where =XXX= and =Y= are their previous meaning, =StimID= is a stimulation identifier (more precisely a =group= name in the =HDF5= data file) and =Z= is the unit number.
+
+* The experiments
+** locust20010114
+
+This is probably the best experiment contained in the zenodo datasets collection. The [[file:Locust_Analysis_with_R/locust20010214/Sorting_20010214_tetB.html][details of the analysis of tetrode B]] are available. 10 units are identified, but only the first seven are well isolated. There is both spontaneous activity and responses to many different odors.
+
+** locust20010117
+
+Only spontaneous activity. The [[file:Locust_Analysis_with_R/locust20010217/Sorting_20010217_tetD.html][details of the analysis for tetrode D]] are available. 10 units are identified but only 5 are good.
+
