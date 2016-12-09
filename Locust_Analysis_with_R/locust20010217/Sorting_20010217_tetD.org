@@ -1,0 +1,3486 @@
+# -*- ispell-local-dictionary: "american" -*-
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:nil arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: Sorting data set 20010217 tetrode D (channels 10, 12, 14, 15)
+#+AUTHOR: Christophe Pouzat
+#+EMAIL: christophe.pouzat@parisdescartes.fr
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 25.1.1 (Org mode 9.0)
+#+LaTeX_CLASS: koma-article
+#+LaTeX_CLASS_OPTIONS: [koma,11pt]
+#+LaTeX_HEADER: \usepackage{cmbright}
+#+LaTeX_HEADER: \usepackage[round]{natbib}
+#+LaTeX_HEADER: \usepackage{alltt}
+#+LaTeX_HEADER: \usepackage[usenames,dvipsnames]{xcolor}
+#+LaTeX_HEADER: \renewenvironment{verbatim}{\begin{alltt} \scriptsize \color{Bittersweet} \vspace{0.2cm} }{\vspace{0.2cm} \end{alltt} \normalsize \color{black}}
+#+LaTeX_HEADER: \usepackage{listings}
+#+LaTeX_HEADER: \lstloadlanguages{C,Gnuplot,bash,sh,R}
+#+LaTeX_HEADER: \hypersetup{colorlinks=true,pagebackref=true}
+#+PROPERTY: header-args:R :session *R*
+#+PROPERTY: header-args:R :eval never-export
+#+PROPERTY: header-args:R :output-dir locust20010217_fig
+
+#+NAME: org-latex-set-up
+#+BEGIN_SRC emacs-lisp :exports none :results silent 
+(setq smartparens-mode nil)
+(require 'ox-latex)
+(setq org-export-latex-listings t)
+(setq org-latex-listings 'listings)
+(setq org-latex-listings-options
+        '(("frame" "lines")
+          ("basicstyle" "\\footnotesize")
+          ("numbers" "left")
+          ("numberstyle" "\\tiny")))
+(add-to-list 'org-latex-classes
+          '("koma-article"
+             "\\documentclass{scrartcl}"
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+             ("\\paragraph{%s}" . "\\paragraph*{%s}")
+             ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+(setq org-latex-pdf-process
+      '("pdflatex -interaction nonstopmode -output-directory %o %f"
+	"bibtex %b" 
+	"pdflatex -interaction nonstopmode -output-directory %o %f" 
+	"pdflatex -interaction nonstopmode -output-directory %o %f"))
+#+END_SRC
+
+* Introduction
+
+This is the description of how to do the (spike) sorting of tetrode D (channels 10, 12, 14, 15) from data set =locust20010217=.
+
+** Getting the data
+
+The data are split into two =HDF5= files, =locust20010217_part1.hdf5= and =locust20010217_part2.hdf5=, located on [[https://zenodo.org/record/21589][zenodo]] and can be downloaded interactivelly with a web browser or by typing at the command line:
+
+#+NAME: wget-locust20010217_part1-and-part2
+#+BEGIN_SRC sh :eval never
+wget https://zenodo.org/record/21589/files/locust20010217.hdf5
+#+END_SRC
+
+In the sequel I will assume that =R= has been started in the directory where the data were downloaded (in other words, the working direcory should be the one containing the data.
+
+The data are in [[https://support.hdfgroup.org/HDF5/][HDF5]] format and the easiest way to get them into =R= is to install the =rhdf5= package from [[http://www.bioconductor.org/packages/release/bioc/html/rhdf5.html][Bioconductor]]. Once the installation is done, the library is loaded into =R= with:
+
+#+NAME: load-rhdf5
+#+BEGIN_SRC R :session *R*
+library(rhdf5)
+#+END_SRC
+
+#+RESULTS: load-rhdf5
+| rhdf5     |
+| stats     |
+| graphics  |
+| grDevices |
+| utils     |
+| datasets  |
+| methods   |
+| base      |
+
+We can then get a (long and detailed) listing of our data file content with (result not shown):
+
+#+NAME: locust20010217_part1.hdf5-h5ls
+#+BEGIN_SRC R :eval never
+h5ls("locust20010217_part1.hdf5")
+#+END_SRC
+
+There must be functions to get access to the _metadata_ contained in the file with =rhdf5= but I do not know them so I'm using =HDFView= called from the command line for that. All the relevant information about the experiment are stored in these metadata so you should take a look at them.
+
+** Getting the code
+
+The code can be sourced as follows:
+
+#+NAME: get-code-4-sorting
+#+BEGIN_SRC R :session *R* 
+source("https://raw.githubusercontent.com/christophe-pouzat/zenodo-locust-datasets-analysis/master/R_Sorting_Code/sorting_with_r.R")
+#+END_SRC
+
+#+RESULTS: get-code-4-sorting
+
+A description of the functions contained in this file can be found at the following address: [[http://xtof.perso.math.cnrs.fr/locust.html]].
+
+* Tetrode B (channels 10, 12, 14, 15) analysis
+
+We now want to get our "model", that is a dictionnary of waveforms (one waveform per neuron and per recording site). To that end we are going to use the first 29 s of data contained in the =Spontaneous_1/trial_01= =Group= (in =HDF5= jargon). 
+
+** Loading the data
+
+So we start by loading the data from channels 10, 12, 14, 15 into =R=:
+
+#+NAME: load-tetD-spontaneous-into-lD
+#+BEGIN_SRC R :exports both :session *R*
+lD = get_data(1,"Spontaneous 1",
+              channels = c("ch10","ch12","ch14","ch15"),
+              file="locust20010217.hdf5")
+dim(lD)
+#+END_SRC
+
+#+RESULTS: load-tetD-spontaneous-into-lD
+| 431548 |
+|      4 |
+
+
+** Five number summary
+
+We get the [[https://en.wikipedia.org/wiki/Five-number_summary][Five number summary]] with:
+
+#+NAME: lD-FNS-tetD
+#+BEGIN_SRC R :exports both :session *R*
+summary(lD,digits=2)
+#+END_SRC
+
+#+RESULTS: lD-FNS-tetD
+| Min.   :1626 | Min.   :1486 | Min.   :1432 | Min.   :1665 |
+| 1st Qu.:2014 | 1st Qu.:2005 | 1st Qu.:2001 | 1st Qu.:2010 |
+| Median :2045 | Median :2045 | Median :2044 | Median :2046 |
+| Mean   :2045 | Mean   :2045 | Mean   :2044 | Mean   :2046 |
+| 3rd Qu.:2077 | 3rd Qu.:2086 | 3rd Qu.:2088 | 3rd Qu.:2082 |
+| Max.   :2383 | Max.   :2495 | Max.   :2526 | Max.   :2378 |
+
+
+It shows that the channels have very similar properties as far as the median and the inter-quartile range (IQR) are concerned. The minimum is much smaller on the third channel. This suggests that the largest spikes are going to be found here (remember that spikes are going mainly downwards).
+
+** Plot the data
+
+We "convert" the data matrix =lD= into a =time series= object with:
+
+#+NAME: lD-to-ts-tetD
+#+BEGIN_SRC R :session *R* :results silent
+lD = ts(lD,start=0,freq=15e3)
+#+END_SRC
+
+We can then plot the whole data with (not shown since it makes a very figure):
+
+#+NAME: plot-lD-tetD
+#+BEGIN_SRC R :eval never
+plot(lD)
+#+END_SRC
+
+** Data normalization
+
+As always we normalize such that the [[https://en.wikipedia.org/wiki/Median_absolute_deviation][median absolute deviation]] (MAD) becomes 1:
+
+#+NAME: lD-normalization-tetD
+#+BEGIN_SRC R :session *R* :results silent
+lD.mad = apply(lD,2,mad)
+lD = t((t(lD)-apply(lD,2,median))/lD.mad)
+lD = ts(lD,start=0,freq=15e3)
+#+END_SRC
+
+Once this is done we explore interactively the data with:
+
+#+NAME: lD-explore-tetD
+#+BEGIN_SRC R :eval never
+explore(lD,col=c("black","grey70"))
+#+END_SRC
+
+Most spikes can be seen on the 4 recording sites and there are different spike waveform!
+
+** Spike detection
+
+Since the spikes are mainly going downwards, we will detect valleys instead of peaks:
+
+#+NAME: lD-detect-spikes-tetD
+#+BEGIN_SRC R :exports both :session *R* :results output
+lDf = -lD
+filter_length = 5
+threshold_factor = 4
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf.mad = apply(lDf,2,mad)
+lDf_mad_original = lDf.mad
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) < thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp0 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp0
+#+END_SRC
+
+#+RESULTS: lD-detect-spikes-tetD
+: 
+: eventsPos object with indexes of 1307 events. 
+:   Mean inter event interval: 329.95 sampling points, corresponding SD: 329.71 sampling points 
+:   Smallest and largest inter event intervals: 16 and 2961 sampling points.
+
+
+Every time a filter length / threshold combination is tried, the detection is checked interactively with:
+
+#+NAME: lD-sp0-check-tetD
+#+BEGIN_SRC R :eval never
+explore(sp0,lD,col=c("black","grey50"))
+#+END_SRC
+
+** Cuts
+
+We proceed as usual to get the cut length right:
+
+#+NAME: cut-length-plot-tetD
+#+HEADER: :width 800 :height 800 :file tetD_cut_length.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+evts = mkEvents(sp0,lD,49,50)
+evts.med = median(evts)
+evts.mad = apply(evts,1,mad)
+plot_range = range(c(evts.med,evts.mad))
+plot(evts.med,type="n",ylab="Amplitude",
+     ylim=plot_range)
+abline(v=seq(0,400,10),col="grey")
+abline(h=c(0,1),col="grey")
+lines(evts.med,lwd=2)
+lines(evts.mad,col=2,lwd=2)
+#+END_SRC
+
+#+CAPTION: Setting the cut length for the data from tetrode D (channels 10, 12, 14, 15). We see that we need 15 points before the peak and 30 after.
+#+RESULTS: cut-length-plot-tetD
+[[file:locust20010217_fig/tetD_cut_length.png]]
+
+We see that we need roughly 15 points before the peak and 30 after.
+
+** Events
+
+We now cut our events:
+
+#+NAME: lD-events-tetD
+#+BEGIN_SRC R :exports both :results output :session *R*
+evts = mkEvents(sp0,lD,14,30)
+summary(evts)
+#+END_SRC
+
+#+RESULTS: lD-events-tetD
+: 
+: events object deriving from data set: lD.
+:  Events defined as cuts of 45 sampling points on each of the 4 recording sites.
+:  The 'reference' time of each event is located at point 15 of the cut.
+:  There are 1307 events in the object.
+
+
+We can as usual visualize the first 200 events with:
+
+#+NAME: first-200-evts-tetD
+#+HEADER: :width 800 :height 800 :file first_200_evts_tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+evts[,1:200]
+#+END_SRC
+
+#+CAPTION: First 200 events for the data from tetrode D (channels 1, 3, 5, 7).
+#+RESULTS: first-200-evts-tetD
+[[file:locust20010217_fig/first_200_evts_tetD.png]]
+
+We do see some superposition and it's therefore a good idea to remove the most obvious of them before reducing the dimension.
+
+** Removing obvious superposition
+
+We define function =goodEvtsFct= with:
+
+#+NAME: goodEvtsFct
+#+BEGIN_SRC R :session *R* :results silent
+goodEvtsFct = function(samp,thr=3) {
+    samp.med = apply(samp,1,median)
+    samp.mad = apply(samp,1,mad)
+    below = samp.med < 0
+    samp.r = apply(samp,2,function(x) {x[below] = 0;x})
+    apply(samp.r,2,function(x) all(abs(x-samp.med) < thr*samp.mad))
+}
+#+END_SRC
+
+We apply it with a threshold of 5 times the MAD:
+
+#+NAME: goodEvts-5-MAD
+#+BEGIN_SRC R :session *R* :results silent
+goodEvts = goodEvtsFct(evts,5)
+#+END_SRC
+
+** Dimension reduction
+
+We do a =PCA= on our good events set:
+
+#+NAME: lD-evts-pca-tetD
+#+BEGIN_SRC R :session *R*
+evts.pc = prcomp(t(evts[,goodEvts]))
+#+END_SRC
+
+#+RESULTS: lD-evts-pca-tetD
+
+We look at the projections on the first 4 principle components:
+
+#+NAME: lD-evts-proj-first-4-pc-tetD
+#+HEADER: :width 800 :height 800 :file evts-proj-first-4-pc-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+panel.dens = function(x,...) {
+  usr = par("usr")
+  on.exit(par(usr))
+  par(usr = c(usr[1:2], 0, 1.5) )
+  d = density(x, adjust=0.5)
+  x = d$x
+  y = d$y
+  y = y/max(y)
+  lines(x, y, col="grey50", ...)
+}
+pairs(evts.pc$x[,1:4],pch=".",gap=0,diag.panel=panel.dens)
+#+END_SRC
+
+#+CAPTION: The good events from tetrode D (channels 10, 12, 14, 15) projected onto the first 4 PCs.
+#+RESULTS: lD-evts-proj-first-4-pc-tetD
+[[file:locust20010217_fig/evts-proj-first-4-pc-tetD.png]]
+
+I see 6/7 clusters. We can also look at the projections on the PC pairs defined by the next 4 PCs:
+
+#+NAME: lD-evts-proj-next-4-pc-tetD
+#+HEADER: :width 800 :height 800 :file evts-proj-next-4-pc-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+pairs(evts.pc$x[,5:8],pch=".",gap=0,diag.panel=panel.dens)
+#+END_SRC
+
+#+CAPTION: The good events from tetrode D (channels 10, 12, 14, 15) projected onto PC 5 to 8.
+#+RESULTS: lD-evts-proj-next-4-pc-tetD
+[[file:locust20010217_fig/evts-proj-next-4-pc-tetD.png]]
+
+There is not much structure left beyond the 4th PC.
+
+** Exporting for =GGobi=
+
+We export the events projected onto the first 8 principle components in =csv= format:
+
+#+NAME: evts-proj-to-csv-tetD
+#+BEGIN_SRC R :session *R*
+write.csv(evts.pc$x[,1:8],file="tetD_evts.csv")
+#+END_SRC
+
+#+RESULTS: evts-proj-to-csv-tetD
+
+Using the =rotation= display of =GGobi= with the first 3 principle components and the =2D tour= with the first 4 components I see 8 clusters. So we will start with a =kmeans= with 8 centers.
+
+** kmeans clustering with 8 clusters
+
+#+NAME: kmeans-8-tetD
+#+BEGIN_SRC R :session *R* :results silent
+nbc=8
+set.seed(20110928,kind="Mersenne-Twister")
+km = kmeans(evts.pc$x[,1:4],centers=nbc,iter.max=100,nstart=100)
+label = km$cluster
+cluster.med = sapply(1:nbc, function(cIdx) median(evts[,goodEvts][,label==cIdx]))
+sizeC = sapply(1:nbc,function(cIdx) sum(abs(cluster.med[,cIdx])))
+newOrder = sort.int(sizeC,decreasing=TRUE,index.return=TRUE)$ix
+cluster.mad = sapply(1:nbc, function(cIdx) {ce = t(evts[,goodEvts]);ce = ce[label==cIdx,];apply(ce,2,mad)})
+cluster.med = cluster.med[,newOrder]
+cluster.mad = cluster.mad[,newOrder]
+labelb = sapply(1:nbc, function(idx) (1:nbc)[newOrder==idx])[label]
+#+END_SRC
+
+ 
+We write a new =csv= file with the data and the labels:
+
+#+NAME: evts-proj-and-labels-to-csv-tetD
+#+BEGIN_SRC R :session *R* :results silent
+write.csv(cbind(evts.pc$x[,1:4],labelb),file="tetD_sorted.csv")
+#+END_SRC
+
+That looks good!
+
+We get a plot showing the events attributed to each of the first 4 units with:
+
+#+NAME: kmeans-8-evts-from-each-of-first-4-tetD
+#+HEADER: :width 800 :height 1600 :file kmeans-8-evts-from-each-of-first-4-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+layout(matrix(1:4,nr=4))
+par(mar=c(1,1,1,1))
+for (i in (1:4)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+#+END_SRC
+
+#+CAPTION: The events of the first four clusters of tetrode D 
+#+RESULTS: kmeans-8-evts-from-each-of-first-4-tetD
+[[file:locust20010217_fig/kmeans-8-evts-from-each-of-first-4-tetD.png]]
+
+We get a plot showing the events attributed to each of the last 4 units with:
+
+#+NAME: kmeans-8-evts-from-each-of-last-4-tetD
+#+HEADER: :width 800 :height 1600 :file kmeans-8-evts-from-each-of-last-4-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+layout(matrix(1:4,nr=4))
+par(mar=c(1,1,1,1))
+for (i in (5:8)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+#+END_SRC
+
+#+CAPTION: The events of the last four clusters of tetrode D 
+#+RESULTS: kmeans-8-evts-from-each-of-last-4-tetD
+[[file:locust20010217_fig/kmeans-8-evts-from-each-of-last-4-tetD.png]]
+
+In fact I see rather 2 units in cluster 4 and 7 so I redo the clustering with 10 units
+
+** kmeans clustering with 10 clusters
+
+#+NAME: kmeans-10-tetD
+#+BEGIN_SRC R :session *R* :results silent
+nbc=10
+set.seed(20110928,kind="Mersenne-Twister")
+km = kmeans(evts.pc$x[,1:4],centers=nbc,iter.max=100,nstart=100)
+label = km$cluster
+cluster.med = sapply(1:nbc, function(cIdx) median(evts[,goodEvts][,label==cIdx]))
+sizeC = sapply(1:nbc,function(cIdx) sum(abs(cluster.med[,cIdx])))
+newOrder = sort.int(sizeC,decreasing=TRUE,index.return=TRUE)$ix
+cluster.mad = sapply(1:nbc, function(cIdx) {ce = t(evts[,goodEvts]);ce = ce[label==cIdx,];apply(ce,2,mad)})
+cluster.med = cluster.med[,newOrder]
+cluster.mad = cluster.mad[,newOrder]
+labelb = sapply(1:nbc, function(idx) (1:nbc)[newOrder==idx])[label]
+#+END_SRC
+
+We get a plot showing the events attributed to each of the first 5 units with:
+
+#+NAME: kmeans-10-evts-from-each-of-first-5-tetD
+#+HEADER: :width 800 :height 1600 :file kmeans-10-evts-from-each-of-first-5-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+layout(matrix(1:5,nr=5))
+par(mar=c(1,1,1,1))
+for (i in (1:5)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+#+END_SRC
+
+#+CAPTION: The events of the first five clusters of tetrode D 
+#+RESULTS: kmeans-10-evts-from-each-of-first-5-tetD
+[[file:locust20010217_fig/kmeans-10-evts-from-each-of-first-5-tetD.png]]
+
+We get a plot showing the events attributed to each of the last 5 units with:
+
+#+NAME: kmeans-10-evts-from-each-of-last-5-tetD
+#+HEADER: :width 800 :height 1600 :file kmeans-10-evts-from-each-of-last-5-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+layout(matrix(1:5,nr=5))
+par(mar=c(1,1,1,1))
+for (i in (6:10)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+#+END_SRC
+
+#+CAPTION: The events of the last five clusters of tetrode D 
+#+RESULTS: kmeans-10-evts-from-each-of-last-5-tetD
+[[file:locust20010217_fig/kmeans-10-evts-from-each-of-last-5-tetD.png]]
+
+
+** Long cuts creation
+
+For the peeling process we need templates that start and end at 0 (we will otherwise generate artifacts when we subtract). We proceed "as usual" with (I tried first with the default value for parameters =before= and =after= but I reduced their values after looking at the centers, see the next figure):
+
+#+NAME: centers-tetD
+#+BEGIN_SRC R :session *R*
+c_before = 49
+c_after = 80
+centers = lapply(1:nbc, function(i)
+    mk_center_list(sp0[goodEvts][labelb==i],lD,
+                   before=c_before,after=c_after))
+names(centers) = paste("Cluster",1:nbc)
+#+END_SRC
+
+#+RESULTS: centers-tetD
+| Cluster 1  |
+| Cluster 2  |
+| Cluster 3  |
+| Cluster 4  |
+| Cluster 5  |
+| Cluster 6  |
+| Cluster 7  |
+| Cluster 8  |
+| Cluster 9  |
+| Cluster 10 |
+
+
+We then make sure that our cuts are long enough by looking at them. Starting with the first five clusters:
+
+#+NAME: centers-10u-first-5-tetD-fig
+#+HEADER: :width 800 :height 1600 :file centers-10u-first-5-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+layout(matrix(1:5,nr=5))
+par(mar=c(1,4,1,1))
+the_range=c(min(sapply(centers,function(l) min(l$center))),
+            max(sapply(centers,function(l) max(l$center))))
+for (i in 1:5) {
+    template = centers[[i]]$center
+    plot(template,lwd=2,col=2,
+         ylim=the_range,type="l",ylab="")
+    abline(h=0,col="grey50")
+    abline(v=(1:2)*(c_before+c_after)+1,col="grey50")
+    lines(filter(template,rep(1,filter_length)/filter_length),
+          col=1,lty=3,lwd=2)
+    abline(h=-threshold_factor,col="grey",lty=2,lwd=2)
+    lines(centers[[i]]$centerD,lwd=2,col=4)
+}
+#+END_SRC
+
+#+CAPTION: The first five templates (red) together with their first derivative (blue) all with the same scale.
+#+RESULTS: centers-10u-first-5-tetD-fig
+[[file:locust20010217_fig/centers-10u-first-5-tetD.png]]
+
+The last five clusters:
+
+#+NAME: centers-10u-last-5-tetD-fig
+#+HEADER: :width 800 :height 1600 :file centers-10u-last-5-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+layout(matrix(1:5,nr=5))
+par(mar=c(1,4,1,1))
+the_range=c(min(sapply(centers,function(l) min(l$center))),
+            max(sapply(centers,function(l) max(l$center))))
+for (i in 6:10) {
+    template = centers[[i]]$center
+    plot(template,lwd=2,col=2,
+         ylim=the_range,type="l",ylab="")
+    abline(h=0,col="grey50")
+    abline(v=(1:2)*(c_before+c_after)+1,col="grey50")
+    lines(filter(template,rep(1,filter_length)/filter_length),
+          col=1,lty=3,lwd=2)
+    abline(h=-threshold_factor,col="grey",lty=2,lwd=2)
+    lines(centers[[i]]$centerD,lwd=2,col=4)
+}
+#+END_SRC
+
+#+CAPTION: The last five templates (red) together with their first derivative (blue) all with the same scale.
+#+RESULTS: centers-10u-last-5-tetD-fig
+[[file:locust20010217_fig/centers-10u-last-5-tetD.png]]
+
+We see that with our setting only units 1, 2, 3, 4 and 8 are going to be reliably detected.
+
+** Peeling
+
+We can now do the peeling.
+
+*** Round 0
+
+We classify, predict, subtract and check how many non-classified events we get:
+
+#+NAME: peeling-0-10u-tetD
+#+BEGIN_SRC R :exports both :session *R*
+round0 = lapply(as.vector(sp0),classify_and_align_evt,
+                data=lD,centers=centers,
+                before=c_before,after=c_after)
+pred0 = predict_data(round0,centers,data_length = dim(lD)[1])
+lD_1 = lD - pred0
+sum(sapply(round0, function(l) l[[1]] == '?'))
+#+END_SRC
+
+#+RESULTS: peeling-0-10u-tetD
+: 2
+
+We can see the difference before / after peeling for the data between 1.0 and 1.1 s:
+
+#+NAME: peeling-0-10u-tetD-fig
+#+HEADER: :width 800 :height 1000 :file peeling-0-10u-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+ii = 1:1500 + 1.0*15000
+tt = ii/15000
+par(mar=c(1,1,1,1))
+plot(tt, lD[ii,1], axes = FALSE,
+     type="l",ylim=c(-50,10),
+     xlab="",ylab="")
+lines(tt, lD_1[ii,1], col='red')
+lines(tt, lD[ii,2]-15, col='black')
+lines(tt, lD_1[ii,2]-15, col='red')
+lines(tt, lD[ii,3]-25, col='black')
+lines(tt, lD_1[ii,3]-25, col='red')
+lines(tt, lD[ii,4]-40, col='black')
+lines(tt, lD_1[ii,4]-40, col='red')
+#+END_SRC
+
+#+CAPTION: The first peeling illustrated on 100 ms of data, the raw data are in black and the first subtration in red.
+#+RESULTS: peeling-0-10u-tetD-fig
+[[file:locust20010217_fig/peeling-0-10u-tetD.png]]
+
+*** Round 1
+
+We keep going, using the subtracted data =lD_1= as "raw data", detecting only all sites:
+
+#+NAME: peeling-1-10u-spike-detection-tetD
+#+BEGIN_SRC R :exports both :results output :session *R*
+lDf = -lD_1
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) < thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp1 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp1
+#+END_SRC
+
+#+RESULTS: peeling-1-10u-spike-detection-tetD
+: 
+: eventsPos object with indexes of 67 events. 
+:   Mean inter event interval: 6271.83 sampling points, corresponding SD: 7284.81 sampling points 
+:   Smallest and largest inter event intervals: 50 and 27732 sampling points.
+
+
+We classify, predict, subtract and check how many non-classified events we get:
+
+#+NAME: peeling-1-10u-tetD
+#+BEGIN_SRC R :exports both :session *R*
+round1 = lapply(as.vector(sp1),classify_and_align_evt,
+                data=lD_1,centers=centers,
+                before=c_before,after=c_after)
+pred1 = predict_data(round1,centers,data_length = dim(lD)[1])
+lD_2 = lD_1 - pred1
+sum(sapply(round1, function(l) l[[1]] == '?'))
+#+END_SRC
+
+#+RESULTS: peeling-1-10u-tetD
+: 10
+
+We look at what's left with (not shown):
+
+#+NAME: check-after-round1
+#+BEGIN_SRC R :eval never
+explore(sp1,lD_2,col=c("black","grey50"))
+#+END_SRC
+
+We decide to stop here.
+
+** Getting the spike trains
+
+#+NAME: spike-trains-10u-tetD
+#+BEGIN_SRC R :session *R*
+round_all = c(round0,round1)
+spike_trains = lapply(paste("Cluster",1:nbc),
+                      function(cn) sapply(round_all[sapply(round_all,
+                                                           function(l) l[[1]]==cn)],
+                                          function(l) l[[2]]+l[[3]]))
+names(spike_trains) = paste("Cluster",1:nbc)
+#+END_SRC
+
+#+RESULTS: spike-trains-10u-tetD
+| Cluster 1  |
+| Cluster 2  |
+| Cluster 3  |
+| Cluster 4  |
+| Cluster 5  |
+| Cluster 6  |
+| Cluster 7  |
+| Cluster 8  |
+| Cluster 9  |
+| Cluster 10 |
+
+** Getting the inter spike intervals and the forward and backward recurrence times
+
+*** ISI distributions
+We first get the =ISI= (inter spike intervals) of each unit:
+
+#+NAME: isi_from_each
+#+BEGIN_SRC R :session *R* :results silent
+isi = sapply(spike_trains, diff)
+names(isi) = names(spike_trains)
+#+END_SRC
+
+We get the ISI ECDF for the units with:
+
+#+NAME: isi-ecdf-10u-tetD
+#+HEADER: :width 800 :height 1600 :file isi-ecdf-10u-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout(matrix(1:(nbc+nbc %% 2),nr=ceiling(nbc/2)))
+par(mar=c(4,5,6,1))
+for (cn in names(isi)) plot_isi(isi[[cn]],main=cn)
+#+END_SRC
+
+#+CAPTION: ISI ECDF for the ten units.
+#+RESULTS: isi-ecdf-10u-tetD
+[[file:locust20010217_fig/isi-ecdf-10u-tetD.png]]
+
+
+*** Forward and Backward Recurrence Times
+On the data at hand that gives for units 1 to 7:
+
+#+NAME: rt-test-10u-tetD
+#+HEADER: :width 1600 :height 1600 :file rt-test-10u-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(spike_trains[[i]],
+                    spike_trains[[j]],
+                    ylab="",main=paste("Units",i,"and",j))
+#+END_SRC
+
+#+CAPTION: Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distrution agaisnt the null hypothesis (no interaction). If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: rt-test-10u-tetD
+[[file:locust20010217_fig/rt-test-10u-tetD.png]]
+
+On this time scale with this number of events, there are a lot of signs of interactions.
+
+** =all_at_once= test
+
+We test the function with:
+
+#+NAME: all_at_once-test
+#+BEGIN_SRC R :results output :exports both :session *R*
+## We need again an un-normalized version of the data
+ref_data = get_data(1,"Spontaneous 1",
+                    channels = c("ch10","ch12","ch14","ch15"),
+                    file="locust20010217.hdf5")
+## We can now use our function
+aao=all_at_once(ref_data,centers,
+                thres=threshold_factor*c(1,1,1,1),
+                filter_length_1=filter_length,
+                filter_length=filter_length,
+                minimalDist_1=15,
+                minimalDist=15,
+                before=c_before,
+                after=c_after,
+                detection_cycle=c(0,0),
+                verbose=2)
+#+END_SRC
+
+#+RESULTS: all_at_once-test
+#+begin_example
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1626   Min.   :1486   Min.   :1432   Min.   :1665  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2082  
+ Max.   :2383   Max.   :2495   Max.   :2526   Max.   :2378  
+
+Doing now round 0 detecting on all sites
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1307        119        115         99        112        144        123 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       180         99        134        180          2 
+
+Doing now round 1 detecting on all sites
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+        67          1          3          0          1          6          7 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+         6          7         14         12         10 
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1378        120        118         99        113        150        130 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       186        106        148        192         16
+#+end_example
+
+We see that we are getting back the numbers we obtained before step by step.
+
+We can compare the "old" and "new" centers with (not shown):
+
+#+NAME: all_at_once-center-comp-tetD
+#+BEGIN_SRC R :eval never 
+layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,1,1,1))
+for (i in 1:nbc) {
+    plot(centers[[i]]$center,lwd=2,col=2,
+         ylim=the_range,type="l")
+    abline(h=0,col="grey50")
+    abline(v=(1:3)*(c_before+c_after)+1,col="grey50")
+    lines(aao$centers[[i]]$center,lwd=1,col=4)
+}
+#+END_SRC
+
+They are not exactly identical since the new version is computed with all events (superposed or not) attributed to each neuron.
+
+** Analysis of =trial_02=
+
+We start by loading the data:
+
+#+NAME: Spontaneous_1_trial_02-tetD-load-data
+#+BEGIN_SRC R :session *R*
+ref_data = get_data(2,"Spontaneous 1",
+                    channels = c("ch10","ch12","ch14","ch15"),
+                    file="locust20010217.hdf5")
+#+END_SRC
+
+#+RESULTS: Spontaneous_1_trial_02-tetD-load-data
+
+We then detect and classify the events using a slightly less verbose output:
+
+#+NAME: Spontaneous_1_trial_02-tetD-detect-and-classify
+#+BEGIN_SRC R :exports both :results output :session *R*
+analysis_s1_t02 = all_at_once(ref_data,aao$centers,
+                              thres=threshold_factor*c(1,1,1,1),
+                              filter_length_1=filter_length,
+                              filter_length=filter_length,
+                              minimalDist_1=15,
+                              minimalDist=15,
+                              before=c_before,
+                              after=c_after,
+                              detection_cycle=c(0,0),
+                              verbose=1)
+#+END_SRC
+
+#+RESULTS: Spontaneous_1_trial_02-tetD-detect-and-classify
+#+begin_example
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1503   Min.   :1443   Min.   :1178   Min.   :1582  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :2387   Max.   :2410   Max.   :2500   Max.   :2429  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1431        153        168        112        122        162         95 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       132        111        130        220         26
+#+end_example
+
+
+** Systematic analysis of the 10 trials from =Spontaneous 1=
+
+*** Create =tetD_analysis= directory
+We will carry out an analysis of the 10 trials from =Spontaneous 1=. We will organize the analysis such that after each trial, the list returned by =all_at_once= is written to disk in a sub-directory called =tetD_analysis=. So we start by creating this sub-directory if it does not already exist:
+
+#+NAME: create-tetD_analysis
+#+BEGIN_SRC R :session *R*
+if (!dir.exists("tetD_analysis"))
+    dir.create("tetD_analysis")
+#+END_SRC
+
+#+RESULTS: create-tetD_analysis
+: TRUE
+
+
+*** Doing the job
+
+#+NAME: Spontaneous_1-tetD
+#+BEGIN_SRC R :exports both :results output :session *R*
+a_Spontaneous_1_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 1",
+                                      trial_nbs=1:10,
+                                      centers=aao$centers,
+                                      counts=aao$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+#+END_SRC
+
+#+RESULTS: Spontaneous_1-tetD
+#+begin_example
+***************
+Doing now trial 1 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1626   Min.   :1486   Min.   :1432   Min.   :1665  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2082  
+ Max.   :2383   Max.   :2495   Max.   :2526   Max.   :2378  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1371        118        118        103        117        146        131 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       187        106        143        192         10 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1503   Min.   :1443   Min.   :1178   Min.   :1582  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :2387   Max.   :2410   Max.   :2500   Max.   :2429  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1431        153        168        112        122        162         95 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       132        111        130        220         26 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1660   Min.   :1493   Min.   :1371   Min.   :1620  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2082  
+ Max.   :2313   Max.   :2446   Max.   :2484   Max.   :2391  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1309        142        121         59        122        167        110 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       125        117        133        191         22 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1452   Min.   :1457   Min.   :1333   Min.   :1611  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2393   Max.   :2475   Max.   :2523   Max.   :2399  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1360        155        132        105        121        176        105 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       130        106        142        172         16 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1597   Min.   :1436   Min.   :1275   Min.   :1622  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2085   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2315   Max.   :2422   Max.   :2483   Max.   :2418  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1355        172        187        112         99        153         92 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       120        102        110        182         26 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1487   Min.   :1399   Min.   :1383   Min.   :1607  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2370   Max.   :2470   Max.   :2508   Max.   :2421  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1375        160        127        106        115        158        132 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       147         88        134        185         23 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1662   Min.   :1441   Min.   :1201   Min.   :1655  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2085   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2302   Max.   :2387   Max.   :2478   Max.   :2396  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1344        142        111         77        115        161        113 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       143         99        158        207         18 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1633   Min.   :1348   Min.   :1346   Min.   :1589  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2363   Max.   :2463   Max.   :2540   Max.   :2430  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1436        165        190        129        103        140         87 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       103        112        189        195         23 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1638   Min.   :1434   Min.   :1469   Min.   :1587  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2363   Max.   :2425   Max.   :2545   Max.   :2423  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1358        168        156        129        105        133        104 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       111        110        143        182         17 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1660   Min.   :1501   Min.   :1488   Min.   :1624  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2047  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2355   Max.   :2399   Max.   :2496   Max.   :2420  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1372        193        160         88        101        144        104 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       152        107        152        152         19 
+Trial 10 done!
+******************
+#+end_example
+
+
+
+*** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Spontaneous_1-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Spontaneous_1-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Spontaneous_1_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with =Spontaneous 1= for tetrode D.
+#+RESULTS: Spontaneous_1-count-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_1-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Spontaneous_1-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1600 :file Spontaneous_1-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Spontaneous_1_tetD,threshold_factor,matrix(1:10,nr=5))
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each of the first five units during the 10 trials of =Spontaneous 1= for tetrode D.
+#+RESULTS: Spontaneous_1-waveform-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_1-waveform-evolution-tetD.png]]
+
+The observed counting processes and inter spike intervals densities for the first five units are:
+
+#+NAME: Spontaneous_1-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1800 :file Spontaneous_1-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+cp_isi(a_Spontaneous_1_tetD,nbins=100)
+#+END_SRC
+
+#+CAPTION: Observed counting processes and empirical inter spike interval distributions.
+#+RESULTS: Spontaneous_1-CP-and-ISI-dist-tetD
+[[file:locust20010217_fig/Spontaneous_1-CP-and-ISI-dist-tetD.png]]
+
+The BRT and RFT tests give for the first 7 units:
+
+#+NAME: Spontaneous_1-rt-test-tetD
+#+HEADER: :width 1600 :height 1600 :file Spontaneous_1-rt-test-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_1_tetD$spike_trains[[i]],
+                    a_Spontaneous_1_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+#+END_SRC
+
+#+CAPTION: Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: Spontaneous_1-rt-test-tetD
+[[file:locust20010217_fig/Spontaneous_1-rt-test-tetD.png]]
+
+
+*** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Spontaneous_1
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Spontaneous_1_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_1","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Spontaneous_1_tetD$spike_trains))
+    cat(a_Spontaneous_1_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_1_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+
+** Systematic analysis of the first 25 trials from =Spontaneous 3=
+
+The description of the data states that the 10 trials of =Spontaneous 2= had to be interrupted after the second one due to a fire alarm, so we go directly to the 30 trials of =Spontaneous 3=. There is moreover a noise problem (not mentioned in the lab book!!!) at trials 26, 27 and 28, so we stop at trial 25. To save space we do not print the output of the running code in the =html= document.
+
+#+NAME: Spontaneous_3-tetD
+#+BEGIN_SRC R :exports code :results output :session *R*
+a_Spontaneous_3_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 3",
+                                      trial_nbs=1:25,
+                                      centers=a_Spontaneous_1_tetD$centers,
+                                      counts=a_Spontaneous_1_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+#+END_SRC
+
+#+RESULTS: Spontaneous_3-tetD
+#+begin_example
+***************
+Doing now trial 1 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1558   Min.   :1427   Min.   :1461   Min.   :1534  
+ 1st Qu.:2013   1st Qu.:2004   1st Qu.:1999   1st Qu.:2009  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2082  
+ Max.   :2331   Max.   :2454   Max.   :2482   Max.   :2398  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1370        117        119        173        113        135        109 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       154         94        153        176         27 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1604   Min.   :1526   Min.   :1338   Min.   :1663  
+ 1st Qu.:2013   1st Qu.:2004   1st Qu.:1999   1st Qu.:2009  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2082  
+ Max.   :2366   Max.   :2449   Max.   :2486   Max.   :2485  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1293        133         89        122         88        134        118 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       162         97        152        179         19 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1627   Min.   :1362   Min.   :1467   Min.   :1446  
+ 1st Qu.:2012   1st Qu.:2004   1st Qu.:1999   1st Qu.:2009  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2086   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :2350   Max.   :2462   Max.   :2497   Max.   :2464  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1403        168        142        152        100        124        115 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       139         86        155        198         24 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1671   Min.   :1445   Min.   :1424   Min.   :1565  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2075   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2082  
+ Max.   :2310   Max.   :2453   Max.   :2508   Max.   :2429  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1272        139         94        114         84        111        124 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       157        115        131        188         15 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1657   Min.   :1515   Min.   :1364   Min.   :1596  
+ 1st Qu.:2013   1st Qu.:2004   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2333   Max.   :2419   Max.   :2487   Max.   :2464  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1321        142        107        161        103        118        123 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       147         99        125        177         19 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1645   Min.   :1512   Min.   :1421   Min.   :1533  
+ 1st Qu.:2013   1st Qu.:2004   1st Qu.:1999   1st Qu.:2009  
+ Median :2044   Median :2044   Median :2043   Median :2046  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :2323   Max.   :2408   Max.   :2481   Max.   :2474  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1374        177        158        145         98        204        114 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        97         86        106        163         26 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1587   Min.   :1474   Min.   :1387   Min.   :1496  
+ 1st Qu.:2012   1st Qu.:2004   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2046  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2088   3rd Qu.:2084  
+ Max.   :2316   Max.   :2412   Max.   :2511   Max.   :2427  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1536        187        132        149        104        336         94 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       139         84        118        163         30 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1661   Min.   :1467   Min.   :1485   Min.   :1475  
+ 1st Qu.:2012   1st Qu.:2004   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2046  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2084  
+ Max.   :2349   Max.   :2527   Max.   :2475   Max.   :2476  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1533        190        149         90         74        387        119 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       120         76        132        155         41 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1627   Min.   :1573   Min.   :1438   Min.   :1568  
+ 1st Qu.:2013   1st Qu.:2004   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2075   3rd Qu.:2084   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :2318   Max.   :2402   Max.   :2480   Max.   :2448  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1408        173        145        100         97        314        110 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        99         90        106        144         30 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1602   Min.   :1478   Min.   :1458   Min.   :1595  
+ 1st Qu.:2012   1st Qu.:2004   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :2324   Max.   :2508   Max.   :2511   Max.   :2438  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1449        174        122        128        107        306        102 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       129         90        125        140         26 
+Trial 10 done!
+******************
+***************
+Doing now trial 11 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1566   Min.   :1506   Min.   :1478   Min.   :1582  
+ 1st Qu.:2012   1st Qu.:2004   1st Qu.:1998   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2084  
+ Max.   :2341   Max.   :2387   Max.   :2531   Max.   :2458  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1414        194        161        124        109        268         93 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       121         81        113        128         22 
+Trial 11 done!
+******************
+***************
+Doing now trial 12 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1631   Min.   :1516   Min.   :1313   Min.   :1543  
+ 1st Qu.:2012   1st Qu.:2004   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2084  
+ Max.   :2324   Max.   :2458   Max.   :2493   Max.   :2436  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1434        167        140        140        117        262        115 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       118         89        118        137         31 
+Trial 12 done!
+******************
+***************
+Doing now trial 13 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1611   Min.   :1450   Min.   :1400   Min.   :1598  
+ 1st Qu.:2012   1st Qu.:2004   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :2381   Max.   :2510   Max.   :2514   Max.   :2453  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1364        171        139        138         86        213        116 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       124         89        118        141         29 
+Trial 13 done!
+******************
+***************
+Doing now trial 14 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1683   Min.   :1468   Min.   :1443   Min.   :1530  
+ 1st Qu.:2012   1st Qu.:2003   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2086   3rd Qu.:2087   3rd Qu.:2084  
+ Max.   :2334   Max.   :2464   Max.   :2485   Max.   :2556  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1404        197        161        144        102        190        121 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       121         73        145        120         30 
+Trial 14 done!
+******************
+***************
+Doing now trial 15 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1683   Min.   :1521   Min.   :1328   Min.   :1495  
+ 1st Qu.:2012   1st Qu.:2003   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2086   3rd Qu.:2087   3rd Qu.:2084  
+ Max.   :2333   Max.   :2537   Max.   :2509   Max.   :2465  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1341        220        151        133         91        171        106 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       116         77        115        138         23 
+Trial 15 done!
+******************
+***************
+Doing now trial 16 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1610   Min.   :1460   Min.   :1471   Min.   :1414  
+ 1st Qu.:2012   1st Qu.:2003   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2046  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2084  
+ Max.   :2331   Max.   :2466   Max.   :2499   Max.   :2450  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1385        221        152        110        105        160        118 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       123        105        112        160         19 
+Trial 16 done!
+******************
+***************
+Doing now trial 17 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   : 885   Min.   : 356   Min.   : 591   Min.   : 390  
+ 1st Qu.:2012   1st Qu.:2003   1st Qu.:1999   1st Qu.:2008  
+ Median :2044   Median :2044   Median :2043   Median :2045  
+ Mean   :2044   Mean   :2044   Mean   :2043   Mean   :2045  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :4073   Max.   :4072   Max.   :4072   Max.   :4071  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1375        184        141         99        113        168        120 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       149         88        138        149         26 
+Trial 17 done!
+******************
+***************
+Doing now trial 18 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1600   Min.   :1170   Min.   : 910   Min.   :1284  
+ 1st Qu.:2010   1st Qu.:2002   1st Qu.:1997   1st Qu.:2006  
+ Median :2042   Median :2042   Median :2041   Median :2043  
+ Mean   :2042   Mean   :2042   Mean   :2041   Mean   :2043  
+ 3rd Qu.:2074   3rd Qu.:2084   3rd Qu.:2085   3rd Qu.:2082  
+ Max.   :2335   Max.   :2456   Max.   :2608   Max.   :2461  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1426        239        159        141         77        244        106 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        98         63        139        119         41 
+Trial 18 done!
+******************
+***************
+Doing now trial 19 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1572   Min.   :1418   Min.   :1543   Min.   :1565  
+ 1st Qu.:2010   1st Qu.:2002   1st Qu.:1997   1st Qu.:2006  
+ Median :2042   Median :2042   Median :2041   Median :2043  
+ Mean   :2042   Mean   :2042   Mean   :2041   Mean   :2043  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2327   Max.   :2446   Max.   :2426   Max.   :2449  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1355        135        133        117         96        242        103 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        87         94        127        176         45 
+Trial 19 done!
+******************
+***************
+Doing now trial 20 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1586   Min.   :1539   Min.   : 970   Min.   :1509  
+ 1st Qu.:2011   1st Qu.:2002   1st Qu.:1997   1st Qu.:2006  
+ Median :2042   Median :2042   Median :2040   Median :2043  
+ Mean   :2042   Mean   :2042   Mean   :2041   Mean   :2043  
+ 3rd Qu.:2074   3rd Qu.:2084   3rd Qu.:2084   3rd Qu.:2081  
+ Max.   :2334   Max.   :2400   Max.   :2565   Max.   :2473  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1324         52        139        103         88        349         90 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        52         91        151        161         48 
+Trial 20 done!
+******************
+***************
+Doing now trial 21 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1604   Min.   :1490   Min.   :1663   Min.   :1426  
+ 1st Qu.:2010   1st Qu.:2001   1st Qu.:1999   1st Qu.:2006  
+ Median :2042   Median :2043   Median :2040   Median :2044  
+ Mean   :2042   Mean   :2042   Mean   :2041   Mean   :2043  
+ 3rd Qu.:2074   3rd Qu.:2085   3rd Qu.:2082   3rd Qu.:2082  
+ Max.   :2318   Max.   :2415   Max.   :2349   Max.   :2451  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1498         56        206        167         74        423         78 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        37         90        179        126         62 
+Trial 21 done!
+******************
+***************
+Doing now trial 22 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1630   Min.   :1424   Min.   :1698   Min.   :1460  
+ 1st Qu.:2010   1st Qu.:2001   1st Qu.:2001   1st Qu.:2006  
+ Median :2043   Median :2043   Median :2041   Median :2044  
+ Mean   :2042   Mean   :2043   Mean   :2041   Mean   :2044  
+ 3rd Qu.:2075   3rd Qu.:2085   3rd Qu.:2082   3rd Qu.:2083  
+ Max.   :2297   Max.   :2423   Max.   :2334   Max.   :2467  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1453         29        196        125         78        512         72 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        26         90        184         96         45 
+Trial 22 done!
+******************
+***************
+Doing now trial 23 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1642   Min.   :1517   Min.   :1442   Min.   :1506  
+ 1st Qu.:2011   1st Qu.:2002   1st Qu.:1998   1st Qu.:2006  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2041   Mean   :2044  
+ 3rd Qu.:2075   3rd Qu.:2085   3rd Qu.:2085   3rd Qu.:2083  
+ Max.   :2312   Max.   :2439   Max.   :2485   Max.   :2473  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1535        201        191        122         70        397         97 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        72         65        169        100         51 
+Trial 23 done!
+******************
+***************
+Doing now trial 24 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1598   Min.   :1483   Min.   :1278   Min.   :1422  
+ 1st Qu.:2011   1st Qu.:2002   1st Qu.:1996   1st Qu.:2006  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2075   3rd Qu.:2086   3rd Qu.:2089   3rd Qu.:2084  
+ Max.   :2345   Max.   :2454   Max.   :2626   Max.   :2508  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1726        347        164         93         69        254        165 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       208         85        119         97        125 
+Trial 24 done!
+******************
+***************
+Doing now trial 25 of Spontaneous 3
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1640   Min.   :1517   Min.   :1196   Min.   :1453  
+ 1st Qu.:2011   1st Qu.:2002   1st Qu.:1997   1st Qu.:2007  
+ Median :2043   Median :2043   Median :2043   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2076   3rd Qu.:2086   3rd Qu.:2089   3rd Qu.:2084  
+ Max.   :2360   Max.   :2420   Max.   :2654   Max.   :2489  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1777        351        138         82         82        209        142 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       260         75        127         97        214 
+Trial 25 done!
+******************
+#+end_example
+
+*** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Spontaneous_3-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Spontaneous_3-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Spontaneous_3_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 25 trials with =Spontaneous 3= for tetrode D.
+#+RESULTS: Spontaneous_3-count-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_3-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Spontaneous_3-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1600 :file Spontaneous_3-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Spontaneous_3_tetD,threshold_factor,matrix(1:10,nr=5))
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each of the first five units during the 25 trials of =Spontaneous 3= for tetrode D.
+#+RESULTS: Spontaneous_3-waveform-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_3-waveform-evolution-tetD.png]]
+
+The observed counting processes and inter spike intervals densities are:
+
+#+NAME: Spontaneous_3-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1800 :file Spontaneous_3-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+cp_isi(a_Spontaneous_3_tetD,nbins=100)
+#+END_SRC
+
+#+CAPTION: Observed counting processes and empirical inter spike interval distributions.
+#+RESULTS: Spontaneous_3-CP-and-ISI-dist-tetD
+[[file:locust20010217_fig/Spontaneous_3-CP-and-ISI-dist-tetD.png]]
+
+The BRT and RFT tests give for the first 7 units:
+
+#+NAME: Spontaneous_3-rt-test-tetD
+#+HEADER: :width 1600 :height 1600 :file Spontaneous_3-rt-test-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_3_tetD$spike_trains[[i]],
+                    a_Spontaneous_3_tetD$spike_trains[[j]],
+		    nbins=500, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+#+END_SRC
+
+#+CAPTION: Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_3. If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: Spontaneous_3-rt-test-tetD
+[[file:locust20010217_fig/Spontaneous_3-rt-test-tetD.png]]
+
+
+*** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Spontaneous_3
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Spontaneous_3_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_3","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Spontaneous_3_tetD$spike_trains))
+    cat(a_Spontaneous_3_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_3_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+
+** Systematic analysis of the 10 trials from =Spontaneous 4=
+
+
+#+NAME: Spontaneous_4-tetD
+#+BEGIN_SRC R :exports code :results output :session *R*
+a_Spontaneous_4_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 4",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_3_tetD$centers,
+                                      counts=a_Spontaneous_3_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+#+END_SRC
+
+#+RESULTS: Spontaneous_4-tetD
+#+begin_example
+***************
+Doing now trial 1 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1717   Min.   :1548   Min.   :1589   Min.   :1560  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2284   Max.   :2379   Max.   :2432   Max.   :2481  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1243         87         74         71         90        196        118 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       164         97        139        180         27 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1710   Min.   :1591   Min.   :1575   Min.   :1602  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2326   Max.   :2389   Max.   :2400   Max.   :2440  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1151        100         71         58        110        192         84 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       135        118        122        139         22 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1630   Min.   :1534   Min.   :1570   Min.   :1644  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2299   Max.   :2397   Max.   :2405   Max.   :2449  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1256        140        100        104         75        204        112 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       140         99        128        122         32 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1671   Min.   :1500   Min.   :1588   Min.   :1572  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2288   Max.   :2469   Max.   :2439   Max.   :2439  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1225        158        135        105         79        168         82 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       107         82        152        125         32 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1675   Min.   :1531   Min.   :1570   Min.   :1440  
+ 1st Qu.:2013   1st Qu.:2004   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2327   Max.   :2390   Max.   :2405   Max.   :2538  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1326        182        155        122         74        187        116 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        92         86        154        120         38 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1686   Min.   :1619   Min.   :1569   Min.   :1602  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2318   Max.   :2365   Max.   :2416   Max.   :2447  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1277        161        143         87         81        188        108 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       109        103        142        120         35 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1700   Min.   :1555   Min.   :1516   Min.   :1568  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2287   Max.   :2370   Max.   :2408   Max.   :2469  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1315        171        150        115         81        189        107 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       106         95        156        120         25 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1728   Min.   :1582   Min.   :1544   Min.   :1583  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2310   Max.   :2447   Max.   :2413   Max.   :2479  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1232        156        117         79         69        162        105 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       106        121        162        128         27 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1694   Min.   :1515   Min.   :1569   Min.   :1497  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2308   Max.   :2389   Max.   :2403   Max.   :2433  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1169        165         88         52         81        160         97 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       148        106        132        110         30 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Spontaneous 4
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1661   Min.   :1586   Min.   :1554   Min.   :1544  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2319   Max.   :2392   Max.   :2408   Max.   :2446  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1388        159        141         98         97        217        114 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       107         91        187        143         34 
+Trial 10 done!
+******************
+#+end_example
+
+*** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Spontaneous_4-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Spontaneous_4-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Spontaneous_4_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with =Spontaneous 4= for tetrode D.
+#+RESULTS: Spontaneous_4-count-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_4-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Spontaneous_4-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1600 :file Spontaneous_4-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Spontaneous_4_tetD,threshold_factor,matrix(1:10,nr=5))
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each of the first five units during the 10 trials of =Spontaneous 4= for tetrode D.
+#+RESULTS: Spontaneous_4-waveform-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_4-waveform-evolution-tetD.png]]
+
+The observed counting processes and inter spike intervals densities are:
+
+#+NAME: Spontaneous_4-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1800 :file Spontaneous_4-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+cp_isi(a_Spontaneous_4_tetD,nbins=100)
+#+END_SRC
+
+#+CAPTION: Observed counting processes and empirical inter spike interval distributions.
+#+RESULTS: Spontaneous_4-CP-and-ISI-dist-tetD
+[[file:locust20010217_fig/Spontaneous_4-CP-and-ISI-dist-tetD.png]]
+
+The BRT and RFT tests give for the first 7 units:
+
+#+NAME: Spontaneous_4-rt-test-tetD
+#+HEADER: :width 1600 :height 1600 :file Spontaneous_4-rt-test-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_4_tetD$spike_trains[[i]],
+                    a_Spontaneous_4_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+#+END_SRC
+
+#+CAPTION: Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_4. If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: Spontaneous_4-rt-test-tetD
+[[file:locust20010217_fig/Spontaneous_4-rt-test-tetD.png]]
+
+
+*** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Spontaneous_4
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Spontaneous_4_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_4","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Spontaneous_4_tetD$spike_trains))
+    cat(a_Spontaneous_4_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_4_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+
+** Systematic analysis of the 10 trials from =Spontaneous 5=
+
+
+#+NAME: Spontaneous_5-tetD
+#+BEGIN_SRC R :exports code :results output :session *R*
+a_Spontaneous_5_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 5",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_4_tetD$centers,
+                                      counts=a_Spontaneous_4_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+#+END_SRC
+
+#+RESULTS: Spontaneous_5-tetD
+#+begin_example
+***************
+Doing now trial 1 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1616   Min.   :1589   Min.   :1528   Min.   :1490  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2315   Max.   :2357   Max.   :2413   Max.   :2513  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1228        138         82         57        114        149         98 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       129        115        165        153         28 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1582   Min.   :1519   Min.   :1551   Min.   :1566  
+ 1st Qu.:2013   1st Qu.:2004   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2344   Max.   :2390   Max.   :2436   Max.   :2437  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1360        122         99         82         95        199        122 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       169        116        158        174         24 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1682   Min.   :1581   Min.   :1564   Min.   :1477  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2313   Max.   :2375   Max.   :2456   Max.   :2446  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1302        178        140        124         77        152         99 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       132        101        147        124         28 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1653   Min.   :1561   Min.   :1561   Min.   :1540  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2332   Max.   :2453   Max.   :2433   Max.   :2478  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1386        157        139        102         83        187        115 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       146        109        176        139         33 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1698   Min.   :1571   Min.   :1562   Min.   :1519  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2381   Max.   :2400   Max.   :2403   Max.   :2500  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1314        168        140         91         89        166        113 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       136        121        146        119         25 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1729   Min.   :1588   Min.   :1560   Min.   :1523  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2308   Max.   :2371   Max.   :2406   Max.   :2451  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1319        173        122         73        117        180        106 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       126        126        141        127         28 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1609   Min.   :1561   Min.   :1548   Min.   :1618  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2289   Max.   :2371   Max.   :2447   Max.   :2435  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1163        103         44         49        102        174         90 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       156        115        130        165         35 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1667   Min.   :1596   Min.   :1522   Min.   :1496  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2287   Max.   :2443   Max.   :2461   Max.   :2503  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1333        177        150        114         85        181         99 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        87         98        169        142         31 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1723   Min.   :1609   Min.   :1541   Min.   :1531  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2308   Max.   :2406   Max.   :2456   Max.   :2514  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1285        180        127         76         84        208        106 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       115         96        156        112         25 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Spontaneous 5
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1709   Min.   :1567   Min.   :1564   Min.   :1386  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2292   Max.   :2362   Max.   :2436   Max.   :2460  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1246        136        102         79         79        192        121 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       128        124        128        137         20 
+Trial 10 done!
+******************
+#+end_example
+
+*** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Spontaneous_5-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Spontaneous_5-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Spontaneous_5_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with =Spontaneous 5= for tetrode D.
+#+RESULTS: Spontaneous_5-count-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_5-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Spontaneous_5-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1600 :file Spontaneous_5-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Spontaneous_5_tetD,threshold_factor,matrix(1:10,nr=5))
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each of the first five units during the 10 trials of =Spontaneous 5= for tetrode D.
+#+RESULTS: Spontaneous_5-waveform-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_5-waveform-evolution-tetD.png]]
+
+The observed counting processes and inter spike intervals densities are:
+
+#+NAME: Spontaneous_5-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1800 :file Spontaneous_5-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+cp_isi(a_Spontaneous_5_tetD,nbins=100)
+#+END_SRC
+
+#+CAPTION: Observed counting processes and empirical inter spike interval distributions.
+#+RESULTS: Spontaneous_5-CP-and-ISI-dist-tetD
+[[file:locust20010217_fig/Spontaneous_5-CP-and-ISI-dist-tetD.png]]
+
+The BRT and RFT tests give for the first 7 units:
+
+#+NAME: Spontaneous_5-rt-test-tetD
+#+HEADER: :width 1600 :height 1600 :file Spontaneous_5-rt-test-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_5_tetD$spike_trains[[i]],
+                    a_Spontaneous_5_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+#+END_SRC
+
+#+CAPTION: Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_5. If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: Spontaneous_5-rt-test-tetD
+[[file:locust20010217_fig/Spontaneous_5-rt-test-tetD.png]]
+
+
+*** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Spontaneous_5
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Spontaneous_5_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_5","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Spontaneous_5_tetD$spike_trains))
+    cat(a_Spontaneous_5_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_5_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+
+
+
+** Systematic analysis of the 10 trials from =Spontaneous 6=
+
+
+#+NAME: Spontaneous_6-tetD
+#+BEGIN_SRC R :exports code :results output :session *R*
+a_Spontaneous_6_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 6",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_5_tetD$centers,
+                                      counts=a_Spontaneous_5_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+#+END_SRC
+
+#+RESULTS: Spontaneous_6-tetD
+#+begin_example
+***************
+Doing now trial 1 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1656   Min.   :1553   Min.   :1497   Min.   :1556  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2298   Max.   :2438   Max.   :2462   Max.   :2448  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1408        155        100         86         83        160        136 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       216        124        134        178         36 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1709   Min.   :1592   Min.   :1456   Min.   :1595  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2045  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2313   Max.   :2440   Max.   :2576   Max.   :2433  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1382        145         87        100        101        184        110 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       140        134        190        163         28 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1701   Min.   :1560   Min.   :1493   Min.   :1560  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2307   Max.   :2392   Max.   :2441   Max.   :2429  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1264        159         99         72        106        179         98 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       126        120        158        129         18 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1707   Min.   :1637   Min.   :1522   Min.   :1551  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2290   Max.   :2389   Max.   :2434   Max.   :2429  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1357        201        131        106         91        174        121 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       131        101        141        132         28 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1710   Min.   :1514   Min.   :1514   Min.   :1608  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2326   Max.   :2419   Max.   :2463   Max.   :2413  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1252        175        109         65        105        156        100 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       120        102        170        118         32 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1655   Min.   :1622   Min.   :1450   Min.   :1532  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1999   1st Qu.:2008  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2306   Max.   :2395   Max.   :2458   Max.   :2481  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1331        164        108         96        100        146        111 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       131        101        192        159         23 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1714   Min.   :1580   Min.   :1495   Min.   :1445  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2044   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2306   Max.   :2392   Max.   :2415   Max.   :2543  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1407        160        120        100         97        174        128 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       158        113        166        171         20 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1719   Min.   :1599   Min.   :1505   Min.   :1538  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2312   Max.   :2357   Max.   :2409   Max.   :2428  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1330        211        155         99         93        181        107 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       105         96        156        102         25 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1636   Min.   :1559   Min.   :1510   Min.   :1565  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2085   3rd Qu.:2081  
+ Max.   :2302   Max.   :2349   Max.   :2472   Max.   :2453  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1245        170         93         68         96        173        100 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       133        109        153        125         25 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Spontaneous 6
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1662   Min.   :1595   Min.   :1450   Min.   :1558  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2288   Max.   :2349   Max.   :2455   Max.   :2458  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1319        183        109        114         95        173        120 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       127        103        165        108         22 
+Trial 10 done!
+******************
+#+end_example
+
+*** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Spontaneous_6-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Spontaneous_6-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Spontaneous_6_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with =Spontaneous 6= for tetrode D.
+#+RESULTS: Spontaneous_6-count-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_6-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Spontaneous_6-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1600 :file Spontaneous_6-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Spontaneous_6_tetD,threshold_factor,matrix(1:10,nr=5))
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each of the first five units during the 10 trials of =Spontaneous 6= for tetrode D.
+#+RESULTS: Spontaneous_6-waveform-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_6-waveform-evolution-tetD.png]]
+
+The observed counting processes and inter spike intervals densities are:
+
+#+NAME: Spontaneous_6-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1800 :file Spontaneous_6-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+cp_isi(a_Spontaneous_6_tetD,nbins=100)
+#+END_SRC
+
+#+CAPTION: Observed counting processes and empirical inter spike interval distributions.
+#+RESULTS: Spontaneous_6-CP-and-ISI-dist-tetD
+[[file:locust20010217_fig/Spontaneous_6-CP-and-ISI-dist-tetD.png]]
+
+The BRT and RFT tests give for the first 7 units:
+
+#+NAME: Spontaneous_6-rt-test-tetD
+#+HEADER: :width 1600 :height 1600 :file Spontaneous_6-rt-test-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_6_tetD$spike_trains[[i]],
+                    a_Spontaneous_6_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+#+END_SRC
+
+#+CAPTION: Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_6. If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: Spontaneous_6-rt-test-tetD
+[[file:locust20010217_fig/Spontaneous_6-rt-test-tetD.png]]
+
+
+*** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Spontaneous_6
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Spontaneous_6_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_6","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Spontaneous_6_tetD$spike_trains))
+    cat(a_Spontaneous_6_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_6_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+
+
+
+** Systematic analysis of the 10 trials from =Spontaneous 7=
+
+
+#+NAME: Spontaneous_7-tetD
+#+BEGIN_SRC R :exports code :results output :session *R*
+a_Spontaneous_7_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 7",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_6_tetD$centers,
+                                      counts=a_Spontaneous_6_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+#+END_SRC
+
+#+RESULTS: Spontaneous_7-tetD
+#+begin_example
+***************
+Doing now trial 1 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1693   Min.   :1572   Min.   :1477   Min.   :1499  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2305   Max.   :2421   Max.   :2539   Max.   :2451  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1300        152         66         78        117        130        107 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       194        130        147        152         27 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1686   Min.   :1614   Min.   :1533   Min.   :1591  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2300   Max.   :2357   Max.   :2550   Max.   :2431  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1269        151         88         83         97        154         92 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       148        130        163        144         19 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1700   Min.   :1604   Min.   :1380   Min.   :1566  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2307   Max.   :2362   Max.   :2512   Max.   :2455  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1268        158         73         76        106        163        103 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       156        112        145        145         31 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   : 763   Min.   : 504   Min.   : 851   Min.   : 802  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :4072   Max.   :4071   Max.   :4073   Max.   :4072  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1217        153         93         78        103        154        113 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       154        117        122        109         21 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1689   Min.   :1526   Min.   :1546   Min.   :1533  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2305   Max.   :2355   Max.   :2451   Max.   :2475  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1333        174        117         83         98        143        116 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       154        134        154        132         28 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1680   Min.   :1650   Min.   :1391   Min.   :1534  
+ 1st Qu.:2013   1st Qu.:2006   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2081   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2317   Max.   :2350   Max.   :2490   Max.   :2440  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1248        199        112         84         88        129        115 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       145         98        146        117         15 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1722   Min.   :1617   Min.   :1529   Min.   :1547  
+ 1st Qu.:2012   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2311   Max.   :2411   Max.   :2473   Max.   :2415  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1423        226        148        123         86        167         98 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       136        101        181        129         28 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1702   Min.   :1587   Min.   :1548   Min.   :1548  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2296   Max.   :2343   Max.   :2442   Max.   :2499  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1262        194        139         67        108        123        113 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       114        109        135        139         21 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1678   Min.   :1583   Min.   :1418   Min.   :1596  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2293   Max.   :2381   Max.   :2515   Max.   :2469  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1196        202         87         88        104        122         80 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       157         78        135        115         28 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Spontaneous 7
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1474   Min.   :1206   Min.   :1399   Min.   :1439  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2962   Max.   :3645   Max.   :4074   Max.   :4072  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1356        218        132         89         82        169         96 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       119        103        169        148         31 
+Trial 10 done!
+******************
+#+end_example
+
+*** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Spontaneous_7-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Spontaneous_7-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Spontaneous_7_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with =Spontaneous 7= for tetrode D.
+#+RESULTS: Spontaneous_7-count-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_7-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Spontaneous_7-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1600 :file Spontaneous_7-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Spontaneous_7_tetD,threshold_factor,matrix(1:10,nr=5))
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each of the first five units during the 10 trials of =Spontaneous 7= for tetrode D.
+#+RESULTS: Spontaneous_7-waveform-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_7-waveform-evolution-tetD.png]]
+
+The observed counting processes and inter spike intervals densities are:
+
+#+NAME: Spontaneous_7-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1800 :file Spontaneous_7-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+cp_isi(a_Spontaneous_7_tetD,nbins=100)
+#+END_SRC
+
+#+CAPTION: Observed counting processes and empirical inter spike interval distributions.
+#+RESULTS: Spontaneous_7-CP-and-ISI-dist-tetD
+[[file:locust20010217_fig/Spontaneous_7-CP-and-ISI-dist-tetD.png]]
+
+The BRT and RFT tests give for the first 7 units:
+
+#+NAME: Spontaneous_7-rt-test-tetD
+#+HEADER: :width 1600 :height 1600 :file Spontaneous_7-rt-test-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_7_tetD$spike_trains[[i]],
+                    a_Spontaneous_7_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+#+END_SRC
+
+#+CAPTION: Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_7. If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: Spontaneous_7-rt-test-tetD
+[[file:locust20010217_fig/Spontaneous_7-rt-test-tetD.png]]
+
+
+*** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Spontaneous_7
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Spontaneous_7_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_7","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Spontaneous_7_tetD$spike_trains))
+    cat(a_Spontaneous_7_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_7_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+
+
+
+** Systematic analysis of the 10 trials from =Spontaneous 8=
+
+#+NAME: Spontaneous_8-tetD
+#+BEGIN_SRC R :exports code :results output :session *R*
+a_Spontaneous_8_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 8",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_7_tetD$centers,
+                                      counts=a_Spontaneous_7_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+#+END_SRC
+
+#+RESULTS: Spontaneous_8-tetD
+#+begin_example
+***************
+Doing now trial 1 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1693   Min.   :1611   Min.   :1487   Min.   :1536  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2285   Max.   :2362   Max.   :2473   Max.   :2455  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1397        122         59        101         95        201        123 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       209        143        150        165         29 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1681   Min.   :1581   Min.   :1481   Min.   :1510  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2302   Max.   :2441   Max.   :2453   Max.   :2451  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1401        198        124        119         91        169        111 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       159         88        163        139         40 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1725   Min.   :1563   Min.   :1496   Min.   :1484  
+ 1st Qu.:2013   1st Qu.:2006   1st Qu.:1998   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2081   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2289   Max.   :2372   Max.   :2471   Max.   :2454  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1306        173         85         82         83        152        107 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       174        138        168        122         22 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1675   Min.   :1586   Min.   :1513   Min.   :1534  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2303   Max.   :2387   Max.   :2540   Max.   :2472  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1345        210        119        115        117        144        101 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       130        108        150        129         22 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1695   Min.   :1589   Min.   :1450   Min.   :1524  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2340   Max.   :2372   Max.   :2460   Max.   :2431  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1356        177        112         78         87        188        107 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       204        112        146        118         27 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1710   Min.   :1643   Min.   :1372   Min.   :1516  
+ 1st Qu.:2013   1st Qu.:2006   1st Qu.:1999   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2314   Max.   :2379   Max.   :2485   Max.   :2430  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1271        135         73         96        100        157        119 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       156        120        151        135         29 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1696   Min.   :1586   Min.   :1448   Min.   :1534  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2292   Max.   :2407   Max.   :2458   Max.   :2428  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1356        247        141        126         83        154        108 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       101         80        171        124         21 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1727   Min.   :1591   Min.   :1300   Min.   :1417  
+ 1st Qu.:2013   1st Qu.:2006   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2294   Max.   :2367   Max.   :2495   Max.   :2550  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1327        161        122         70        114        151        107 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       154         89        172        163         24 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1641   Min.   :1601   Min.   :1490   Min.   :1578  
+ 1st Qu.:2013   1st Qu.:2006   1st Qu.:1998   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2307   Max.   :2374   Max.   :2468   Max.   :2477  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1252        171        120         79         85        151         87 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       155        108        149        128         19 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Spontaneous 8
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1641   Min.   :1600   Min.   :1515   Min.   :1498  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2087   3rd Qu.:2082  
+ Max.   :2321   Max.   :2371   Max.   :2456   Max.   :2455  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1415        245        171        106         79        144        118 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       139        100        163        124         26 
+Trial 10 done!
+******************
+#+end_example
+
+*** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Spontaneous_8-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Spontaneous_8-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Spontaneous_8_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with =Spontaneous 8= for tetrode D.
+#+RESULTS: Spontaneous_8-count-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_8-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Spontaneous_8-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1600 :file Spontaneous_8-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Spontaneous_8_tetD,threshold_factor,matrix(1:10,nr=5))
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each of the first five units during the 10 trials of =Spontaneous 8= for tetrode D.
+#+RESULTS: Spontaneous_8-waveform-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_8-waveform-evolution-tetD.png]]
+
+The observed counting processes and inter spike intervals densities are:
+
+#+NAME: Spontaneous_8-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1800 :file Spontaneous_8-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+cp_isi(a_Spontaneous_8_tetD,nbins=100)
+#+END_SRC
+
+#+CAPTION: Observed counting processes and empirical inter spike interval distributions.
+#+RESULTS: Spontaneous_8-CP-and-ISI-dist-tetD
+[[file:locust20010217_fig/Spontaneous_8-CP-and-ISI-dist-tetD.png]]
+
+The BRT and RFT tests give for the first 7 units:
+
+#+NAME: Spontaneous_8-rt-test-tetD
+#+HEADER: :width 1600 :height 1600 :file Spontaneous_8-rt-test-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_8_tetD$spike_trains[[i]],
+                    a_Spontaneous_8_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+#+END_SRC
+
+#+CAPTION: Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_8. If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: Spontaneous_8-rt-test-tetD
+[[file:locust20010217_fig/Spontaneous_8-rt-test-tetD.png]]
+
+
+*** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Spontaneous_8
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Spontaneous_8_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_8","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Spontaneous_8_tetD$spike_trains))
+    cat(a_Spontaneous_8_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_8_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+
+
+
+** Systematic analysis of the 10 trials from =Spontaneous 9=
+
+#+NAME: Spontaneous_9-tetD
+#+BEGIN_SRC R :exports code :results output :session *R*
+a_Spontaneous_9_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 9",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_8_tetD$centers,
+                                      counts=a_Spontaneous_8_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+#+END_SRC
+
+#+RESULTS: Spontaneous_9-tetD
+#+begin_example
+***************
+Doing now trial 1 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1721   Min.   :1563   Min.   :1506   Min.   :1530  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2305   Max.   :2437   Max.   :2524   Max.   :2494  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1411        156        103         95        108        173        115 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       188        130        164        152         27 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1707   Min.   :1551   Min.   :1448   Min.   :1470  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2278   Max.   :2364   Max.   :2491   Max.   :2428  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1406        176         88        107         88        169        124 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       179        122        171        156         26 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1624   Min.   :1577   Min.   :1472   Min.   :1542  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2367   Max.   :2404   Max.   :2462   Max.   :2452  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1315        196         74         91         85        151        116 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       175        113        150        137         27 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1664   Min.   :1637   Min.   :1508   Min.   :1485  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2081   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2315   Max.   :2391   Max.   :2468   Max.   :2481  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1321        133         81         88        100        196        116 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       145        123        156        156         27 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1735   Min.   :1523   Min.   :1514   Min.   :1585  
+ 1st Qu.:2013   1st Qu.:2006   1st Qu.:1998   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2081   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2303   Max.   :2365   Max.   :2492   Max.   :2466  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1269        180         85         92        100        142        106 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       151        105        148        136         24 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1714   Min.   :1573   Min.   :1455   Min.   :1543  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2087   3rd Qu.:2082  
+ Max.   :2315   Max.   :2384   Max.   :2461   Max.   :2472  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1427        251        142        118         71        162        129 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       130         89        170        139         26 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1684   Min.   :1539   Min.   :1511   Min.   :1539  
+ 1st Qu.:2013   1st Qu.:2006   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2081   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2284   Max.   :2396   Max.   :2460   Max.   :2414  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1286        173         96         81         88        157         94 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       140        101        193        143         20 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1654   Min.   :1599   Min.   :1485   Min.   :1559  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2283   Max.   :2357   Max.   :2467   Max.   :2456  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1352        197        128        105         86        157        104 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       123        107        170        153         22 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1669   Min.   :1574   Min.   :1502   Min.   :1579  
+ 1st Qu.:2013   1st Qu.:2006   1st Qu.:1998   1st Qu.:2009  
+ Median :2043   Median :2043   Median :2042   Median :2044  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2073   3rd Qu.:2081   3rd Qu.:2086   3rd Qu.:2081  
+ Max.   :2287   Max.   :2408   Max.   :2444   Max.   :2439  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1222        171         82         77         85        148         98 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       123        111        140        168         19 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Spontaneous 9
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1698   Min.   :1605   Min.   :1504   Min.   :1485  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:1998   1st Qu.:2008  
+ Median :2043   Median :2043   Median :2042   Median :2045  
+ Mean   :2043   Mean   :2043   Mean   :2042   Mean   :2044  
+ 3rd Qu.:2074   3rd Qu.:2082   3rd Qu.:2086   3rd Qu.:2082  
+ Max.   :2333   Max.   :2373   Max.   :2464   Max.   :2490  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1428        231        146        118        109        151        133 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+        98         99        182        131         30 
+Trial 10 done!
+******************
+#+end_example
+
+*** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Spontaneous_9-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Spontaneous_9-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Spontaneous_9_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with =Spontaneous 9= for tetrode D.
+#+RESULTS: Spontaneous_9-count-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_9-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Spontaneous_9-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1600 :file Spontaneous_9-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Spontaneous_9_tetD,threshold_factor,matrix(1:10,nr=5))
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each of the first five units during the 10 trials of =Spontaneous 9= for tetrode D.
+#+RESULTS: Spontaneous_9-waveform-evolution-tetD
+[[file:locust20010217_fig/Spontaneous_9-waveform-evolution-tetD.png]]
+
+The observed counting processes and inter spike intervals densities are:
+
+#+NAME: Spontaneous_9-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1800 :file Spontaneous_9-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+cp_isi(a_Spontaneous_9_tetD,nbins=100)
+#+END_SRC
+
+#+CAPTION: Observed counting processes and empirical inter spike interval distributions.
+#+RESULTS: Spontaneous_9-CP-and-ISI-dist-tetD
+[[file:locust20010217_fig/Spontaneous_9-CP-and-ISI-dist-tetD.png]]
+
+The BRT and RFT tests give for the first 7 units:
+
+#+NAME: Spontaneous_9-rt-test-tetD
+#+HEADER: :width 1600 :height 1600 :file Spontaneous_9-rt-test-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_9_tetD$spike_trains[[i]],
+                    a_Spontaneous_9_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+#+END_SRC
+
+#+CAPTION: Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_9. If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: Spontaneous_9-rt-test-tetD
+[[file:locust20010217_fig/Spontaneous_9-rt-test-tetD.png]]
+
+
+*** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Spontaneous_9
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Spontaneous_9_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_9","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Spontaneous_9_tetD$spike_trains))
+    cat(a_Spontaneous_9_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_9_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+
+

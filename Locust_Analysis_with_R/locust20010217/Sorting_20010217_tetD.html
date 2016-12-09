@@ -1,0 +1,2686 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2016-12-09 ven. 16:13 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sorting data set 20010217 tetrode D (channels 10, 12, 14, 15)</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Christophe Pouzat" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Sorting data set 20010217 tetrode D (channels 10, 12, 14, 15)</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgaf03bf2">1. Introduction</a>
+<ul>
+<li><a href="#org6cc9f53">1.1. Getting the data</a></li>
+<li><a href="#org5971d54">1.2. Getting the code</a></li>
+</ul>
+</li>
+<li><a href="#org5868b76">2. Tetrode B (channels 10, 12, 14, 15) analysis</a>
+<ul>
+<li><a href="#org79f926f">2.1. Loading the data</a></li>
+<li><a href="#orgb499bc0">2.2. Five number summary</a></li>
+<li><a href="#orgdd8caca">2.3. Plot the data</a></li>
+<li><a href="#org8e493ac">2.4. Data normalization</a></li>
+<li><a href="#org024e866">2.5. Spike detection</a></li>
+<li><a href="#orga235c73">2.6. Cuts</a></li>
+<li><a href="#org23b10bd">2.7. Events</a></li>
+<li><a href="#org57239b6">2.8. Removing obvious superposition</a></li>
+<li><a href="#orgf1221ff">2.9. Dimension reduction</a></li>
+<li><a href="#orgb9dc6fe">2.10. Exporting for <code>GGobi</code></a></li>
+<li><a href="#orgf59070b">2.11. kmeans clustering with 8 clusters</a></li>
+<li><a href="#orgc866675">2.12. kmeans clustering with 10 clusters</a></li>
+<li><a href="#orgc8d252b">2.13. Long cuts creation</a></li>
+<li><a href="#orge6c73ce">2.14. Peeling</a>
+<ul>
+<li><a href="#org761b909">2.14.1. Round 0</a></li>
+<li><a href="#org6cb107c">2.14.2. Round 1</a></li>
+</ul>
+</li>
+<li><a href="#org9e8cc00">2.15. Getting the spike trains</a></li>
+<li><a href="#org84b699a">2.16. Getting the inter spike intervals and the forward and backward recurrence times</a>
+<ul>
+<li><a href="#org3619d2b">2.16.1. ISI distributions</a></li>
+<li><a href="#orgfdb1dff">2.16.2. Forward and Backward Recurrence Times</a></li>
+</ul>
+</li>
+<li><a href="#orgb5dd38b">2.17. <code>all_at_once</code> test</a></li>
+<li><a href="#org2e5668f">2.18. Analysis of <code>trial_02</code></a></li>
+<li><a href="#org96a5b56">2.19. Systematic analysis of the 10 trials from <code>Spontaneous 1</code></a>
+<ul>
+<li><a href="#org806df0c">2.19.1. Create <code>tetD_analysis</code> directory</a></li>
+<li><a href="#orge730cf3">2.19.2. Doing the job</a></li>
+<li><a href="#orgb2c99cc">2.19.3. Diagnostic plots</a></li>
+<li><a href="#orgdffbb81">2.19.4. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org3146f07">2.20. Systematic analysis of the first 25 trials from <code>Spontaneous 3</code></a>
+<ul>
+<li><a href="#orge6827f3">2.20.1. Diagnostic plots</a></li>
+<li><a href="#orgf248489">2.20.2. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgb48ca12">2.21. Systematic analysis of the 10 trials from <code>Spontaneous 4</code></a>
+<ul>
+<li><a href="#org1c65090">2.21.1. Diagnostic plots</a></li>
+<li><a href="#org8f0222e">2.21.2. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org7076ea7">2.22. Systematic analysis of the 10 trials from <code>Spontaneous 5</code></a>
+<ul>
+<li><a href="#org8b06b4a">2.22.1. Diagnostic plots</a></li>
+<li><a href="#orga5dad59">2.22.2. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org1fcb316">2.23. Systematic analysis of the 10 trials from <code>Spontaneous 6</code></a>
+<ul>
+<li><a href="#org73e88fe">2.23.1. Diagnostic plots</a></li>
+<li><a href="#orgdb82116">2.23.2. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgc5d34c7">2.24. Systematic analysis of the 10 trials from <code>Spontaneous 7</code></a>
+<ul>
+<li><a href="#orgdf708a1">2.24.1. Diagnostic plots</a></li>
+<li><a href="#orge14cbc0">2.24.2. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org4d5a70d">2.25. Systematic analysis of the 10 trials from <code>Spontaneous 8</code></a>
+<ul>
+<li><a href="#org4c226c3">2.25.1. Diagnostic plots</a></li>
+<li><a href="#org5ff30a8">2.25.2. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgc15fd14">2.26. Systematic analysis of the 10 trials from <code>Spontaneous 9</code></a>
+<ul>
+<li><a href="#org26bd18b">2.26.1. Diagnostic plots</a></li>
+<li><a href="#orgc6e4cc4">2.26.2. Save results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgaf03bf2" class="outline-2">
+<h2 id="orgaf03bf2"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This is the description of how to do the (spike) sorting of tetrode D (channels 10, 12, 14, 15) from data set <code>locust20010217</code>.
+</p>
+</div>
+
+<div id="outline-container-org6cc9f53" class="outline-3">
+<h3 id="org6cc9f53"><span class="section-number-3">1.1</span> Getting the data</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+The data are split into two <code>HDF5</code> files, <code>locust20010217_part1.hdf5</code> and <code>locust20010217_part2.hdf5</code>, located on <a href="https://zenodo.org/record/21589">zenodo</a> and can be downloaded interactivelly with a web browser or by typing at the command line:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh" id="orgdb6be64">wget https://zenodo.org/record/21589/files/locust20010217.hdf5
+</pre>
+</div>
+
+<p>
+In the sequel I will assume that <code>R</code> has been started in the directory where the data were downloaded (in other words, the working direcory should be the one containing the data.
+</p>
+
+<p>
+The data are in <a href="https://support.hdfgroup.org/HDF5/">HDF5</a> format and the easiest way to get them into <code>R</code> is to install the <code>rhdf5</code> package from <a href="http://www.bioconductor.org/packages/release/bioc/html/rhdf5.html">Bioconductor</a>. Once the installation is done, the library is loaded into <code>R</code> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge5d44fe">library(rhdf5)
+</pre>
+</div>
+
+<p>
+We can then get a (long and detailed) listing of our data file content with (result not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf2462d7">h5ls("locust20010217_part1.hdf5")
+</pre>
+</div>
+
+<p>
+There must be functions to get access to the <span class="underline">metadata</span> contained in the file with <code>rhdf5</code> but I do not know them so I'm using <code>HDFView</code> called from the command line for that. All the relevant information about the experiment are stored in these metadata so you should take a look at them.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5971d54" class="outline-3">
+<h3 id="org5971d54"><span class="section-number-3">1.2</span> Getting the code</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+The code can be sourced as follows:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org2b70853">source("https://raw.githubusercontent.com/christophe-pouzat/zenodo-locust-datasets-analysis/master/R_Sorting_Code/sorting_with_r.R")
+</pre>
+</div>
+
+<p>
+A description of the functions contained in this file can be found at the following address: <a href="http://xtof.perso.math.cnrs.fr/locust.html">http://xtof.perso.math.cnrs.fr/locust.html</a>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5868b76" class="outline-2">
+<h2 id="org5868b76"><span class="section-number-2">2</span> Tetrode B (channels 10, 12, 14, 15) analysis</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We now want to get our "model", that is a dictionnary of waveforms (one waveform per neuron and per recording site). To that end we are going to use the first 29 s of data contained in the <code>Spontaneous_1/trial_01</code> <code>Group</code> (in <code>HDF5</code> jargon). 
+</p>
+</div>
+
+<div id="outline-container-org79f926f" class="outline-3">
+<h3 id="org79f926f"><span class="section-number-3">2.1</span> Loading the data</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+So we start by loading the data from channels 10, 12, 14, 15 into <code>R</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgaf7da06">lD = get_data(1,"Spontaneous 1",
+              channels = c("ch10","ch12","ch14","ch15"),
+              file="locust20010217.hdf5")
+dim(lD)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">431548</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-orgb499bc0" class="outline-3">
+<h3 id="orgb499bc0"><span class="section-number-3">2.2</span> Five number summary</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+We get the <a href="https://en.wikipedia.org/wiki/Five-number_summary">Five number summary</a> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd8ab5bd">summary(lD,digits=2)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Min.   :1626</td>
+<td class="org-left">Min.   :1486</td>
+<td class="org-left">Min.   :1432</td>
+<td class="org-left">Min.   :1665</td>
+</tr>
+
+<tr>
+<td class="org-left">1st Qu.:2014</td>
+<td class="org-left">1st Qu.:2005</td>
+<td class="org-left">1st Qu.:2001</td>
+<td class="org-left">1st Qu.:2010</td>
+</tr>
+
+<tr>
+<td class="org-left">Median :2045</td>
+<td class="org-left">Median :2045</td>
+<td class="org-left">Median :2044</td>
+<td class="org-left">Median :2046</td>
+</tr>
+
+<tr>
+<td class="org-left">Mean   :2045</td>
+<td class="org-left">Mean   :2045</td>
+<td class="org-left">Mean   :2044</td>
+<td class="org-left">Mean   :2046</td>
+</tr>
+
+<tr>
+<td class="org-left">3rd Qu.:2077</td>
+<td class="org-left">3rd Qu.:2086</td>
+<td class="org-left">3rd Qu.:2088</td>
+<td class="org-left">3rd Qu.:2082</td>
+</tr>
+
+<tr>
+<td class="org-left">Max.   :2383</td>
+<td class="org-left">Max.   :2495</td>
+<td class="org-left">Max.   :2526</td>
+<td class="org-left">Max.   :2378</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+It shows that the channels have very similar properties as far as the median and the inter-quartile range (IQR) are concerned. The minimum is much smaller on the third channel. This suggests that the largest spikes are going to be found here (remember that spikes are going mainly downwards).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdd8caca" class="outline-3">
+<h3 id="orgdd8caca"><span class="section-number-3">2.3</span> Plot the data</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+We "convert" the data matrix <code>lD</code> into a <code>time series</code> object with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgde855d7">lD = ts(lD,start=0,freq=15e3)
+</pre>
+</div>
+
+<p>
+We can then plot the whole data with (not shown since it makes a very figure):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf527b50">plot(lD)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8e493ac" class="outline-3">
+<h3 id="org8e493ac"><span class="section-number-3">2.4</span> Data normalization</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+As always we normalize such that the <a href="https://en.wikipedia.org/wiki/Median_absolute_deviation">median absolute deviation</a> (MAD) becomes 1:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org9793221">lD.mad = apply(lD,2,mad)
+lD = t((t(lD)-apply(lD,2,median))/lD.mad)
+lD = ts(lD,start=0,freq=15e3)
+</pre>
+</div>
+
+<p>
+Once this is done we explore interactively the data with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga9d256a">explore(lD,col=c("black","grey70"))
+</pre>
+</div>
+
+<p>
+Most spikes can be seen on the 4 recording sites and there are different spike waveform!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org024e866" class="outline-3">
+<h3 id="org024e866"><span class="section-number-3">2.5</span> Spike detection</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+Since the spikes are mainly going downwards, we will detect valleys instead of peaks:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5390040">lDf = -lD
+filter_length = 5
+threshold_factor = 4
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf.mad = apply(lDf,2,mad)
+lDf_mad_original = lDf.mad
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) &lt; thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp0 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp0
+</pre>
+</div>
+
+<pre class="example">
+eventsPos object with indexes of 1307 events. 
+  Mean inter event interval: 329.95 sampling points, corresponding SD: 329.71 sampling points 
+  Smallest and largest inter event intervals: 16 and 2961 sampling points.
+</pre>
+
+
+<p>
+Every time a filter length / threshold combination is tried, the detection is checked interactively with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgffcfad8">explore(sp0,lD,col=c("black","grey50"))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga235c73" class="outline-3">
+<h3 id="orga235c73"><span class="section-number-3">2.6</span> Cuts</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+We proceed as usual to get the cut length right:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd997e00">evts = mkEvents(sp0,lD,49,50)
+evts.med = median(evts)
+evts.mad = apply(evts,1,mad)
+plot_range = range(c(evts.med,evts.mad))
+plot(evts.med,type="n",ylab="Amplitude",
+     ylim=plot_range)
+abline(v=seq(0,400,10),col="grey")
+abline(h=c(0,1),col="grey")
+lines(evts.med,lwd=2)
+lines(evts.mad,col=2,lwd=2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/tetD_cut_length.png" alt="tetD_cut_length.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Setting the cut length for the data from tetrode D (channels 10, 12, 14, 15). We see that we need 15 points before the peak and 30 after.</p>
+</div>
+
+<p>
+We see that we need roughly 15 points before the peak and 30 after.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org23b10bd" class="outline-3">
+<h3 id="org23b10bd"><span class="section-number-3">2.7</span> Events</h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+We now cut our events:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb806da9">evts = mkEvents(sp0,lD,14,30)
+summary(evts)
+</pre>
+</div>
+
+<pre class="example">
+events object deriving from data set: lD.
+ Events defined as cuts of 45 sampling points on each of the 4 recording sites.
+ The 'reference' time of each event is located at point 15 of the cut.
+ There are 1307 events in the object.
+</pre>
+
+
+<p>
+We can as usual visualize the first 200 events with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge2cdcdb">evts[,1:200]
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/first_200_evts_tetD.png" alt="first_200_evts_tetD.png" />
+</p>
+<p><span class="figure-number">Figure 2: </span>First 200 events for the data from tetrode D (channels 1, 3, 5, 7).</p>
+</div>
+
+<p>
+We do see some superposition and it's therefore a good idea to remove the most obvious of them before reducing the dimension.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org57239b6" class="outline-3">
+<h3 id="org57239b6"><span class="section-number-3">2.8</span> Removing obvious superposition</h3>
+<div class="outline-text-3" id="text-2-8">
+<p>
+We define function <code>goodEvtsFct</code> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org08a95c9">goodEvtsFct = function(samp,thr=3) {
+    samp.med = apply(samp,1,median)
+    samp.mad = apply(samp,1,mad)
+    below = samp.med &lt; 0
+    samp.r = apply(samp,2,function(x) {x[below] = 0;x})
+    apply(samp.r,2,function(x) all(abs(x-samp.med) &lt; thr*samp.mad))
+}
+</pre>
+</div>
+
+<p>
+We apply it with a threshold of 5 times the MAD:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org6597048">goodEvts = goodEvtsFct(evts,5)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf1221ff" class="outline-3">
+<h3 id="orgf1221ff"><span class="section-number-3">2.9</span> Dimension reduction</h3>
+<div class="outline-text-3" id="text-2-9">
+<p>
+We do a <code>PCA</code> on our good events set:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org03264bf">evts.pc = prcomp(t(evts[,goodEvts]))
+</pre>
+</div>
+
+<p>
+We look at the projections on the first 4 principle components:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga2761f2">panel.dens = function(x,...) {
+  usr = par("usr")
+  on.exit(par(usr))
+  par(usr = c(usr[1:2], 0, 1.5) )
+  d = density(x, adjust=0.5)
+  x = d$x
+  y = d$y
+  y = y/max(y)
+  lines(x, y, col="grey50", ...)
+}
+pairs(evts.pc$x[,1:4],pch=".",gap=0,diag.panel=panel.dens)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/evts-proj-first-4-pc-tetD.png" alt="evts-proj-first-4-pc-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 3: </span>The good events from tetrode D (channels 10, 12, 14, 15) projected onto the first 4 PCs.</p>
+</div>
+
+<p>
+I see 6/7 clusters. We can also look at the projections on the PC pairs defined by the next 4 PCs:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga3e82b9">pairs(evts.pc$x[,5:8],pch=".",gap=0,diag.panel=panel.dens)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/evts-proj-next-4-pc-tetD.png" alt="evts-proj-next-4-pc-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 4: </span>The good events from tetrode D (channels 10, 12, 14, 15) projected onto PC 5 to 8.</p>
+</div>
+
+<p>
+There is not much structure left beyond the 4th PC.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb9dc6fe" class="outline-3">
+<h3 id="orgb9dc6fe"><span class="section-number-3">2.10</span> Exporting for <code>GGobi</code></h3>
+<div class="outline-text-3" id="text-2-10">
+<p>
+We export the events projected onto the first 8 principle components in <code>csv</code> format:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb6f67cd">write.csv(evts.pc$x[,1:8],file="tetD_evts.csv")
+</pre>
+</div>
+
+<p>
+Using the <code>rotation</code> display of <code>GGobi</code> with the first 3 principle components and the <code>2D tour</code> with the first 4 components I see 8 clusters. So we will start with a <code>kmeans</code> with 8 centers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf59070b" class="outline-3">
+<h3 id="orgf59070b"><span class="section-number-3">2.11</span> kmeans clustering with 8 clusters</h3>
+<div class="outline-text-3" id="text-2-11">
+<div class="org-src-container">
+<pre class="src src-R" id="org905bd8f">nbc=8
+set.seed(20110928,kind="Mersenne-Twister")
+km = kmeans(evts.pc$x[,1:4],centers=nbc,iter.max=100,nstart=100)
+label = km$cluster
+cluster.med = sapply(1:nbc, function(cIdx) median(evts[,goodEvts][,label==cIdx]))
+sizeC = sapply(1:nbc,function(cIdx) sum(abs(cluster.med[,cIdx])))
+newOrder = sort.int(sizeC,decreasing=TRUE,index.return=TRUE)$ix
+cluster.mad = sapply(1:nbc, function(cIdx) {ce = t(evts[,goodEvts]);ce = ce[label==cIdx,];apply(ce,2,mad)})
+cluster.med = cluster.med[,newOrder]
+cluster.mad = cluster.mad[,newOrder]
+labelb = sapply(1:nbc, function(idx) (1:nbc)[newOrder==idx])[label]
+</pre>
+</div>
+
+
+<p>
+We write a new <code>csv</code> file with the data and the labels:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4bd1f3b">write.csv(cbind(evts.pc$x[,1:4],labelb),file="tetD_sorted.csv")
+</pre>
+</div>
+
+<p>
+That looks good!
+</p>
+
+<p>
+We get a plot showing the events attributed to each of the first 4 units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org8fe84d7">layout(matrix(1:4,nr=4))
+par(mar=c(1,1,1,1))
+for (i in (1:4)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/kmeans-8-evts-from-each-of-first-4-tetD.png" alt="kmeans-8-evts-from-each-of-first-4-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 5: </span>The events of the first four clusters of tetrode D</p>
+</div>
+
+<p>
+We get a plot showing the events attributed to each of the last 4 units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org8a6fad3">layout(matrix(1:4,nr=4))
+par(mar=c(1,1,1,1))
+for (i in (5:8)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/kmeans-8-evts-from-each-of-last-4-tetD.png" alt="kmeans-8-evts-from-each-of-last-4-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 6: </span>The events of the last four clusters of tetrode D</p>
+</div>
+
+<p>
+In fact I see rather 2 units in cluster 4 and 7 so I redo the clustering with 10 units
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc866675" class="outline-3">
+<h3 id="orgc866675"><span class="section-number-3">2.12</span> kmeans clustering with 10 clusters</h3>
+<div class="outline-text-3" id="text-2-12">
+<div class="org-src-container">
+<pre class="src src-R" id="org2cbd8ba">nbc=10
+set.seed(20110928,kind="Mersenne-Twister")
+km = kmeans(evts.pc$x[,1:4],centers=nbc,iter.max=100,nstart=100)
+label = km$cluster
+cluster.med = sapply(1:nbc, function(cIdx) median(evts[,goodEvts][,label==cIdx]))
+sizeC = sapply(1:nbc,function(cIdx) sum(abs(cluster.med[,cIdx])))
+newOrder = sort.int(sizeC,decreasing=TRUE,index.return=TRUE)$ix
+cluster.mad = sapply(1:nbc, function(cIdx) {ce = t(evts[,goodEvts]);ce = ce[label==cIdx,];apply(ce,2,mad)})
+cluster.med = cluster.med[,newOrder]
+cluster.mad = cluster.mad[,newOrder]
+labelb = sapply(1:nbc, function(idx) (1:nbc)[newOrder==idx])[label]
+</pre>
+</div>
+
+<p>
+We get a plot showing the events attributed to each of the first 5 units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb2df145">layout(matrix(1:5,nr=5))
+par(mar=c(1,1,1,1))
+for (i in (1:5)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/kmeans-10-evts-from-each-of-first-5-tetD.png" alt="kmeans-10-evts-from-each-of-first-5-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 7: </span>The events of the first five clusters of tetrode D</p>
+</div>
+
+<p>
+We get a plot showing the events attributed to each of the last 5 units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org745a5e7">layout(matrix(1:5,nr=5))
+par(mar=c(1,1,1,1))
+for (i in (6:10)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/kmeans-10-evts-from-each-of-last-5-tetD.png" alt="kmeans-10-evts-from-each-of-last-5-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 8: </span>The events of the last five clusters of tetrode D</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgc8d252b" class="outline-3">
+<h3 id="orgc8d252b"><span class="section-number-3">2.13</span> Long cuts creation</h3>
+<div class="outline-text-3" id="text-2-13">
+<p>
+For the peeling process we need templates that start and end at 0 (we will otherwise generate artifacts when we subtract). We proceed "as usual" with (I tried first with the default value for parameters <code>before</code> and <code>after</code> but I reduced their values after looking at the centers, see the next figure):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga594426">c_before = 49
+c_after = 80
+centers = lapply(1:nbc, function(i)
+    mk_center_list(sp0[goodEvts][labelb==i],lD,
+                   before=c_before,after=c_after))
+names(centers) = paste("Cluster",1:nbc)
+</pre>
+</div>
+
+
+<p>
+We then make sure that our cuts are long enough by looking at them. Starting with the first five clusters:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0a2baaf">layout(matrix(1:5,nr=5))
+par(mar=c(1,4,1,1))
+the_range=c(min(sapply(centers,function(l) min(l$center))),
+            max(sapply(centers,function(l) max(l$center))))
+for (i in 1:5) {
+    template = centers[[i]]$center
+    plot(template,lwd=2,col=2,
+         ylim=the_range,type="l",ylab="")
+    abline(h=0,col="grey50")
+    abline(v=(1:2)*(c_before+c_after)+1,col="grey50")
+    lines(filter(template,rep(1,filter_length)/filter_length),
+          col=1,lty=3,lwd=2)
+    abline(h=-threshold_factor,col="grey",lty=2,lwd=2)
+    lines(centers[[i]]$centerD,lwd=2,col=4)
+}
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/centers-10u-first-5-tetD.png" alt="centers-10u-first-5-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 9: </span>The first five templates (red) together with their first derivative (blue) all with the same scale.</p>
+</div>
+
+<p>
+The last five clusters:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org71ec2d8">layout(matrix(1:5,nr=5))
+par(mar=c(1,4,1,1))
+the_range=c(min(sapply(centers,function(l) min(l$center))),
+            max(sapply(centers,function(l) max(l$center))))
+for (i in 6:10) {
+    template = centers[[i]]$center
+    plot(template,lwd=2,col=2,
+         ylim=the_range,type="l",ylab="")
+    abline(h=0,col="grey50")
+    abline(v=(1:2)*(c_before+c_after)+1,col="grey50")
+    lines(filter(template,rep(1,filter_length)/filter_length),
+          col=1,lty=3,lwd=2)
+    abline(h=-threshold_factor,col="grey",lty=2,lwd=2)
+    lines(centers[[i]]$centerD,lwd=2,col=4)
+}
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/centers-10u-last-5-tetD.png" alt="centers-10u-last-5-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 10: </span>The last five templates (red) together with their first derivative (blue) all with the same scale.</p>
+</div>
+
+<p>
+We see that with our setting only units 1, 2, 3, 4 and 8 are going to be reliably detected.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge6c73ce" class="outline-3">
+<h3 id="orge6c73ce"><span class="section-number-3">2.14</span> Peeling</h3>
+<div class="outline-text-3" id="text-2-14">
+<p>
+We can now do the peeling.
+</p>
+</div>
+
+<div id="outline-container-org761b909" class="outline-4">
+<h4 id="org761b909"><span class="section-number-4">2.14.1</span> Round 0</h4>
+<div class="outline-text-4" id="text-2-14-1">
+<p>
+We classify, predict, subtract and check how many non-classified events we get:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgddb4671">round0 = lapply(as.vector(sp0),classify_and_align_evt,
+                data=lD,centers=centers,
+                before=c_before,after=c_after)
+pred0 = predict_data(round0,centers,data_length = dim(lD)[1])
+lD_1 = lD - pred0
+sum(sapply(round0, function(l) l[[1]] == '?'))
+</pre>
+</div>
+
+<pre class="example">
+2
+</pre>
+
+<p>
+We can see the difference before / after peeling for the data between 1.0 and 1.1 s:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc07077e">ii = 1:1500 + 1.0*15000
+tt = ii/15000
+par(mar=c(1,1,1,1))
+plot(tt, lD[ii,1], axes = FALSE,
+     type="l",ylim=c(-50,10),
+     xlab="",ylab="")
+lines(tt, lD_1[ii,1], col='red')
+lines(tt, lD[ii,2]-15, col='black')
+lines(tt, lD_1[ii,2]-15, col='red')
+lines(tt, lD[ii,3]-25, col='black')
+lines(tt, lD_1[ii,3]-25, col='red')
+lines(tt, lD[ii,4]-40, col='black')
+lines(tt, lD_1[ii,4]-40, col='red')
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/peeling-0-10u-tetD.png" alt="peeling-0-10u-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 11: </span>The first peeling illustrated on 100 ms of data, the raw data are in black and the first subtration in red.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6cb107c" class="outline-4">
+<h4 id="org6cb107c"><span class="section-number-4">2.14.2</span> Round 1</h4>
+<div class="outline-text-4" id="text-2-14-2">
+<p>
+We keep going, using the subtracted data <code>lD_1</code> as "raw data", detecting only all sites:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org6a212df">lDf = -lD_1
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) &lt; thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp1 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp1
+</pre>
+</div>
+
+<pre class="example">
+eventsPos object with indexes of 67 events. 
+  Mean inter event interval: 6271.83 sampling points, corresponding SD: 7284.81 sampling points 
+  Smallest and largest inter event intervals: 50 and 27732 sampling points.
+</pre>
+
+
+<p>
+We classify, predict, subtract and check how many non-classified events we get:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb8d50b3">round1 = lapply(as.vector(sp1),classify_and_align_evt,
+                data=lD_1,centers=centers,
+                before=c_before,after=c_after)
+pred1 = predict_data(round1,centers,data_length = dim(lD)[1])
+lD_2 = lD_1 - pred1
+sum(sapply(round1, function(l) l[[1]] == '?'))
+</pre>
+</div>
+
+<pre class="example">
+10
+</pre>
+
+<p>
+We look at what's left with (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc3de8c6">explore(sp1,lD_2,col=c("black","grey50"))
+</pre>
+</div>
+
+<p>
+We decide to stop here.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9e8cc00" class="outline-3">
+<h3 id="org9e8cc00"><span class="section-number-3">2.15</span> Getting the spike trains</h3>
+<div class="outline-text-3" id="text-2-15">
+<div class="org-src-container">
+<pre class="src src-R" id="orgfbf756b">round_all = c(round0,round1)
+spike_trains = lapply(paste("Cluster",1:nbc),
+                      function(cn) sapply(round_all[sapply(round_all,
+                                                           function(l) l[[1]]==cn)],
+                                          function(l) l[[2]]+l[[3]]))
+names(spike_trains) = paste("Cluster",1:nbc)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org84b699a" class="outline-3">
+<h3 id="org84b699a"><span class="section-number-3">2.16</span> Getting the inter spike intervals and the forward and backward recurrence times</h3>
+<div class="outline-text-3" id="text-2-16">
+</div><div id="outline-container-org3619d2b" class="outline-4">
+<h4 id="org3619d2b"><span class="section-number-4">2.16.1</span> ISI distributions</h4>
+<div class="outline-text-4" id="text-2-16-1">
+<p>
+We first get the <code>ISI</code> (inter spike intervals) of each unit:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1b9e590">isi = sapply(spike_trains, diff)
+names(isi) = names(spike_trains)
+</pre>
+</div>
+
+<p>
+We get the ISI ECDF for the units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3462f5d">layout(matrix(1:(nbc+nbc %% 2),nr=ceiling(nbc/2)))
+par(mar=c(4,5,6,1))
+for (cn in names(isi)) plot_isi(isi[[cn]],main=cn)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/isi-ecdf-10u-tetD.png" alt="isi-ecdf-10u-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 12: </span>ISI ECDF for the ten units.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgfdb1dff" class="outline-4">
+<h4 id="orgfdb1dff"><span class="section-number-4">2.16.2</span> Forward and Backward Recurrence Times</h4>
+<div class="outline-text-4" id="text-2-16-2">
+<p>
+On the data at hand that gives for units 1 to 7:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7385fec">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(spike_trains[[i]],
+                    spike_trains[[j]],
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/rt-test-10u-tetD.png" alt="rt-test-10u-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 13: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distrution agaisnt the null hypothesis (no interaction). If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+
+<p>
+On this time scale with this number of events, there are a lot of signs of interactions.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb5dd38b" class="outline-3">
+<h3 id="orgb5dd38b"><span class="section-number-3">2.17</span> <code>all_at_once</code> test</h3>
+<div class="outline-text-3" id="text-2-17">
+<p>
+We test the function with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org31b6de7">## We need again an un-normalized version of the data
+ref_data = get_data(1,"Spontaneous 1",
+                    channels = c("ch10","ch12","ch14","ch15"),
+                    file="locust20010217.hdf5")
+## We can now use our function
+aao=all_at_once(ref_data,centers,
+                thres=threshold_factor*c(1,1,1,1),
+                filter_length_1=filter_length,
+                filter_length=filter_length,
+                minimalDist_1=15,
+                minimalDist=15,
+                before=c_before,
+                after=c_after,
+                detection_cycle=c(0,0),
+                verbose=2)
+</pre>
+</div>
+
+<pre class="example">
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1626   Min.   :1486   Min.   :1432   Min.   :1665  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2082  
+ Max.   :2383   Max.   :2495   Max.   :2526   Max.   :2378  
+
+Doing now round 0 detecting on all sites
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1307        119        115         99        112        144        123 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       180         99        134        180          2 
+
+Doing now round 1 detecting on all sites
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+        67          1          3          0          1          6          7 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+         6          7         14         12         10 
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1378        120        118         99        113        150        130 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       186        106        148        192         16
+</pre>
+
+<p>
+We see that we are getting back the numbers we obtained before step by step.
+</p>
+
+<p>
+We can compare the "old" and "new" centers with (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org748220f">layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,1,1,1))
+for (i in 1:nbc) {
+    plot(centers[[i]]$center,lwd=2,col=2,
+         ylim=the_range,type="l")
+    abline(h=0,col="grey50")
+    abline(v=(1:3)*(c_before+c_after)+1,col="grey50")
+    lines(aao$centers[[i]]$center,lwd=1,col=4)
+}
+</pre>
+</div>
+
+<p>
+They are not exactly identical since the new version is computed with all events (superposed or not) attributed to each neuron.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2e5668f" class="outline-3">
+<h3 id="org2e5668f"><span class="section-number-3">2.18</span> Analysis of <code>trial_02</code></h3>
+<div class="outline-text-3" id="text-2-18">
+<p>
+We start by loading the data:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc717a37">ref_data = get_data(2,"Spontaneous 1",
+                    channels = c("ch10","ch12","ch14","ch15"),
+                    file="locust20010217.hdf5")
+</pre>
+</div>
+
+<p>
+We then detect and classify the events using a slightly less verbose output:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4b1c627">analysis_s1_t02 = all_at_once(ref_data,aao$centers,
+                              thres=threshold_factor*c(1,1,1,1),
+                              filter_length_1=filter_length,
+                              filter_length=filter_length,
+                              minimalDist_1=15,
+                              minimalDist=15,
+                              before=c_before,
+                              after=c_after,
+                              detection_cycle=c(0,0),
+                              verbose=1)
+</pre>
+</div>
+
+<pre class="example">
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1503   Min.   :1443   Min.   :1178   Min.   :1582  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :2387   Max.   :2410   Max.   :2500   Max.   :2429  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1431        153        168        112        122        162         95 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       132        111        130        220         26
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-org96a5b56" class="outline-3">
+<h3 id="org96a5b56"><span class="section-number-3">2.19</span> Systematic analysis of the 10 trials from <code>Spontaneous 1</code></h3>
+<div class="outline-text-3" id="text-2-19">
+</div><div id="outline-container-org806df0c" class="outline-4">
+<h4 id="org806df0c"><span class="section-number-4">2.19.1</span> Create <code>tetD_analysis</code> directory</h4>
+<div class="outline-text-4" id="text-2-19-1">
+<p>
+We will carry out an analysis of the 10 trials from <code>Spontaneous 1</code>. We will organize the analysis such that after each trial, the list returned by <code>all_at_once</code> is written to disk in a sub-directory called <code>tetD_analysis</code>. So we start by creating this sub-directory if it does not already exist:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org66101e3">if (!dir.exists("tetD_analysis"))
+    dir.create("tetD_analysis")
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orge730cf3" class="outline-4">
+<h4 id="orge730cf3"><span class="section-number-4">2.19.2</span> Doing the job</h4>
+<div class="outline-text-4" id="text-2-19-2">
+<div class="org-src-container">
+<pre class="src src-R" id="orga235857">a_Spontaneous_1_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 1",
+                                      trial_nbs=1:10,
+                                      centers=aao$centers,
+                                      counts=aao$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+
+<pre class="example">
+***************
+Doing now trial 1 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1626   Min.   :1486   Min.   :1432   Min.   :1665  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2082  
+ Max.   :2383   Max.   :2495   Max.   :2526   Max.   :2378  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1371        118        118        103        117        146        131 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       187        106        143        192         10 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1503   Min.   :1443   Min.   :1178   Min.   :1582  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2087   3rd Qu.:2083  
+ Max.   :2387   Max.   :2410   Max.   :2500   Max.   :2429  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1431        153        168        112        122        162         95 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       132        111        130        220         26 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1660   Min.   :1493   Min.   :1371   Min.   :1620  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2087   3rd Qu.:2082  
+ Max.   :2313   Max.   :2446   Max.   :2484   Max.   :2391  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1309        142        121         59        122        167        110 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       125        117        133        191         22 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1452   Min.   :1457   Min.   :1333   Min.   :1611  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2076   3rd Qu.:2085   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2393   Max.   :2475   Max.   :2523   Max.   :2399  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1360        155        132        105        121        176        105 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       130        106        142        172         16 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1597   Min.   :1436   Min.   :1275   Min.   :1622  
+ 1st Qu.:2013   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2085   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2315   Max.   :2422   Max.   :2483   Max.   :2418  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1355        172        187        112         99        153         92 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       120        102        110        182         26 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1487   Min.   :1399   Min.   :1383   Min.   :1607  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2370   Max.   :2470   Max.   :2508   Max.   :2421  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1375        160        127        106        115        158        132 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       147         88        134        185         23 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1662   Min.   :1441   Min.   :1201   Min.   :1655  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2085   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2302   Max.   :2387   Max.   :2478   Max.   :2396  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1344        142        111         77        115        161        113 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       143         99        158        207         18 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1633   Min.   :1348   Min.   :1346   Min.   :1589  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2001   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2363   Max.   :2463   Max.   :2540   Max.   :2430  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1436        165        190        129        103        140         87 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       103        112        189        195         23 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1638   Min.   :1434   Min.   :1469   Min.   :1587  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2046  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2363   Max.   :2425   Max.   :2545   Max.   :2423  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1358        168        156        129        105        133        104 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       111        110        143        182         17 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Spontaneous 1
+The five number summary is:
+      ch10           ch12           ch14           ch15     
+ Min.   :1660   Min.   :1501   Min.   :1488   Min.   :1624  
+ 1st Qu.:2014   1st Qu.:2005   1st Qu.:2000   1st Qu.:2010  
+ Median :2045   Median :2045   Median :2044   Median :2047  
+ Mean   :2045   Mean   :2045   Mean   :2044   Mean   :2046  
+ 3rd Qu.:2077   3rd Qu.:2086   3rd Qu.:2088   3rd Qu.:2083  
+ Max.   :2355   Max.   :2399   Max.   :2496   Max.   :2420  
+
+Global counts at classification's end:
+     Total  Cluster 1  Cluster 2  Cluster 3  Cluster 4  Cluster 5  Cluster 6 
+      1372        193        160         88        101        144        104 
+ Cluster 7  Cluster 8  Cluster 9 Cluster 10          ? 
+       152        107        152        152         19 
+Trial 10 done!
+******************
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgb2c99cc" class="outline-4">
+<h4 id="orgb2c99cc"><span class="section-number-4">2.19.3</span> Diagnostic plots</h4>
+<div class="outline-text-4" id="text-2-19-3">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7520f78">counts_evolution(a_Spontaneous_1_tetD)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_1-count-evolution-tetD.png" alt="Spontaneous_1-count-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 14: </span>Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with <code>Spontaneous 1</code> for tetrode D.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3af3f17">waveform_evolution(a_Spontaneous_1_tetD,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_1-waveform-evolution-tetD.png" alt="Spontaneous_1-waveform-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 15: </span>Evolution of the templates of each of the first five units during the 10 trials of <code>Spontaneous 1</code> for tetrode D.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities for the first five units are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org857e710">cp_isi(a_Spontaneous_1_tetD,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_1-CP-and-ISI-dist-tetD.png" alt="Spontaneous_1-CP-and-ISI-dist-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 16: </span>Observed counting processes and empirical inter spike interval distributions.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org59337f5">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_1_tetD$spike_trains[[i]],
+                    a_Spontaneous_1_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_1-rt-test-tetD.png" alt="Spontaneous_1-rt-test-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 17: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_1. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgdffbb81" class="outline-4">
+<h4 id="orgdffbb81"><span class="section-number-4">2.19.4</span> Save results</h4>
+<div class="outline-text-4" id="text-2-19-4">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1347597">save(a_Spontaneous_1_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_1","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org96063d3">for (c_idx in 1:length(a_Spontaneous_1_tetD$spike_trains))
+    cat(a_Spontaneous_1_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_1_tetD_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org3146f07" class="outline-3">
+<h3 id="org3146f07"><span class="section-number-3">2.20</span> Systematic analysis of the first 25 trials from <code>Spontaneous 3</code></h3>
+<div class="outline-text-3" id="text-2-20">
+<p>
+The description of the data states that the 10 trials of <code>Spontaneous 2</code> had to be interrupted after the second one due to a fire alarm, so we go directly to the 30 trials of <code>Spontaneous 3</code>. There is moreover a noise problem (not mentioned in the lab book!!!) at trials 26, 27 and 28, so we stop at trial 25. To save space we do not print the output of the running code in the <code>html</code> document.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4437176">a_Spontaneous_3_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 3",
+                                      trial_nbs=1:25,
+                                      centers=a_Spontaneous_1_tetD$centers,
+                                      counts=a_Spontaneous_1_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orge6827f3" class="outline-4">
+<h4 id="orge6827f3"><span class="section-number-4">2.20.1</span> Diagnostic plots</h4>
+<div class="outline-text-4" id="text-2-20-1">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1ca9b29">counts_evolution(a_Spontaneous_3_tetD)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_3-count-evolution-tetD.png" alt="Spontaneous_3-count-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 18: </span>Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 25 trials with <code>Spontaneous 3</code> for tetrode D.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org6cda527">waveform_evolution(a_Spontaneous_3_tetD,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_3-waveform-evolution-tetD.png" alt="Spontaneous_3-waveform-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 19: </span>Evolution of the templates of each of the first five units during the 25 trials of <code>Spontaneous 3</code> for tetrode D.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgde8b727">cp_isi(a_Spontaneous_3_tetD,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_3-CP-and-ISI-dist-tetD.png" alt="Spontaneous_3-CP-and-ISI-dist-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 20: </span>Observed counting processes and empirical inter spike interval distributions.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org8314d0d">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_3_tetD$spike_trains[[i]],
+                    a_Spontaneous_3_tetD$spike_trains[[j]],
+		    nbins=500, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_3-rt-test-tetD.png" alt="Spontaneous_3-rt-test-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 21: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_3. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgf248489" class="outline-4">
+<h4 id="orgf248489"><span class="section-number-4">2.20.2</span> Save results</h4>
+<div class="outline-text-4" id="text-2-20-2">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org34e4ec3">save(a_Spontaneous_3_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_3","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1517ae3">for (c_idx in 1:length(a_Spontaneous_3_tetD$spike_trains))
+    cat(a_Spontaneous_3_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_3_tetD_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgb48ca12" class="outline-3">
+<h3 id="orgb48ca12"><span class="section-number-3">2.21</span> Systematic analysis of the 10 trials from <code>Spontaneous 4</code></h3>
+<div class="outline-text-3" id="text-2-21">
+<div class="org-src-container">
+<pre class="src src-R" id="org9de8dea">a_Spontaneous_4_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 4",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_3_tetD$centers,
+                                      counts=a_Spontaneous_3_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org1c65090" class="outline-4">
+<h4 id="org1c65090"><span class="section-number-4">2.21.1</span> Diagnostic plots</h4>
+<div class="outline-text-4" id="text-2-21-1">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgec6d57b">counts_evolution(a_Spontaneous_4_tetD)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_4-count-evolution-tetD.png" alt="Spontaneous_4-count-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 22: </span>Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with <code>Spontaneous 4</code> for tetrode D.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org64230ee">waveform_evolution(a_Spontaneous_4_tetD,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_4-waveform-evolution-tetD.png" alt="Spontaneous_4-waveform-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 23: </span>Evolution of the templates of each of the first five units during the 10 trials of <code>Spontaneous 4</code> for tetrode D.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfeb8655">cp_isi(a_Spontaneous_4_tetD,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_4-CP-and-ISI-dist-tetD.png" alt="Spontaneous_4-CP-and-ISI-dist-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 24: </span>Observed counting processes and empirical inter spike interval distributions.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org752469c">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_4_tetD$spike_trains[[i]],
+                    a_Spontaneous_4_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_4-rt-test-tetD.png" alt="Spontaneous_4-rt-test-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 25: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_4. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org8f0222e" class="outline-4">
+<h4 id="org8f0222e"><span class="section-number-4">2.21.2</span> Save results</h4>
+<div class="outline-text-4" id="text-2-21-2">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org9a175d1">save(a_Spontaneous_4_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_4","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7b1c2dc">for (c_idx in 1:length(a_Spontaneous_4_tetD$spike_trains))
+    cat(a_Spontaneous_4_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_4_tetD_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org7076ea7" class="outline-3">
+<h3 id="org7076ea7"><span class="section-number-3">2.22</span> Systematic analysis of the 10 trials from <code>Spontaneous 5</code></h3>
+<div class="outline-text-3" id="text-2-22">
+<div class="org-src-container">
+<pre class="src src-R" id="org102b1c2">a_Spontaneous_5_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 5",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_4_tetD$centers,
+                                      counts=a_Spontaneous_4_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org8b06b4a" class="outline-4">
+<h4 id="org8b06b4a"><span class="section-number-4">2.22.1</span> Diagnostic plots</h4>
+<div class="outline-text-4" id="text-2-22-1">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org681782c">counts_evolution(a_Spontaneous_5_tetD)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_5-count-evolution-tetD.png" alt="Spontaneous_5-count-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 26: </span>Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with <code>Spontaneous 5</code> for tetrode D.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfce150c">waveform_evolution(a_Spontaneous_5_tetD,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_5-waveform-evolution-tetD.png" alt="Spontaneous_5-waveform-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 27: </span>Evolution of the templates of each of the first five units during the 10 trials of <code>Spontaneous 5</code> for tetrode D.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb3144df">cp_isi(a_Spontaneous_5_tetD,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_5-CP-and-ISI-dist-tetD.png" alt="Spontaneous_5-CP-and-ISI-dist-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 28: </span>Observed counting processes and empirical inter spike interval distributions.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org129a6b4">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_5_tetD$spike_trains[[i]],
+                    a_Spontaneous_5_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_5-rt-test-tetD.png" alt="Spontaneous_5-rt-test-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 29: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_5. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga5dad59" class="outline-4">
+<h4 id="orga5dad59"><span class="section-number-4">2.22.2</span> Save results</h4>
+<div class="outline-text-4" id="text-2-22-2">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org62c82ff">save(a_Spontaneous_5_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_5","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgcbaa84c">for (c_idx in 1:length(a_Spontaneous_5_tetD$spike_trains))
+    cat(a_Spontaneous_5_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_5_tetD_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-org1fcb316" class="outline-3">
+<h3 id="org1fcb316"><span class="section-number-3">2.23</span> Systematic analysis of the 10 trials from <code>Spontaneous 6</code></h3>
+<div class="outline-text-3" id="text-2-23">
+<div class="org-src-container">
+<pre class="src src-R" id="org0a8626d">a_Spontaneous_6_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 6",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_5_tetD$centers,
+                                      counts=a_Spontaneous_5_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org73e88fe" class="outline-4">
+<h4 id="org73e88fe"><span class="section-number-4">2.23.1</span> Diagnostic plots</h4>
+<div class="outline-text-4" id="text-2-23-1">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org41443b1">counts_evolution(a_Spontaneous_6_tetD)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_6-count-evolution-tetD.png" alt="Spontaneous_6-count-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 30: </span>Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with <code>Spontaneous 6</code> for tetrode D.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org84c81ae">waveform_evolution(a_Spontaneous_6_tetD,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_6-waveform-evolution-tetD.png" alt="Spontaneous_6-waveform-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 31: </span>Evolution of the templates of each of the first five units during the 10 trials of <code>Spontaneous 6</code> for tetrode D.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf15e1e8">cp_isi(a_Spontaneous_6_tetD,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_6-CP-and-ISI-dist-tetD.png" alt="Spontaneous_6-CP-and-ISI-dist-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 32: </span>Observed counting processes and empirical inter spike interval distributions.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga5c1e2d">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_6_tetD$spike_trains[[i]],
+                    a_Spontaneous_6_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_6-rt-test-tetD.png" alt="Spontaneous_6-rt-test-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 33: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_6. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgdb82116" class="outline-4">
+<h4 id="orgdb82116"><span class="section-number-4">2.23.2</span> Save results</h4>
+<div class="outline-text-4" id="text-2-23-2">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org51408f5">save(a_Spontaneous_6_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_6","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb1a96ed">for (c_idx in 1:length(a_Spontaneous_6_tetD$spike_trains))
+    cat(a_Spontaneous_6_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_6_tetD_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-orgc5d34c7" class="outline-3">
+<h3 id="orgc5d34c7"><span class="section-number-3">2.24</span> Systematic analysis of the 10 trials from <code>Spontaneous 7</code></h3>
+<div class="outline-text-3" id="text-2-24">
+<div class="org-src-container">
+<pre class="src src-R" id="org80c4bd3">a_Spontaneous_7_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 7",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_6_tetD$centers,
+                                      counts=a_Spontaneous_6_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgdf708a1" class="outline-4">
+<h4 id="orgdf708a1"><span class="section-number-4">2.24.1</span> Diagnostic plots</h4>
+<div class="outline-text-4" id="text-2-24-1">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3fcf939">counts_evolution(a_Spontaneous_7_tetD)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_7-count-evolution-tetD.png" alt="Spontaneous_7-count-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 34: </span>Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with <code>Spontaneous 7</code> for tetrode D.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb4eb723">waveform_evolution(a_Spontaneous_7_tetD,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_7-waveform-evolution-tetD.png" alt="Spontaneous_7-waveform-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 35: </span>Evolution of the templates of each of the first five units during the 10 trials of <code>Spontaneous 7</code> for tetrode D.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf9a98eb">cp_isi(a_Spontaneous_7_tetD,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_7-CP-and-ISI-dist-tetD.png" alt="Spontaneous_7-CP-and-ISI-dist-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 36: </span>Observed counting processes and empirical inter spike interval distributions.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5618845">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_7_tetD$spike_trains[[i]],
+                    a_Spontaneous_7_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_7-rt-test-tetD.png" alt="Spontaneous_7-rt-test-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 37: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_7. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orge14cbc0" class="outline-4">
+<h4 id="orge14cbc0"><span class="section-number-4">2.24.2</span> Save results</h4>
+<div class="outline-text-4" id="text-2-24-2">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd521594">save(a_Spontaneous_7_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_7","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgdf28aee">for (c_idx in 1:length(a_Spontaneous_7_tetD$spike_trains))
+    cat(a_Spontaneous_7_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_7_tetD_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-org4d5a70d" class="outline-3">
+<h3 id="org4d5a70d"><span class="section-number-3">2.25</span> Systematic analysis of the 10 trials from <code>Spontaneous 8</code></h3>
+<div class="outline-text-3" id="text-2-25">
+<div class="org-src-container">
+<pre class="src src-R" id="orga1e1554">a_Spontaneous_8_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 8",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_7_tetD$centers,
+                                      counts=a_Spontaneous_7_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org4c226c3" class="outline-4">
+<h4 id="org4c226c3"><span class="section-number-4">2.25.1</span> Diagnostic plots</h4>
+<div class="outline-text-4" id="text-2-25-1">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge8f0dc9">counts_evolution(a_Spontaneous_8_tetD)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_8-count-evolution-tetD.png" alt="Spontaneous_8-count-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 38: </span>Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with <code>Spontaneous 8</code> for tetrode D.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org10f1542">waveform_evolution(a_Spontaneous_8_tetD,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_8-waveform-evolution-tetD.png" alt="Spontaneous_8-waveform-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 39: </span>Evolution of the templates of each of the first five units during the 10 trials of <code>Spontaneous 8</code> for tetrode D.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgadc1773">cp_isi(a_Spontaneous_8_tetD,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_8-CP-and-ISI-dist-tetD.png" alt="Spontaneous_8-CP-and-ISI-dist-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 40: </span>Observed counting processes and empirical inter spike interval distributions.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org383e52a">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_8_tetD$spike_trains[[i]],
+                    a_Spontaneous_8_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_8-rt-test-tetD.png" alt="Spontaneous_8-rt-test-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 41: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_8. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org5ff30a8" class="outline-4">
+<h4 id="org5ff30a8"><span class="section-number-4">2.25.2</span> Save results</h4>
+<div class="outline-text-4" id="text-2-25-2">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7a31a3b">save(a_Spontaneous_8_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_8","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgcdff062">for (c_idx in 1:length(a_Spontaneous_8_tetD$spike_trains))
+    cat(a_Spontaneous_8_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_8_tetD_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-orgc15fd14" class="outline-3">
+<h3 id="orgc15fd14"><span class="section-number-3">2.26</span> Systematic analysis of the 10 trials from <code>Spontaneous 9</code></h3>
+<div class="outline-text-3" id="text-2-26">
+<div class="org-src-container">
+<pre class="src src-R" id="org4f9bb51">a_Spontaneous_9_tetD=sort_many_trials(inter_trial_time=30*15000,
+                                      get_data_fct=function(i,s) get_data(i,s,
+                                                                          channels = c("ch10","ch12","ch14","ch15"),
+                                                                          file="locust20010217.hdf5"),
+                                      stim_name="Spontaneous 9",
+                                      trial_nbs=1:10,
+                                      centers=a_Spontaneous_8_tetD$centers,
+                                      counts=a_Spontaneous_8_tetD$counts,
+                                      all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                                 filter_length_1=filter_length, filter_length=filter_length, 
+                                                                 minimalDist_1=15, minimalDist=15, 
+                                                                 before=c_before, after=c_after, 
+                                                                 detection_cycle=c(0,0), verbose=1),
+                                      layout_matrix=matrix(c(1,1:11),nr=6),new_weight_in_update=0.01
+                                      )
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org26bd18b" class="outline-4">
+<h4 id="org26bd18b"><span class="section-number-4">2.26.1</span> Diagnostic plots</h4>
+<div class="outline-text-4" id="text-2-26-1">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge12a51f">counts_evolution(a_Spontaneous_9_tetD)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_9-count-evolution-tetD.png" alt="Spontaneous_9-count-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 42: </span>Evolution of the number of events attributed to each unit (1 to 9 plus "a") or unclassified ("?") during the 10 trials with <code>Spontaneous 9</code> for tetrode D.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org8f1d361">waveform_evolution(a_Spontaneous_9_tetD,threshold_factor,matrix(1:10,nr=5))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_9-waveform-evolution-tetD.png" alt="Spontaneous_9-waveform-evolution-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 43: </span>Evolution of the templates of each of the first five units during the 10 trials of <code>Spontaneous 9</code> for tetrode D.</p>
+</div>
+
+<p>
+The observed counting processes and inter spike intervals densities are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd51e4d2">cp_isi(a_Spontaneous_9_tetD,nbins=100)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_9-CP-and-ISI-dist-tetD.png" alt="Spontaneous_9-CP-and-ISI-dist-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 44: </span>Observed counting processes and empirical inter spike interval distributions.</p>
+</div>
+
+<p>
+The BRT and RFT tests give for the first 7 units:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org38e5a66">layout_matrix = matrix(0,nr=nbc-3,nc=nbc-3)
+counter = 1
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:(nbc-3))
+    for (j in 1:(nbc-3))
+        if (i != j)
+            test_rt(a_Spontaneous_9_tetD$spike_trains[[i]],
+                    a_Spontaneous_9_tetD$spike_trains[[j]],
+		    nbins=200, single_trial_duration=30,
+                    ylab="",main=paste("Units",i,"and",j),
+                    xlim=c(-0.1,0.1))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20010217_fig/Spontaneous_9-rt-test-tetD.png" alt="Spontaneous_9-rt-test-tetD.png" />
+</p>
+<p><span class="figure-number">Figure 45: </span>Graphical tests for the first 7 units of the Backward and Forward Reccurrence Times distribution against the null hypothesis (no interaction) during Spontaneous_9. If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgc6e4cc4" class="outline-4">
+<h4 id="orgc6e4cc4"><span class="section-number-4">2.26.2</span> Save results</h4>
+<div class="outline-text-4" id="text-2-26-2">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7b305ff">save(a_Spontaneous_9_tetD,
+     file=paste0("tetD_analysis/tetD_","Spontaneous_9","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org99a76db">for (c_idx in 1:length(a_Spontaneous_9_tetD$spike_trains))
+    cat(a_Spontaneous_9_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20010217_spike_trains/locust20010217_Spontaneous_9_tetD_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Christophe Pouzat</p>
+<p class="date">Created: 2016-12-09 ven. 16:13</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
