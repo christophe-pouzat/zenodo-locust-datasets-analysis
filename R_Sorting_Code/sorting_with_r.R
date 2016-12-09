@@ -1416,7 +1416,7 @@ counts_evolution = function(smt_res ## result of a sort_many_trials call
 }
 waveform_evolution = function(smt_res, ## result of a sort_many_trials call
                               threshold_factor=4, ## threshold used
-                              layout_matrix=matrix(1:lenght(smt_res$centers_L),nr=lenght(smt_res$centers_L))
+                              layout_matrix=matrix(1:length(smt_res$centers_L),nr=length(smt_res$centers_L))
                               ) {
     nbc = length(smt_res$centers)
     nt = length(smt_res$trial_nbs)
@@ -1434,7 +1434,7 @@ cp_isi=function(smt_res, ## result of a sort_many_trials call
                 sampling_rate=15000, ## sampling rate in Hz
                 nbins=50, ## number of bins for isi histogram
                 isi_max=1, ## largest isi in isi histogram
-                layout_matrix=matrix(1:(2*lenght(smt_res$centers_L)),nr=lenght(smt_res$centers_L),byrow=TRUE)
+                layout_matrix=matrix(1:(2*length(smt_res$centers_L)),nr=length(smt_res$centers_L),byrow=TRUE)
                 ) {
     t_duration = inter_trial_time
     n_trials = length(smt_res$trial_nbs)
@@ -1463,7 +1463,7 @@ cp_isi_raster=function(smt_res, ## result of a sort_many_trials call
                       sampling_rate=15000, ## sampling rate in Hz
                       nbins=50, ## number of bins for isi histogram
                       isi_max=1, ## largest isi in isi histogram
-                      layout_matrix=matrix(1:(3*lenght(smt_res$centers_L)),nr=lenght(smt_res$centers_L),byrow=TRUE)
+                      layout_matrix=matrix(1:(3*length(smt_res$centers_L)),nr=length(smt_res$centers_L),byrow=TRUE)
                       ) {
     t_duration = inter_trial_time
     n_trials = length(smt_res$trial_nbs)

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-12-09 ven. 12:20 -->
+<!-- 2016-12-09 ven. 15:46 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Functions for Sorting with R</title>
@@ -255,51 +255,51 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge713136">1. Introduction</a></li>
-<li><a href="#orgb51bc24">2. Model estimation</a>
+<li><a href="#org38a2479">1. Introduction</a></li>
+<li><a href="#org3348cb1">2. Model estimation</a>
 <ul>
-<li><a href="#org655c00c">2.1. <code>cstValueSgts</code> definition</a></li>
-<li><a href="#org99be932">2.2. Definitions of generic function and time-series specific method for data exploration</a></li>
-<li><a href="#orgea0af0d">2.3. <code>peaks</code> and associated methods definition</a></li>
-<li><a href="#org794cb58">2.4. Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</a></li>
-<li><a href="#org2420984">2.5. Function <code>cutSglEvt</code></a></li>
-<li><a href="#org992fdac">2.6. Function <code>mkEvents</code></a></li>
-<li><a href="#org660d3bf">2.7. <code>events</code> methods</a></li>
-<li><a href="#orgf920d1e">2.8. <code>mkNoise</code> definition</a></li>
-<li><a href="#org4183317">2.9. Definition of an <code>explore</code> method for <code>pca</code> results</a></li>
-<li><a href="#orgc0a4e92">2.10. Definition of <code>get_jitter</code></a></li>
-<li><a href="#org97a7c91">2.11. Definition of <code>mk_aligned_events</code></a></li>
-<li><a href="#orgb06f3bc">2.12. Definition of <code>mk_center_list</code></a></li>
-<li><a href="#org09adefb">2.13. Definition of <code>classify_and_align_evt</code></a></li>
-<li><a href="#org049c114">2.14. Definition of <code>predict_data</code></a></li>
+<li><a href="#orgbe445dd">2.1. <code>cstValueSgts</code> definition</a></li>
+<li><a href="#org06416fa">2.2. Definitions of generic function and time-series specific method for data exploration</a></li>
+<li><a href="#org190b87c">2.3. <code>peaks</code> and associated methods definition</a></li>
+<li><a href="#org0a3778f">2.4. Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</a></li>
+<li><a href="#org517ba0e">2.5. Function <code>cutSglEvt</code></a></li>
+<li><a href="#org9609d5a">2.6. Function <code>mkEvents</code></a></li>
+<li><a href="#orgd9de453">2.7. <code>events</code> methods</a></li>
+<li><a href="#org2fc6907">2.8. <code>mkNoise</code> definition</a></li>
+<li><a href="#org46a4cfd">2.9. Definition of an <code>explore</code> method for <code>pca</code> results</a></li>
+<li><a href="#orgc521029">2.10. Definition of <code>get_jitter</code></a></li>
+<li><a href="#orgacf6c43">2.11. Definition of <code>mk_aligned_events</code></a></li>
+<li><a href="#orgd51b481">2.12. Definition of <code>mk_center_list</code></a></li>
+<li><a href="#org83108a2">2.13. Definition of <code>classify_and_align_evt</code></a></li>
+<li><a href="#org6169535">2.14. Definition of <code>predict_data</code></a></li>
 </ul>
 </li>
-<li><a href="#orgfb6d3a2">3. Template matching</a>
+<li><a href="#org9a5ceeb">3. Template matching</a>
 <ul>
-<li><a href="#org2dd6f38">3.1. Making "all at once"</a>
+<li><a href="#orgce1353d">3.1. Making "all at once"</a>
 <ul>
-<li><a href="#org32aeba2">3.1.1. What should our "all at once" function do?</a></li>
-<li><a href="#org9cb86e7">3.1.2. <code>all_at_once</code> definition</a></li>
+<li><a href="#org4b98e35">3.1.1. What should our "all at once" function do?</a></li>
+<li><a href="#org1abc710">3.1.2. <code>all_at_once</code> definition</a></li>
 </ul>
 </li>
-<li><a href="#org9024fd8">3.2. <code>get_data</code></a></li>
-<li><a href="#orgd1458d2">3.3. <code>sort_many_trials</code> definition</a></li>
+<li><a href="#orgfc8ae04">3.2. <code>get_data</code></a></li>
+<li><a href="#org8d66229">3.3. <code>sort_many_trials</code> definition</a></li>
 </ul>
 </li>
-<li><a href="#org0e473f7">4. Some diagnostic functions</a>
+<li><a href="#orgf20185d">4. Some diagnostic functions</a>
 <ul>
-<li><a href="#org2423870">4.1. Functions that can be used for single trials</a>
+<li><a href="#org9ae348f">4.1. Functions that can be used for single trials</a>
 <ul>
-<li><a href="#org5ead5d1">4.1.1. ISI distributions</a></li>
-<li><a href="#orgb4a409b">4.1.2. Forward and Backward Recurrence Times</a></li>
+<li><a href="#org183695f">4.1.1. ISI distributions</a></li>
+<li><a href="#org08fa3d8">4.1.2. Forward and Backward Recurrence Times</a></li>
 </ul>
 </li>
-<li><a href="#org197d38f">4.2. Functions for use after a call to <code>sort_many_trials</code></a>
+<li><a href="#orgb36dccb">4.2. Functions for use after a call to <code>sort_many_trials</code></a>
 <ul>
-<li><a href="#org2d51137">4.2.1. <code>counts_evolutions</code></a></li>
-<li><a href="#org98bfe19">4.2.2. <code>waveform_evolution</code></a></li>
-<li><a href="#org17474ed">4.2.3. <code>cp_isi</code></a></li>
-<li><a href="#org2784075">4.2.4. <code>cp_isi_raster</code></a></li>
+<li><a href="#org25920d7">4.2.1. <code>counts_evolutions</code></a></li>
+<li><a href="#orgab35e2a">4.2.2. <code>waveform_evolution</code></a></li>
+<li><a href="#orgb9c6e9f">4.2.3. <code>cp_isi</code></a></li>
+<li><a href="#org4a2028a">4.2.4. <code>cp_isi_raster</code></a></li>
 </ul>
 </li>
 </ul>
@@ -308,8 +308,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orge713136" class="outline-2">
-<h2 id="orge713136"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org38a2479" class="outline-2">
+<h2 id="org38a2479"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This file contains function definitions and documentation.
@@ -327,11 +327,11 @@ These functions are designed to sort data for "long" recordings (several hours) 
 </div>
 
 
-<div id="outline-container-orgb51bc24" class="outline-2">
-<h2 id="orgb51bc24"><span class="section-number-2">2</span> Model estimation</h2>
+<div id="outline-container-org3348cb1" class="outline-2">
+<h2 id="org3348cb1"><span class="section-number-2">2</span> Model estimation</h2>
 <div class="outline-text-2" id="text-2">
-</div><div id="outline-container-org655c00c" class="outline-3">
-<h3 id="org655c00c"><span class="section-number-3">2.1</span> <code>cstValueSgts</code> definition</h3>
+</div><div id="outline-container-orgbe445dd" class="outline-3">
+<h3 id="orgbe445dd"><span class="section-number-3">2.1</span> <code>cstValueSgts</code> definition</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Formal parameters:
@@ -343,7 +343,7 @@ Formal parameters:
 Returns: an intgeger matrix with as many columns as segments where the derivative is null, the first row contains the index of the beginning of each segment, the second row contains the segments' lengths.
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="org6812f20">cstValueSgts &lt;- function(x) {
+<pre class="src src-R" id="org10a998a">cstValueSgts &lt;- function(x) {
     dx &lt;- as.integer(abs(diff(x,2))/2 &lt;= .Machine$double.eps) ## use "order 2" derivative estimates
     ## ddx is zero where the derivative did not change,
     ## it is one if the derivative becomes null and -1
@@ -365,14 +365,14 @@ Returns: an intgeger matrix with as many columns as segments where the derivativ
 </div>
 </div>
 
-<div id="outline-container-org99be932" class="outline-3">
-<h3 id="org99be932"><span class="section-number-3">2.2</span> Definitions of generic function and time-series specific method for data exploration</h3>
+<div id="outline-container-org06416fa" class="outline-3">
+<h3 id="org06416fa"><span class="section-number-3">2.2</span> Definitions of generic function and time-series specific method for data exploration</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 Definition of the generic function:
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="org38cf7d9">explore &lt;- function(x,...) {
+<pre class="src src-R" id="org1b86eb0">explore &lt;- function(x,...) {
   UseMethod("explore")
 }
 </pre>
@@ -388,7 +388,7 @@ Formal arguments:
 <li><code>...</code>: additional arguments passed to <code>matplot</code> and <code>plot</code> functions called inernally.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="org0ba223c">explore.ts &lt;- function(x,
+<pre class="src src-R" id="org3b5d603">explore.ts &lt;- function(x,
                        offsetFactor=0.5, 
                        ...) {
 
@@ -697,14 +697,14 @@ Formal arguments:
 </div>
 </div>
 
-<div id="outline-container-orgea0af0d" class="outline-3">
-<h3 id="orgea0af0d"><span class="section-number-3">2.3</span> <code>peaks</code> and associated methods definition</h3>
+<div id="outline-container-org190b87c" class="outline-3">
+<h3 id="org190b87c"><span class="section-number-3">2.3</span> <code>peaks</code> and associated methods definition</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Function <code>peaks</code> returns an object (essentially a vector of indices) of class <code>eventsPos</code>:
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="org43fdaf7">peaks &lt;- function(x,
+<pre class="src src-R" id="org19c4334">peaks &lt;- function(x,
                   minimalDist=15,
                   notZero=1e-3) {
     dx &lt;- c(0,diff(x,2)/2,0)
@@ -729,7 +729,7 @@ Method <code>as.eventsPos</code> transforms a vector into an <code>eventsPos</co
 <li><code>end</code>: an integer, the sampling point at which observation ended.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="org9f06956">as.eventsPos &lt;- function(x,
+<pre class="src src-R" id="org01ca4f1">as.eventsPos &lt;- function(x,
                          start,
                          end
                          ) {
@@ -751,7 +751,7 @@ Method <code>as.eventsPos</code> transforms a vector into an <code>eventsPos</co
 Method <code>print.eventsPos</code> prints an <code>eventsPos</code> object:
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="orga36b804">print.eventsPos &lt;- function(x, ...) {
+<pre class="src src-R" id="orga8d046e">print.eventsPos &lt;- function(x, ...) {
   cat("\neventsPos object with indexes of ", length(x)," events. \n", sep = "")
   cat("  Mean inter event interval: ", round(mean(diff(x)),digits=2), " sampling points, corresponding SD: ", round(sd(diff(x)),digits=2), " sampling points \n", sep = "")
   cat("  Smallest and largest inter event intervals: ", paste(range(diff(x)),collapse=" and "), " sampling points. \n\n",sep= "")
@@ -761,8 +761,8 @@ Method <code>print.eventsPos</code> prints an <code>eventsPos</code> object:
 </div>
 </div>
 
-<div id="outline-container-org794cb58" class="outline-3">
-<h3 id="org794cb58"><span class="section-number-3">2.4</span> Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</h3>
+<div id="outline-container-org0a3778f" class="outline-3">
+<h3 id="org0a3778f"><span class="section-number-3">2.4</span> Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 The formal parameters of the method are:
@@ -776,7 +776,7 @@ The formal parameters of the method are:
 <li><code>...</code>: additional arguments passed to <code>matplot</code> and <code>plot</code> functions called inernally.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="org85fee21">explore.eventsPos &lt;- function(x,y,
+<pre class="src src-R" id="org0013dab">explore.eventsPos &lt;- function(x,y,
                               offsetFactor=0.5,
                               events.pch=16,
                               events.col=2,
@@ -1106,8 +1106,8 @@ The formal parameters of the method are:
 </div>
 
 
-<div id="outline-container-org2420984" class="outline-3">
-<h3 id="org2420984"><span class="section-number-3">2.5</span> Function <code>cutSglEvt</code></h3>
+<div id="outline-container-org517ba0e" class="outline-3">
+<h3 id="org517ba0e"><span class="section-number-3">2.5</span> Function <code>cutSglEvt</code></h3>
 <div class="outline-text-3" id="text-2-5">
 <p>
 Its formal parameters are:
@@ -1125,7 +1125,7 @@ It returns:
 <li>A numeric vector with the cut(s). When several recording sites are used the cuts of each individual sites are placed one after the other.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="org96f3eab">cutSglEvt &lt;- function(evtPos,
+<pre class="src src-R" id="orgf222524">cutSglEvt &lt;- function(evtPos,
                       data,
                       before=14,
                       after=30
@@ -1158,8 +1158,8 @@ It returns:
 </div>
 
 
-<div id="outline-container-org992fdac" class="outline-3">
-<h3 id="org992fdac"><span class="section-number-3">2.6</span> Function <code>mkEvents</code></h3>
+<div id="outline-container-org9609d5a" class="outline-3">
+<h3 id="org9609d5a"><span class="section-number-3">2.6</span> Function <code>mkEvents</code></h3>
 <div class="outline-text-3" id="text-2-6">
 <p>
 Its formal parameters are:
@@ -1184,7 +1184,7 @@ cancellation"). The returned matrix is given an "events" class.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org80f2d41">mkEvents &lt;- function(positions,
+<pre class="src src-R" id="orgf0daae2">mkEvents &lt;- function(positions,
                      data,
                      before=14,
                      after=30
@@ -1213,11 +1213,11 @@ cancellation"). The returned matrix is given an "events" class.
 </div>
 
 
-<div id="outline-container-org660d3bf" class="outline-3">
-<h3 id="org660d3bf"><span class="section-number-3">2.7</span> <code>events</code> methods</h3>
+<div id="outline-container-orgd9de453" class="outline-3">
+<h3 id="orgd9de453"><span class="section-number-3">2.7</span> <code>events</code> methods</h3>
 <div class="outline-text-3" id="text-2-7">
 <div class="org-src-container">
-<pre class="src src-R" id="org4464251">summary.events &lt;- function(object,
+<pre class="src src-R" id="org8b88737">summary.events &lt;- function(object,
                            ...) {
   b &lt;- attr(object,"before")
   a &lt;- attr(object,"after")
@@ -1234,7 +1234,7 @@ cancellation"). The returned matrix is given an "events" class.
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orgd66ee8d">"[.events" &lt;- function(x,i,j,drop = FALSE) {
+<pre class="src src-R" id="orgbcada28">"[.events" &lt;- function(x,i,j,drop = FALSE) {
     y &lt;- NextMethod("[")
     if (!missing(i)) return(NULL)
     if (is.matrix(y) &amp;&amp; dim(y)[2] &gt; 1) {
@@ -1253,14 +1253,14 @@ cancellation"). The returned matrix is given an "events" class.
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orgbb93ae5">t.events &lt;- function(x) {
+<pre class="src src-R" id="org642b109">t.events &lt;- function(x) {
   t(unclass(x))
 }
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org2e2f32b">mean.events &lt;- function(x,...) {
+<pre class="src src-R" id="org6c91057">mean.events &lt;- function(x,...) {
     apply(unclass(x),1,mean,...)
 }
 
@@ -1271,7 +1271,7 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org81a1062">'-.events' &lt;- function(e1,e2) {
+<pre class="src src-R" id="org53e8df9">'-.events' &lt;- function(e1,e2) {
     stopifnot(length(e2) == dim(e1)[1])
     res &lt;- unclass(e1)-e2
     attr(res,"positions") &lt;- attr(e1,"positions")
@@ -1288,7 +1288,7 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org82c40dd">plot.events &lt;- function(x,
+<pre class="src src-R" id="orge2bac6f">plot.events &lt;- function(x,
                         y=NULL,
                         evts.lwd = 0.1,
                         medAndMad = TRUE,
@@ -1321,7 +1321,7 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org1c8d116">lines.events &lt;- function(x,
+<pre class="src src-R" id="org6574c8a">lines.events &lt;- function(x,
                          evts.lwd = 0.1,
                          evts.col = "black",
                          ...
@@ -1332,7 +1332,7 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org6c0d9f7">print.events &lt;- function(x, 
+<pre class="src src-R" id="org9101b3c">print.events &lt;- function(x, 
                          ... ) {
     plot.events(x,...)
 }
@@ -1342,11 +1342,11 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 
-<div id="outline-container-orgf920d1e" class="outline-3">
-<h3 id="orgf920d1e"><span class="section-number-3">2.8</span> <code>mkNoise</code> definition</h3>
+<div id="outline-container-org2fc6907" class="outline-3">
+<h3 id="org2fc6907"><span class="section-number-3">2.8</span> <code>mkNoise</code> definition</h3>
 <div class="outline-text-3" id="text-2-8">
 <div class="org-src-container">
-<pre class="src src-R" id="orgab03a40">mkNoise &lt;- function(positions,
+<pre class="src src-R" id="org2d7fd0d">mkNoise &lt;- function(positions,
                     data,
                     before=14,
                     after=30,
@@ -1418,11 +1418,11 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 </div>
 
-<div id="outline-container-org4183317" class="outline-3">
-<h3 id="org4183317"><span class="section-number-3">2.9</span> Definition of an <code>explore</code> method for <code>pca</code> results</h3>
+<div id="outline-container-org46a4cfd" class="outline-3">
+<h3 id="org46a4cfd"><span class="section-number-3">2.9</span> Definition of an <code>explore</code> method for <code>pca</code> results</h3>
 <div class="outline-text-3" id="text-2-9">
 <div class="org-src-container">
-<pre class="src src-R" id="org95bc0d7">explore.prcomp &lt;- function(x,
+<pre class="src src-R" id="org339c00e">explore.prcomp &lt;- function(x,
                            pc=1, ##&lt;&lt; an integer: the pc index to add to the mean.
                            factor=2, ##&lt;&lt; a numeric, the scaling factor; that is, the plot shows mean +/- factor * pc.
                            m.col="black", ##&lt;&lt; a character string or an integer, the color used for mean.
@@ -1450,8 +1450,8 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 
-<div id="outline-container-orgc0a4e92" class="outline-3">
-<h3 id="orgc0a4e92"><span class="section-number-3">2.10</span> Definition of <code>get_jitter</code></h3>
+<div id="outline-container-orgc521029" class="outline-3">
+<h3 id="orgc521029"><span class="section-number-3">2.10</span> Definition of <code>get_jitter</code></h3>
 <div class="outline-text-3" id="text-2-10">
 <p>
 We define  a function that estimates the jitter given:
@@ -1471,7 +1471,7 @@ This sampling jitter estimation is performed by a two stages procedure:
 <li>A Newton-Raphson step is used to refine the first estimation (used as a starting point) based on a second order Taylor expansion.</li>
 </ol>
 <div class="org-src-container">
-<pre class="src src-R" id="orgcd85449">get_jitter &lt;- function(evts,
+<pre class="src src-R" id="org69b9551">get_jitter &lt;- function(evts,
                        center,
                        centerD,
                        centerDD){
@@ -1496,14 +1496,14 @@ This sampling jitter estimation is performed by a two stages procedure:
 </div>
 
 
-<div id="outline-container-org97a7c91" class="outline-3">
-<h3 id="org97a7c91"><span class="section-number-3">2.11</span> Definition of <code>mk_aligned_events</code></h3>
+<div id="outline-container-orgacf6c43" class="outline-3">
+<h3 id="orgacf6c43"><span class="section-number-3">2.11</span> Definition of <code>mk_aligned_events</code></h3>
 <div class="outline-text-3" id="text-2-11">
 <p>
 We define a function taking a vector of spike times, that should all come from the same cluster and correspond to reasonably "clean" events, and three arguments corresponding to the last three arguments of <code>mkEvents</code>, the function returns a <code>events</code> object. The <code>positions</code> attribute of the returned object gives the nearest sampling point to the actual peak. The <code>delta</code> attribute gives the offset between the previous spike position and the "actual" peak position (the actual position is attribute <code>positions</code> <b>minus</b> attribute <code>delta</code>):
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="org2472649">mk_aligned_events &lt;- function(positions,
+<pre class="src src-R" id="orgcfbf3a0">mk_aligned_events &lt;- function(positions,
                               data,
                               before=14,
                               after=30){
@@ -1538,8 +1538,8 @@ We define a function taking a vector of spike times, that should all come from t
 </div>
 
 
-<div id="outline-container-orgb06f3bc" class="outline-3">
-<h3 id="orgb06f3bc"><span class="section-number-3">2.12</span> Definition of <code>mk_center_list</code></h3>
+<div id="outline-container-orgd51b481" class="outline-3">
+<h3 id="orgd51b481"><span class="section-number-3">2.12</span> Definition of <code>mk_center_list</code></h3>
 <div class="outline-text-3" id="text-2-12">
 <p>
 We define function <code>mk_center_list</code> that given:
@@ -1566,7 +1566,7 @@ returns a nammed list with the following elements and their content:
 The peeling procedure, requiers, for each cluster, estimates of its center and of its first two derivatives. Clusters' centers must moreover be built such that they can be used for subtraction, this implies that we should make them long enough, on both side of the peak, to see them go back to baseline. Formal parameters <code>before</code> and <code>after</code> should therefore be set to larger values than the ones used for clustering.
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="orgac49f15">mk_center_list = function(positions,
+<pre class="src src-R" id="orgc0d2591">mk_center_list = function(positions,
                            data,
                            before=49,
                            after=80) {
@@ -1592,8 +1592,8 @@ The peeling procedure, requiers, for each cluster, estimates of its center and o
 </div>
 
 
-<div id="outline-container-org09adefb" class="outline-3">
-<h3 id="org09adefb"><span class="section-number-3">2.13</span> Definition of <code>classify_and_align_evt</code></h3>
+<div id="outline-container-org83108a2" class="outline-3">
+<h3 id="org83108a2"><span class="section-number-3">2.13</span> Definition of <code>classify_and_align_evt</code></h3>
 <div class="outline-text-3" id="text-2-13">
 <p>
 The formal parameters of <code>classify_and_align_evt</code> are:
@@ -1613,7 +1613,7 @@ returns a list with the following element:
 <li>the remaining jitter.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="orgab22b51">classify_and_align_evt &lt;- function(evt_pos,
+<pre class="src src-R" id="org61c0835">classify_and_align_evt &lt;- function(evt_pos,
                                    data,
                                    centers,
                                    before=14,
@@ -1690,8 +1690,8 @@ returns a list with the following element:
 </div>
 </div>
 
-<div id="outline-container-org049c114" class="outline-3">
-<h3 id="org049c114"><span class="section-number-3">2.14</span> Definition of <code>predict_data</code></h3>
+<div id="outline-container-org6169535" class="outline-3">
+<h3 id="org6169535"><span class="section-number-3">2.14</span> Definition of <code>predict_data</code></h3>
 <div class="outline-text-3" id="text-2-14">
 <p>
 The formal parameters of <code>predict_data</code> are:
@@ -1706,7 +1706,7 @@ The formal parameters of <code>predict_data</code> are:
 The function returns a matrix with <code>data_length</code> rows and <code>nb_channels</code> columns with observations predictions based on <code>class_pos_jitter_list</code> and <code>centers_list</code>.  
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="org35dc80f">predict_data &lt;- function(class_pos_jitter_list,
+<pre class="src src-R" id="orgef82ca3">predict_data &lt;- function(class_pos_jitter_list,
                          centers_list,
                          nb_channels=4,
                          data_length=300000) {
@@ -1736,11 +1736,11 @@ The function returns a matrix with <code>data_length</code> rows and <code>nb_ch
 </div>
 
 
-<div id="outline-container-orgfb6d3a2" class="outline-2">
-<h2 id="orgfb6d3a2"><span class="section-number-2">3</span> Template matching</h2>
+<div id="outline-container-org9a5ceeb" class="outline-2">
+<h2 id="org9a5ceeb"><span class="section-number-2">3</span> Template matching</h2>
 <div class="outline-text-2" id="text-3">
-</div><div id="outline-container-org2dd6f38" class="outline-3">
-<h3 id="org2dd6f38"><span class="section-number-3">3.1</span> Making "all at once"</h3>
+</div><div id="outline-container-orgce1353d" class="outline-3">
+<h3 id="orgce1353d"><span class="section-number-3">3.1</span> Making "all at once"</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 After classifying a single trial, we would like to classify the subsequent ones (from the same experiment and the same tetrode) without re-estimating the model every time. If the recording conditions were perfectly stable we could proceed rather easily and in fact to the job in parallel. There are nevertheless few sources of variability we should be ready to cope with:
@@ -1752,8 +1752,8 @@ After classifying a single trial, we would like to classify the subsequent ones 
 </ul>
 </div>
 
-<div id="outline-container-org32aeba2" class="outline-4">
-<h4 id="org32aeba2"><span class="section-number-4">3.1.1</span> What should our "all at once" function do?</h4>
+<div id="outline-container-org4b98e35" class="outline-4">
+<h4 id="org4b98e35"><span class="section-number-4">3.1.1</span> What should our "all at once" function do?</h4>
 <div class="outline-text-4" id="text-3-1-1">
 <p>
 The first thing is to print the five-number summary so that if something went really wrong (amplifier saturation, large noise increase) it will be readily detected. It is then a good idea to print after each peeling round the total number of detected events, the number of events attributed to each neuron and the number of unclassified events. At the end we want to print these same numbers obtained from the whole peeling procedure. The function will also return in a list the following elements:
@@ -1770,8 +1770,8 @@ The first thing is to print the five-number summary so that if something went re
 </div>
 </div>
 
-<div id="outline-container-org9cb86e7" class="outline-4">
-<h4 id="org9cb86e7"><span class="section-number-4">3.1.2</span> <code>all_at_once</code> definition</h4>
+<div id="outline-container-org1abc710" class="outline-4">
+<h4 id="org1abc710"><span class="section-number-4">3.1.2</span> <code>all_at_once</code> definition</h4>
 <div class="outline-text-4" id="text-3-1-2">
 <p>
 The formal parameters (arguments) of <code>all_at_once</code> are:
@@ -1796,7 +1796,7 @@ So let us define our function:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orgfeb8e8b">all_at_once = function(data, ## an unormalized data matrix
+<pre class="src src-R" id="org14930c9">all_at_once = function(data, ## an unormalized data matrix
                        centers, ## a list of centers
                        thres=4*c(1,1,1,1), ## threshold vector
                        filter_length_1=5, ## length of first filter
@@ -1945,8 +1945,8 @@ So let us define our function:
 </div>
 
 
-<div id="outline-container-org9024fd8" class="outline-3">
-<h3 id="org9024fd8"><span class="section-number-3">3.2</span> <code>get_data</code></h3>
+<div id="outline-container-orgfc8ae04" class="outline-3">
+<h3 id="orgfc8ae04"><span class="section-number-3">3.2</span> <code>get_data</code></h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 Function <code>get_data</code> should read data from an (HDF5) file and return a matrix suitable as argument <code>data</code> in <code>all_at_once</code>. 
@@ -1961,7 +1961,7 @@ We define it here to take the following arguments:
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org14630ab">get_data = function(trial_idx,
+<pre class="src src-R" id="org83ac9bc">get_data = function(trial_idx,
                     stim="Spontaneous_1",
                     channels=c("ch02","ch03","ch05","ch07"),
                     file="locust20010214_part1.hdf5") {
@@ -1979,8 +1979,8 @@ We define it here to take the following arguments:
 </div>
 </div>
 
-<div id="outline-container-orgd1458d2" class="outline-3">
-<h3 id="orgd1458d2"><span class="section-number-3">3.3</span> <code>sort_many_trials</code> definition</h3>
+<div id="outline-container-org8d66229" class="outline-3">
+<h3 id="org8d66229"><span class="section-number-3">3.3</span> <code>sort_many_trials</code> definition</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 We define now function <code>sort_many_trials</code>. This function takes the following formal parameters:
@@ -2020,7 +2020,7 @@ The function returns a list with the following elements:
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org2932455">sort_many_trials = function(inter_trial_time,
+<pre class="src src-R" id="org8b3a84d">sort_many_trials = function(inter_trial_time,
                             get_data_fct,
                             stim_name,
                             trial_nbs,
@@ -2113,21 +2113,21 @@ The function returns a list with the following elements:
 </div>
 </div>
 
-<div id="outline-container-org0e473f7" class="outline-2">
-<h2 id="org0e473f7"><span class="section-number-2">4</span> Some diagnostic functions</h2>
+<div id="outline-container-orgf20185d" class="outline-2">
+<h2 id="orgf20185d"><span class="section-number-2">4</span> Some diagnostic functions</h2>
 <div class="outline-text-2" id="text-4">
-</div><div id="outline-container-org2423870" class="outline-3">
-<h3 id="org2423870"><span class="section-number-3">4.1</span> Functions that can be used for single trials</h3>
+</div><div id="outline-container-org9ae348f" class="outline-3">
+<h3 id="org9ae348f"><span class="section-number-3">4.1</span> Functions that can be used for single trials</h3>
 <div class="outline-text-3" id="text-4-1">
-</div><div id="outline-container-org5ead5d1" class="outline-4">
-<h4 id="org5ead5d1"><span class="section-number-4">4.1.1</span> ISI distributions</h4>
+</div><div id="outline-container-org183695f" class="outline-4">
+<h4 id="org183695f"><span class="section-number-4">4.1.1</span> ISI distributions</h4>
 <div class="outline-text-4" id="text-4-1-1">
 <p>
 We define a <code>plot_isi</code> function that plots the <code>ECDF</code> (empirical cumulative distribution function) of the <code>ISI</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orgd9ef2cc">plot_isi = function(isi, ## vector of ISIs
+<pre class="src src-R" id="org299c7e9">plot_isi = function(isi, ## vector of ISIs
                     xlab="ISI (s)",
                     ylab="ECFD",
                     xlim=c(0,0.5), 
@@ -2145,8 +2145,8 @@ We define a <code>plot_isi</code> function that plots the <code>ECDF</code> (emp
 </div>
 </div>
 
-<div id="outline-container-orgb4a409b" class="outline-4">
-<h4 id="orgb4a409b"><span class="section-number-4">4.1.2</span> Forward and Backward Recurrence Times</h4>
+<div id="outline-container-org08fa3d8" class="outline-4">
+<h4 id="org08fa3d8"><span class="section-number-4">4.1.2</span> Forward and Backward Recurrence Times</h4>
 <div class="outline-text-4" id="text-4-1-2">
 <p>
 The forward recurrence time (<code>FRT</code>) between neuron A and B is the elapsed time between a spike in A and the next spike in B. The backward recurrence time (<code>BRT</code>) is the same thing except that we look for the former spike in B. If A and B are not correlated, the expected density of the FRT is the survival function (1-CDF) of the ISI from B divided by the mean ISI of B (the same holds for the BRT under the null hypothesis after taking the opposite). All that is correct if the data are <i>stationary</i>.
@@ -2158,7 +2158,7 @@ We define next a function <code>test_rt</code> that plots a variance stabilized 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org0dfa339">test_rt = function(ref_train, 
+<pre class="src src-R" id="org553adc1">test_rt = function(ref_train, 
                    test_train,
                    sampling_frequency=15000,
                    nbins=50, ## the number of breaks in the histogram
@@ -2239,18 +2239,18 @@ We define next a function <code>test_rt</code> that plots a variance stabilized 
 </div>
 </div>
 
-<div id="outline-container-org197d38f" class="outline-3">
-<h3 id="org197d38f"><span class="section-number-3">4.2</span> Functions for use after a call to <code>sort_many_trials</code></h3>
+<div id="outline-container-orgb36dccb" class="outline-3">
+<h3 id="orgb36dccb"><span class="section-number-3">4.2</span> Functions for use after a call to <code>sort_many_trials</code></h3>
 <div class="outline-text-3" id="text-4-2">
-</div><div id="outline-container-org2d51137" class="outline-4">
-<h4 id="org2d51137"><span class="section-number-4">4.2.1</span> <code>counts_evolutions</code></h4>
+</div><div id="outline-container-org25920d7" class="outline-4">
+<h4 id="org25920d7"><span class="section-number-4">4.2.1</span> <code>counts_evolutions</code></h4>
 <div class="outline-text-4" id="text-4-2-1">
 <p>
 Plots the evolution of the counts attributed to each neuron in the model together with the number of unclassified events.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orge228659">counts_evolution = function(smt_res ## result of a sort_many_trials call
+<pre class="src src-R" id="org1b6abbc">counts_evolution = function(smt_res ## result of a sort_many_trials call
                            ) {
     nbc = length(smt_res$centers)
     the_pch = if (nbc&lt;10) c(paste(1:nbc),"?")
@@ -2265,17 +2265,17 @@ Plots the evolution of the counts attributed to each neuron in the model togethe
 </div>
 </div>
 
-<div id="outline-container-org98bfe19" class="outline-4">
-<h4 id="org98bfe19"><span class="section-number-4">4.2.2</span> <code>waveform_evolution</code></h4>
+<div id="outline-container-orgab35e2a" class="outline-4">
+<h4 id="orgab35e2a"><span class="section-number-4">4.2.2</span> <code>waveform_evolution</code></h4>
 <div class="outline-text-4" id="text-4-2-2">
 <p>
 Plots the evolution of the waveform / templates of each neuron
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org673ed98">waveform_evolution = function(smt_res, ## result of a sort_many_trials call
+<pre class="src src-R" id="org5119068">waveform_evolution = function(smt_res, ## result of a sort_many_trials call
                               threshold_factor=4, ## threshold used
-                              layout_matrix=matrix(1:lenght(smt_res$centers_L),nr=lenght(smt_res$centers_L))
+                              layout_matrix=matrix(1:length(smt_res$centers_L),nr=length(smt_res$centers_L))
                               ) {
     nbc = length(smt_res$centers)
     nt = length(smt_res$trial_nbs)
@@ -2293,20 +2293,20 @@ Plots the evolution of the waveform / templates of each neuron
 </div>
 </div>
 
-<div id="outline-container-org17474ed" class="outline-4">
-<h4 id="org17474ed"><span class="section-number-4">4.2.3</span> <code>cp_isi</code></h4>
+<div id="outline-container-orgb9c6e9f" class="outline-4">
+<h4 id="orgb9c6e9f"><span class="section-number-4">4.2.3</span> <code>cp_isi</code></h4>
 <div class="outline-text-4" id="text-4-2-3">
 <p>
 Plots the observed counting process together with the ISI density for each neuron in the model.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orgc5e64f4">cp_isi=function(smt_res, ## result of a sort_many_trials call
+<pre class="src src-R" id="org3808728">cp_isi=function(smt_res, ## result of a sort_many_trials call
                 inter_trial_time=10, ## time between trials in seconds
                 sampling_rate=15000, ## sampling rate in Hz
                 nbins=50, ## number of bins for isi histogram
                 isi_max=1, ## largest isi in isi histogram
-                layout_matrix=matrix(1:(2*lenght(smt_res$centers_L)),nr=lenght(smt_res$centers_L),byrow=TRUE)
+                layout_matrix=matrix(1:(2*length(smt_res$centers_L)),nr=length(smt_res$centers_L),byrow=TRUE)
                 ) {
     t_duration = inter_trial_time
     n_trials = length(smt_res$trial_nbs)
@@ -2335,20 +2335,20 @@ Plots the observed counting process together with the ISI density for each neuro
 </div>
 </div>
 
-<div id="outline-container-org2784075" class="outline-4">
-<h4 id="org2784075"><span class="section-number-4">4.2.4</span> <code>cp_isi_raster</code></h4>
+<div id="outline-container-org4a2028a" class="outline-4">
+<h4 id="org4a2028a"><span class="section-number-4">4.2.4</span> <code>cp_isi_raster</code></h4>
 <div class="outline-text-4" id="text-4-2-4">
 <p>
 Plots the observed counting process together with the ISI density and the raster for each neuron in the model.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orgdb871a1">cp_isi_raster=function(smt_res, ## result of a sort_many_trials call
+<pre class="src src-R" id="orgc887535">cp_isi_raster=function(smt_res, ## result of a sort_many_trials call
                       inter_trial_time=10, ## time between trials in seconds
                       sampling_rate=15000, ## sampling rate in Hz
                       nbins=50, ## number of bins for isi histogram
                       isi_max=1, ## largest isi in isi histogram
-                      layout_matrix=matrix(1:(3*lenght(smt_res$centers_L)),nr=lenght(smt_res$centers_L),byrow=TRUE)
+                      layout_matrix=matrix(1:(3*length(smt_res$centers_L)),nr=length(smt_res$centers_L),byrow=TRUE)
                       ) {
     t_duration = inter_trial_time
     n_trials = length(smt_res$trial_nbs)
@@ -2389,7 +2389,7 @@ Plots the observed counting process together with the ISI density and the raster
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Christophe Pouzat</p>
-<p class="date">Created: 2016-12-09 ven. 12:20</p>
+<p class="date">Created: 2016-12-09 ven. 15:46</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
