@@ -10,6 +10,9 @@
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 25.1.1 (Org mode 9.0)
+#+LINK_HOME: ../index.html
+#+LINK_UP: ../index.html
+
 
 * Introduction
 

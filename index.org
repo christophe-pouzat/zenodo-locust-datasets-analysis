@@ -15,7 +15,7 @@
 
 You will find here the codes necessary for reproducing the sorting of the extracellular recordings from the locust olfactory pathway available on zenodo (https://zenodo.org/record/21589) as well as the sorting results (the spike trains).
 
-For now the analysis is done with [[https://www.r-project.org/][R]] but a =C= version is in preparation. The way the code is applied to the specific datasets can be followed with `html` files that were generated using [[https://www.gnu.org/software/emacs/tour/][Emacs]] [[http://orgmode.org/][Org mode]], especially the [[http://orgmode.org/worg/org-contrib/babel/][Babel]] extension of `Org mode` (the developers of these wonderful tools are warmly thanked! Without their work none of what follows would have been possible--this does not mean that they should be held responsible for my mistakes--). 
+For now the analysis is done with [[https://www.r-project.org/][R]] but a =C= version is in preparation. The way the code is applied to the specific datasets can be followed with `html` files that were generated using [[https://www.gnu.org/software/emacs/tour/][Emacs]] [[http://orgmode.org/][Org mode]], especially the [[http://orgmode.org/worg/org-contrib/babel/][Babel]] extension of =Org mode= (the developers of these wonderful tools are warmly thanked! Without their work none of what follows would have been possible--this does not mean that they should be held responsible for my mistakes--). 
 
 There is one directory per experiment on the dedicated [[https://github.com/christophe-pouzat/zenodo-locust-datasets-analysis/tree/master/Locust_Analysis_with_R][GitHub repository]]. In the directory of each experiment you will find:
 
@@ -25,6 +25,10 @@ There is one directory per experiment on the dedicated [[https://github.com/chri
 - A directory named =locustXXX_tetY_fig= that contains the figures of the =html= file.
 
 The spike trains in directory =locustXXX_spike_trains= are stored in ASCII format with one spike time per line. They are named =locustXXX_StimID_tetY_uZ.txt=, where =XXX= and =Y= are their previous meaning, =StimID= is a stimulation identifier (more precisely a =group= name in the =HDF5= data file) and =Z= is the unit number.
+
+* The code
+
+There is a [[file:R_Sorting_Code/sorting_with_r.html]["reference manual"]] describing the =R= function specifically developed for spike sorting. A [[http://xtof.perso.math.cnrs.fr/locust.html][more detailed description]] of what these function do is also available.
 
 * The experiments
 ** locust20010214
