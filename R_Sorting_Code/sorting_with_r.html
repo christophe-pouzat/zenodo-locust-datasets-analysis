@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-12-08 jeu. 20:59 -->
+<!-- 2016-12-09 ven. 12:20 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Functions Sorting with R</title>
+<title>Functions for Sorting with R</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="Christophe Pouzat" />
 <style type="text/css">
@@ -225,33 +225,81 @@ for the JavaScript code in this tag.
  }
 /*]]>*///-->
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content">
-<h1 class="title">Functions Sorting with R</h1>
+<h1 class="title">Functions for Sorting with R</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgac35772">1. Introduction</a></li>
-<li><a href="#org7ff165a">2. Custom developed code</a>
+<li><a href="#orge713136">1. Introduction</a></li>
+<li><a href="#orgb51bc24">2. Model estimation</a>
 <ul>
-<li><a href="#org8d16c8b">2.1. Individual function definitions</a>
+<li><a href="#org655c00c">2.1. <code>cstValueSgts</code> definition</a></li>
+<li><a href="#org99be932">2.2. Definitions of generic function and time-series specific method for data exploration</a></li>
+<li><a href="#orgea0af0d">2.3. <code>peaks</code> and associated methods definition</a></li>
+<li><a href="#org794cb58">2.4. Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</a></li>
+<li><a href="#org2420984">2.5. Function <code>cutSglEvt</code></a></li>
+<li><a href="#org992fdac">2.6. Function <code>mkEvents</code></a></li>
+<li><a href="#org660d3bf">2.7. <code>events</code> methods</a></li>
+<li><a href="#orgf920d1e">2.8. <code>mkNoise</code> definition</a></li>
+<li><a href="#org4183317">2.9. Definition of an <code>explore</code> method for <code>pca</code> results</a></li>
+<li><a href="#orgc0a4e92">2.10. Definition of <code>get_jitter</code></a></li>
+<li><a href="#org97a7c91">2.11. Definition of <code>mk_aligned_events</code></a></li>
+<li><a href="#orgb06f3bc">2.12. Definition of <code>mk_center_list</code></a></li>
+<li><a href="#org09adefb">2.13. Definition of <code>classify_and_align_evt</code></a></li>
+<li><a href="#org049c114">2.14. Definition of <code>predict_data</code></a></li>
+</ul>
+</li>
+<li><a href="#orgfb6d3a2">3. Template matching</a>
 <ul>
-<li><a href="#org092ac03">2.1.1. <code>cstValueSgts</code> definition</a></li>
-<li><a href="#org913c8ab">2.1.2. Definitions of generic function and time-series specific method for data exploration</a></li>
-<li><a href="#org42d015c">2.1.3. <code>peaks</code> and associated methods definition</a></li>
-<li><a href="#org3b39c3a">2.1.4. Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</a></li>
-<li><a href="#org6d8f751">2.1.5. Function <code>cutSglEvt</code></a></li>
-<li><a href="#org55443e3">2.1.6. Function <code>mkEvents</code></a></li>
-<li><a href="#org949c75e">2.1.7. <code>events</code> methods</a></li>
-<li><a href="#orgf01ff42">2.1.8. <code>mkNoise</code> definition</a></li>
-<li><a href="#org2979fa9">2.1.9. Definition of an <code>explore</code> method for <code>pca</code> results</a></li>
-<li><a href="#org0f10f85">2.1.10. Definition of <code>get_jitter</code></a></li>
-<li><a href="#orgb00920e">2.1.11. Definition of <code>mk_aligned_events</code></a></li>
-<li><a href="#orgaaf9f29">2.1.12. Definition of <code>mk_center_list</code></a></li>
-<li><a href="#orgb10176c">2.1.13. Definition of <code>classify_and_align_evt</code></a></li>
-<li><a href="#org785a74d">2.1.14. Definition of <code>predict_data</code></a></li>
+<li><a href="#org2dd6f38">3.1. Making "all at once"</a>
+<ul>
+<li><a href="#org32aeba2">3.1.1. What should our "all at once" function do?</a></li>
+<li><a href="#org9cb86e7">3.1.2. <code>all_at_once</code> definition</a></li>
+</ul>
+</li>
+<li><a href="#org9024fd8">3.2. <code>get_data</code></a></li>
+<li><a href="#orgd1458d2">3.3. <code>sort_many_trials</code> definition</a></li>
+</ul>
+</li>
+<li><a href="#org0e473f7">4. Some diagnostic functions</a>
+<ul>
+<li><a href="#org2423870">4.1. Functions that can be used for single trials</a>
+<ul>
+<li><a href="#org5ead5d1">4.1.1. ISI distributions</a></li>
+<li><a href="#orgb4a409b">4.1.2. Forward and Backward Recurrence Times</a></li>
+</ul>
+</li>
+<li><a href="#org197d38f">4.2. Functions for use after a call to <code>sort_many_trials</code></a>
+<ul>
+<li><a href="#org2d51137">4.2.1. <code>counts_evolutions</code></a></li>
+<li><a href="#org98bfe19">4.2.2. <code>waveform_evolution</code></a></li>
+<li><a href="#org17474ed">4.2.3. <code>cp_isi</code></a></li>
+<li><a href="#org2784075">4.2.4. <code>cp_isi_raster</code></a></li>
 </ul>
 </li>
 </ul>
@@ -260,24 +308,31 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orgac35772" class="outline-2">
-<h2 id="orgac35772"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orge713136" class="outline-2">
+<h2 id="orge713136"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This file contains function definitions and documentation.
 </p>
+
+<p>
+These functions are designed to sort data for "long" recordings (several hours) in a "two steps" manner:
+</p>
+
+<ul class="org-ul">
+<li>Few minutes at the beginning of the recording are used to establish the "model": a dictionary with one entry per neuron and, for each neuron, as many waveform as recording sites.</li>
+<li>The model is then used on the subsequent minutes for template matching (with the peeling procedure for resolving superposition). The templates are the waveform of the model and they are allowed to evolve in order to track drifts.</li>
+</ul>
 </div>
 </div>
 
-<div id="outline-container-org7ff165a" class="outline-2">
-<h2 id="org7ff165a"><span class="section-number-2">2</span> Custom developed code</h2>
+
+<div id="outline-container-orgb51bc24" class="outline-2">
+<h2 id="orgb51bc24"><span class="section-number-2">2</span> Model estimation</h2>
 <div class="outline-text-2" id="text-2">
-</div><div id="outline-container-org8d16c8b" class="outline-3">
-<h3 id="org8d16c8b"><span class="section-number-3">2.1</span> Individual function definitions</h3>
+</div><div id="outline-container-org655c00c" class="outline-3">
+<h3 id="org655c00c"><span class="section-number-3">2.1</span> <code>cstValueSgts</code> definition</h3>
 <div class="outline-text-3" id="text-2-1">
-</div><div id="outline-container-org092ac03" class="outline-4">
-<h4 id="org092ac03"><span class="section-number-4">2.1.1</span> <code>cstValueSgts</code> definition</h4>
-<div class="outline-text-4" id="text-2-1-1">
 <p>
 Formal parameters:
 </p>
@@ -288,7 +343,7 @@ Formal parameters:
 Returns: an intgeger matrix with as many columns as segments where the derivative is null, the first row contains the index of the beginning of each segment, the second row contains the segments' lengths.
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="orgb044b78">cstValueSgts &lt;- function(x) {
+<pre class="src src-R" id="org6812f20">cstValueSgts &lt;- function(x) {
     dx &lt;- as.integer(abs(diff(x,2))/2 &lt;= .Machine$double.eps) ## use "order 2" derivative estimates
     ## ddx is zero where the derivative did not change,
     ## it is one if the derivative becomes null and -1
@@ -310,14 +365,14 @@ Returns: an intgeger matrix with as many columns as segments where the derivativ
 </div>
 </div>
 
-<div id="outline-container-org913c8ab" class="outline-4">
-<h4 id="org913c8ab"><span class="section-number-4">2.1.2</span> Definitions of generic function and time-series specific method for data exploration</h4>
-<div class="outline-text-4" id="text-2-1-2">
+<div id="outline-container-org99be932" class="outline-3">
+<h3 id="org99be932"><span class="section-number-3">2.2</span> Definitions of generic function and time-series specific method for data exploration</h3>
+<div class="outline-text-3" id="text-2-2">
 <p>
 Definition of the generic function:
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="orga1d9483">explore &lt;- function(x,...) {
+<pre class="src src-R" id="org38cf7d9">explore &lt;- function(x,...) {
   UseMethod("explore")
 }
 </pre>
@@ -333,7 +388,7 @@ Formal arguments:
 <li><code>...</code>: additional arguments passed to <code>matplot</code> and <code>plot</code> functions called inernally.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="orga17b57b">explore.ts &lt;- function(x,
+<pre class="src src-R" id="org0ba223c">explore.ts &lt;- function(x,
                        offsetFactor=0.5, 
                        ...) {
 
@@ -642,14 +697,14 @@ Formal arguments:
 </div>
 </div>
 
-<div id="outline-container-org42d015c" class="outline-4">
-<h4 id="org42d015c"><span class="section-number-4">2.1.3</span> <code>peaks</code> and associated methods definition</h4>
-<div class="outline-text-4" id="text-2-1-3">
+<div id="outline-container-orgea0af0d" class="outline-3">
+<h3 id="orgea0af0d"><span class="section-number-3">2.3</span> <code>peaks</code> and associated methods definition</h3>
+<div class="outline-text-3" id="text-2-3">
 <p>
 Function <code>peaks</code> returns an object (essentially a vector of indices) of class <code>eventsPos</code>:
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="org7a9d142">peaks &lt;- function(x,
+<pre class="src src-R" id="org43fdaf7">peaks &lt;- function(x,
                   minimalDist=15,
                   notZero=1e-3) {
     dx &lt;- c(0,diff(x,2)/2,0)
@@ -674,7 +729,7 @@ Method <code>as.eventsPos</code> transforms a vector into an <code>eventsPos</co
 <li><code>end</code>: an integer, the sampling point at which observation ended.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="org7f2af45">as.eventsPos &lt;- function(x,
+<pre class="src src-R" id="org9f06956">as.eventsPos &lt;- function(x,
                          start,
                          end
                          ) {
@@ -696,7 +751,7 @@ Method <code>as.eventsPos</code> transforms a vector into an <code>eventsPos</co
 Method <code>print.eventsPos</code> prints an <code>eventsPos</code> object:
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="orgea5b8e3">print.eventsPos &lt;- function(x, ...) {
+<pre class="src src-R" id="orga36b804">print.eventsPos &lt;- function(x, ...) {
   cat("\neventsPos object with indexes of ", length(x)," events. \n", sep = "")
   cat("  Mean inter event interval: ", round(mean(diff(x)),digits=2), " sampling points, corresponding SD: ", round(sd(diff(x)),digits=2), " sampling points \n", sep = "")
   cat("  Smallest and largest inter event intervals: ", paste(range(diff(x)),collapse=" and "), " sampling points. \n\n",sep= "")
@@ -706,9 +761,9 @@ Method <code>print.eventsPos</code> prints an <code>eventsPos</code> object:
 </div>
 </div>
 
-<div id="outline-container-org3b39c3a" class="outline-4">
-<h4 id="org3b39c3a"><span class="section-number-4">2.1.4</span> Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</h4>
-<div class="outline-text-4" id="text-2-1-4">
+<div id="outline-container-org794cb58" class="outline-3">
+<h3 id="org794cb58"><span class="section-number-3">2.4</span> Definition of an <code>explore</code> method for time series and <code>eventsPos</code> objects</h3>
+<div class="outline-text-3" id="text-2-4">
 <p>
 The formal parameters of the method are:
 </p>
@@ -721,7 +776,7 @@ The formal parameters of the method are:
 <li><code>...</code>: additional arguments passed to <code>matplot</code> and <code>plot</code> functions called inernally.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="org6aa84c5">explore.eventsPos &lt;- function(x,y,
+<pre class="src src-R" id="org85fee21">explore.eventsPos &lt;- function(x,y,
                               offsetFactor=0.5,
                               events.pch=16,
                               events.col=2,
@@ -1050,9 +1105,10 @@ The formal parameters of the method are:
 </div>
 </div>
 
-<div id="outline-container-org6d8f751" class="outline-4">
-<h4 id="org6d8f751"><span class="section-number-4">2.1.5</span> Function <code>cutSglEvt</code></h4>
-<div class="outline-text-4" id="text-2-1-5">
+
+<div id="outline-container-org2420984" class="outline-3">
+<h3 id="org2420984"><span class="section-number-3">2.5</span> Function <code>cutSglEvt</code></h3>
+<div class="outline-text-3" id="text-2-5">
 <p>
 Its formal parameters are:
 </p>
@@ -1069,7 +1125,7 @@ It returns:
 <li>A numeric vector with the cut(s). When several recording sites are used the cuts of each individual sites are placed one after the other.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="org2e00f16">cutSglEvt &lt;- function(evtPos,
+<pre class="src src-R" id="org96f3eab">cutSglEvt &lt;- function(evtPos,
                       data,
                       before=14,
                       after=30
@@ -1101,9 +1157,10 @@ It returns:
 </div>
 </div>
 
-<div id="outline-container-org55443e3" class="outline-4">
-<h4 id="org55443e3"><span class="section-number-4">2.1.6</span> Function <code>mkEvents</code></h4>
-<div class="outline-text-4" id="text-2-1-6">
+
+<div id="outline-container-org992fdac" class="outline-3">
+<h3 id="org992fdac"><span class="section-number-3">2.6</span> Function <code>mkEvents</code></h3>
+<div class="outline-text-3" id="text-2-6">
 <p>
 Its formal parameters are:
 </p>
@@ -1127,7 +1184,7 @@ cancellation"). The returned matrix is given an "events" class.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orga6a9ce8">mkEvents &lt;- function(positions,
+<pre class="src src-R" id="org80f2d41">mkEvents &lt;- function(positions,
                      data,
                      before=14,
                      after=30
@@ -1155,11 +1212,12 @@ cancellation"). The returned matrix is given an "events" class.
 </div>
 </div>
 
-<div id="outline-container-org949c75e" class="outline-4">
-<h4 id="org949c75e"><span class="section-number-4">2.1.7</span> <code>events</code> methods</h4>
-<div class="outline-text-4" id="text-2-1-7">
+
+<div id="outline-container-org660d3bf" class="outline-3">
+<h3 id="org660d3bf"><span class="section-number-3">2.7</span> <code>events</code> methods</h3>
+<div class="outline-text-3" id="text-2-7">
 <div class="org-src-container">
-<pre class="src src-R" id="orgc52ea1b">summary.events &lt;- function(object,
+<pre class="src src-R" id="org4464251">summary.events &lt;- function(object,
                            ...) {
   b &lt;- attr(object,"before")
   a &lt;- attr(object,"after")
@@ -1176,7 +1234,7 @@ cancellation"). The returned matrix is given an "events" class.
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org24b0767">"[.events" &lt;- function(x,i,j,drop = FALSE) {
+<pre class="src src-R" id="orgd66ee8d">"[.events" &lt;- function(x,i,j,drop = FALSE) {
     y &lt;- NextMethod("[")
     if (!missing(i)) return(NULL)
     if (is.matrix(y) &amp;&amp; dim(y)[2] &gt; 1) {
@@ -1195,14 +1253,14 @@ cancellation"). The returned matrix is given an "events" class.
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orgfdc3c80">t.events &lt;- function(x) {
+<pre class="src src-R" id="orgbb93ae5">t.events &lt;- function(x) {
   t(unclass(x))
 }
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org441266b">mean.events &lt;- function(x,...) {
+<pre class="src src-R" id="org2e2f32b">mean.events &lt;- function(x,...) {
     apply(unclass(x),1,mean,...)
 }
 
@@ -1213,7 +1271,7 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="orgbbd02a8">'-.events' &lt;- function(e1,e2) {
+<pre class="src src-R" id="org81a1062">'-.events' &lt;- function(e1,e2) {
     stopifnot(length(e2) == dim(e1)[1])
     res &lt;- unclass(e1)-e2
     attr(res,"positions") &lt;- attr(e1,"positions")
@@ -1230,7 +1288,7 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org89305e0">plot.events &lt;- function(x,
+<pre class="src src-R" id="org82c40dd">plot.events &lt;- function(x,
                         y=NULL,
                         evts.lwd = 0.1,
                         medAndMad = TRUE,
@@ -1263,7 +1321,7 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org5011b19">lines.events &lt;- function(x,
+<pre class="src src-R" id="org1c8d116">lines.events &lt;- function(x,
                          evts.lwd = 0.1,
                          evts.col = "black",
                          ...
@@ -1274,7 +1332,7 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 
 <div class="org-src-container">
-<pre class="src src-R" id="org45730f1">print.events &lt;- function(x, 
+<pre class="src src-R" id="org6c0d9f7">print.events &lt;- function(x, 
                          ... ) {
     plot.events(x,...)
 }
@@ -1283,11 +1341,12 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 </div>
 
-<div id="outline-container-orgf01ff42" class="outline-4">
-<h4 id="orgf01ff42"><span class="section-number-4">2.1.8</span> <code>mkNoise</code> definition</h4>
-<div class="outline-text-4" id="text-2-1-8">
+
+<div id="outline-container-orgf920d1e" class="outline-3">
+<h3 id="orgf920d1e"><span class="section-number-3">2.8</span> <code>mkNoise</code> definition</h3>
+<div class="outline-text-3" id="text-2-8">
 <div class="org-src-container">
-<pre class="src src-R" id="org66c3a11">mkNoise &lt;- function(positions,
+<pre class="src src-R" id="orgab03a40">mkNoise &lt;- function(positions,
                     data,
                     before=14,
                     after=30,
@@ -1359,11 +1418,11 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 </div>
 
-<div id="outline-container-org2979fa9" class="outline-4">
-<h4 id="org2979fa9"><span class="section-number-4">2.1.9</span> Definition of an <code>explore</code> method for <code>pca</code> results</h4>
-<div class="outline-text-4" id="text-2-1-9">
+<div id="outline-container-org4183317" class="outline-3">
+<h3 id="org4183317"><span class="section-number-3">2.9</span> Definition of an <code>explore</code> method for <code>pca</code> results</h3>
+<div class="outline-text-3" id="text-2-9">
 <div class="org-src-container">
-<pre class="src src-R" id="orgcbad540">explore.prcomp &lt;- function(x,
+<pre class="src src-R" id="org95bc0d7">explore.prcomp &lt;- function(x,
                            pc=1, ##&lt;&lt; an integer: the pc index to add to the mean.
                            factor=2, ##&lt;&lt; a numeric, the scaling factor; that is, the plot shows mean +/- factor * pc.
                            m.col="black", ##&lt;&lt; a character string or an integer, the color used for mean.
@@ -1390,9 +1449,10 @@ median.events &lt;- function(x,na.rm = FALSE) {
 </div>
 </div>
 
-<div id="outline-container-org0f10f85" class="outline-4">
-<h4 id="org0f10f85"><span class="section-number-4">2.1.10</span> Definition of <code>get_jitter</code></h4>
-<div class="outline-text-4" id="text-2-1-10">
+
+<div id="outline-container-orgc0a4e92" class="outline-3">
+<h3 id="orgc0a4e92"><span class="section-number-3">2.10</span> Definition of <code>get_jitter</code></h3>
+<div class="outline-text-3" id="text-2-10">
 <p>
 We define  a function that estimates the jitter given:
 </p>
@@ -1411,7 +1471,7 @@ This sampling jitter estimation is performed by a two stages procedure:
 <li>A Newton-Raphson step is used to refine the first estimation (used as a starting point) based on a second order Taylor expansion.</li>
 </ol>
 <div class="org-src-container">
-<pre class="src src-R" id="orgaadc6bc">get_jitter &lt;- function(evts,
+<pre class="src src-R" id="orgcd85449">get_jitter &lt;- function(evts,
                        center,
                        centerD,
                        centerDD){
@@ -1435,14 +1495,15 @@ This sampling jitter estimation is performed by a two stages procedure:
 </div>
 </div>
 
-<div id="outline-container-orgb00920e" class="outline-4">
-<h4 id="orgb00920e"><span class="section-number-4">2.1.11</span> Definition of <code>mk_aligned_events</code></h4>
-<div class="outline-text-4" id="text-2-1-11">
+
+<div id="outline-container-org97a7c91" class="outline-3">
+<h3 id="org97a7c91"><span class="section-number-3">2.11</span> Definition of <code>mk_aligned_events</code></h3>
+<div class="outline-text-3" id="text-2-11">
 <p>
 We define a function taking a vector of spike times, that should all come from the same cluster and correspond to reasonably "clean" events, and three arguments corresponding to the last three arguments of <code>mkEvents</code>, the function returns a <code>events</code> object. The <code>positions</code> attribute of the returned object gives the nearest sampling point to the actual peak. The <code>delta</code> attribute gives the offset between the previous spike position and the "actual" peak position (the actual position is attribute <code>positions</code> <b>minus</b> attribute <code>delta</code>):
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="orgc2730ee">mk_aligned_events &lt;- function(positions,
+<pre class="src src-R" id="org2472649">mk_aligned_events &lt;- function(positions,
                               data,
                               before=14,
                               after=30){
@@ -1476,9 +1537,10 @@ We define a function taking a vector of spike times, that should all come from t
 </div>
 </div>
 
-<div id="outline-container-orgaaf9f29" class="outline-4">
-<h4 id="orgaaf9f29"><span class="section-number-4">2.1.12</span> Definition of <code>mk_center_list</code></h4>
-<div class="outline-text-4" id="text-2-1-12">
+
+<div id="outline-container-orgb06f3bc" class="outline-3">
+<h3 id="orgb06f3bc"><span class="section-number-3">2.12</span> Definition of <code>mk_center_list</code></h3>
+<div class="outline-text-3" id="text-2-12">
 <p>
 We define function <code>mk_center_list</code> that given:
 </p>
@@ -1504,7 +1566,7 @@ returns a nammed list with the following elements and their content:
 The peeling procedure, requiers, for each cluster, estimates of its center and of its first two derivatives. Clusters' centers must moreover be built such that they can be used for subtraction, this implies that we should make them long enough, on both side of the peak, to see them go back to baseline. Formal parameters <code>before</code> and <code>after</code> should therefore be set to larger values than the ones used for clustering.
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="org8a027f4">mk_center_list = function(positions,
+<pre class="src src-R" id="orgac49f15">mk_center_list = function(positions,
                            data,
                            before=49,
                            after=80) {
@@ -1529,9 +1591,10 @@ The peeling procedure, requiers, for each cluster, estimates of its center and o
 </div>
 </div>
 
-<div id="outline-container-orgb10176c" class="outline-4">
-<h4 id="orgb10176c"><span class="section-number-4">2.1.13</span> Definition of <code>classify_and_align_evt</code></h4>
-<div class="outline-text-4" id="text-2-1-13">
+
+<div id="outline-container-org09adefb" class="outline-3">
+<h3 id="org09adefb"><span class="section-number-3">2.13</span> Definition of <code>classify_and_align_evt</code></h3>
+<div class="outline-text-3" id="text-2-13">
 <p>
 The formal parameters of <code>classify_and_align_evt</code> are:
 </p>
@@ -1550,7 +1613,7 @@ returns a list with the following element:
 <li>the remaining jitter.</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-R" id="orge9c5bd5">classify_and_align_evt &lt;- function(evt_pos,
+<pre class="src src-R" id="orgab22b51">classify_and_align_evt &lt;- function(evt_pos,
                                    data,
                                    centers,
                                    before=14,
@@ -1627,9 +1690,9 @@ returns a list with the following element:
 </div>
 </div>
 
-<div id="outline-container-org785a74d" class="outline-4">
-<h4 id="org785a74d"><span class="section-number-4">2.1.14</span> Definition of <code>predict_data</code></h4>
-<div class="outline-text-4" id="text-2-1-14">
+<div id="outline-container-org049c114" class="outline-3">
+<h3 id="org049c114"><span class="section-number-3">2.14</span> Definition of <code>predict_data</code></h3>
+<div class="outline-text-3" id="text-2-14">
 <p>
 The formal parameters of <code>predict_data</code> are:
 </p>
@@ -1643,7 +1706,7 @@ The formal parameters of <code>predict_data</code> are:
 The function returns a matrix with <code>data_length</code> rows and <code>nb_channels</code> columns with observations predictions based on <code>class_pos_jitter_list</code> and <code>centers_list</code>.  
 </p>
 <div class="org-src-container">
-<pre class="src src-R" id="org5dc3308">predict_data &lt;- function(class_pos_jitter_list,
+<pre class="src src-R" id="org35dc80f">predict_data &lt;- function(class_pos_jitter_list,
                          centers_list,
                          nb_channels=4,
                          data_length=300000) {
@@ -1671,11 +1734,662 @@ The function returns a matrix with <code>data_length</code> rows and <code>nb_ch
 </div>
 </div>
 </div>
+
+
+<div id="outline-container-orgfb6d3a2" class="outline-2">
+<h2 id="orgfb6d3a2"><span class="section-number-2">3</span> Template matching</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-org2dd6f38" class="outline-3">
+<h3 id="org2dd6f38"><span class="section-number-3">3.1</span> Making "all at once"</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+After classifying a single trial, we would like to classify the subsequent ones (from the same experiment and the same tetrode) without re-estimating the model every time. If the recording conditions were perfectly stable we could proceed rather easily and in fact to the job in parallel. There are nevertheless few sources of variability we should be ready to cope with:
+</p>
+
+<ul class="org-ul">
+<li>First and foremost we can observe a slow drift of the electrodes inducing a change in the relative positions of the neurons and the electrodes. This results in a change of the waveform generated by the neurons on the different recording sites. Since these drifts usually occur on a slow time scale (several minutes) the easiest way to deal with them is to <i>process the data sequentially, in the order in which they were recorded</i> (that precludes the parallel processing alluded to above) and to make the templates evolve slowly by computing, at the end of each trial a weighted average of the templates just used and of the ones obtained by averaging the well isolated events that were just classified.</li>
+<li>A neuron can disappear (because it dies&#x2013;don't forget that our probes are large and damage the neurons upon insertion&#x2013;or because of the drift) or appear (because of the drift or "something else" like an hormonal regulation). In the latter case, the model (list of templates) should be updated to include a new element. In any case, the way to detect these appearances / disappearances is to monitor at the end of each trial classification the number of spikes attributed to each neuron of the model as well as the number of unclassified events.</li>
+</ul>
+</div>
+
+<div id="outline-container-org32aeba2" class="outline-4">
+<h4 id="org32aeba2"><span class="section-number-4">3.1.1</span> What should our "all at once" function do?</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+The first thing is to print the five-number summary so that if something went really wrong (amplifier saturation, large noise increase) it will be readily detected. It is then a good idea to print after each peeling round the total number of detected events, the number of events attributed to each neuron and the number of unclassified events. At the end we want to print these same numbers obtained from the whole peeling procedure. The function will also return in a list the following elements:
+</p>
+
+<ul class="org-ul">
+<li><b>prediction</b>: A predicted trace (the overall version of the previous <code>predX</code>).</li>
+<li><b>residual</b>: A residual trace (the data minus the prediction).</li>
+<li><b>classification</b>: The <code>round_all</code> object above.</li>
+<li><b>unknown</b>: An <code>events</code> object containing the unclassified events (for quick monitoring in case of problems).</li>
+<li><b>centers</b>: A version of <code>centers</code> computed from the data just analyzed (so that the user can make a weighted average at will).</li>
+<li><b>counts</b>: A vector with the total number of events, the number of events from each neuron and the number of unclassified events.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org9cb86e7" class="outline-4">
+<h4 id="org9cb86e7"><span class="section-number-4">3.1.2</span> <code>all_at_once</code> definition</h4>
+<div class="outline-text-4" id="text-3-1-2">
+<p>
+The formal parameters (arguments) of <code>all_at_once</code> are:
+</p>
+
+<ul class="org-ul">
+<li><b>data</b>: the un-normalized data matrix.</li>
+<li><b>centers</b>: the current model (obtained for instance by calling <code>mk_center_list</code>).</li>
+<li><b>thres</b>: the detection thresholds.</li>
+<li><b>filter_length_1</b>: the filter used during the first peeling round.</li>
+<li><b>filter_length</b>: the filter used during the subsequent peeling rounds.</li>
+<li><b>minimalDist_1</b>: dead time length imposed at first detection during first peeling round (argument <code>minimalDist</code> of <code>peaks</code>).</li>
+<li><b>minimalDist</b>: dead time length imposed during the subsequent peeling rounds.</li>
+<li><b>before</b>: parameter with the same name used in <code>mk_center_list</code>.</li>
+<li><b>after</b>: parameter with the same name used in <code>mk_center_list</code>.</li>
+<li><b>detection_cycle</b>: a vector with as many elements as peeling round. The elements must be in {0,1,..,number of channels}. The length controls the number of peeling rounds and the value of each element controls where is the spike detection performed: 0 means on every channel and 1, 2,&#x2026; mean on channel 1, 2,&#x2026;</li>
+<li><b>verbose</b>: controls the verbosity: if 0 nothing is printed to the <code>stdout</code>; if 1 the final results are printed; if 2 (default) the final and intermediate (following each peeling round) results are printed.</li>
+</ul>
+
+<p>
+So let us define our function:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfeb8e8b">all_at_once = function(data, ## an unormalized data matrix
+                       centers, ## a list of centers
+                       thres=4*c(1,1,1,1), ## threshold vector
+                       filter_length_1=5, ## length of first filter
+                       filter_length=5, ## length of subsequent filters
+                       minimalDist_1=15, ## dead time length imposed at first detection
+                       minimalDist=10, ## dead time length imposed at subsequent detection
+                       before, ## parameter of centers
+                       after, ## parameter of centers
+                       detection_cycle=c(0,1,2,3,4), ## where is detection done during the peeling
+                       verbose=2 ## verbosity level
+                       ) {
+    n_samples = dim(data)[1] ## Number of sample points
+    n_chan = dim(data)[2] ## Number of channels
+    n_rounds = length(detection_cycle)
+    if (verbose &gt; 0) {
+        ## print five number summary
+        cat("The five number summary is:\n")
+        print(summary(data,digits=2))
+        cat("\n")
+    }
+    ## normalize the data
+    data.mad = apply(data,2,mad)
+    data = t((t(data)-apply(data,2,median))/data.mad)
+    filtered_data_mad = sapply(c(filter_length_1,filter_length),
+                               function(l) {
+                                   lDf = -data
+                                   lDf = filter(lDf,rep(1,l)/l)
+                                   lDf[is.na(lDf)] = 0
+                                   apply(lDf,2,mad)
+                               })
+    ## Define local function detecting spikes
+    get_sp = function(dataM,
+                      f_length,
+                      MAD,
+                      site_idx=0,
+                      minimalDist=15) {
+        lDf = -dataM
+        lDf = filter(lDf,rep(1,f_length)/f_length)
+        lDf[is.na(lDf)] = 0
+        lDf = t(t(lDf)/MAD)
+        bellow.thrs = t(t(lDf) &lt; thres)
+        lDfr = lDf
+        lDfr[bellow.thrs] = 0
+        if (site_idx == 0)
+            res = peaks(apply(lDfr,1,sum),minimalDist)
+        else
+            res = peaks(lDfr[,site_idx],minimalDist)
+        res[res&gt;before &amp; res &lt; dim(dataM)[1]-after]
+    }
+    
+    out_names = c(names(centers),"?") ## Possible names for classification
+    data0 = data ## The normalized version of the data
+    for (r_idx in 1:n_rounds) {
+        s_idx = detection_cycle[r_idx]
+        if (verbose &gt; 1 &amp;&amp; s_idx==0)
+            cat(paste("Doing now round",r_idx-1,"detecting on all sites\n"))
+        if (verbose &gt; 1 &amp;&amp; s_idx!=0)
+            cat(paste("Doing now round",r_idx-1,"detecting on site",s_idx,"\n"))
+        sp = get_sp(dataM=data,
+                    f_length=ifelse(r_idx==1,filter_length_1,filter_length),
+                    MAD=filtered_data_mad[,ifelse(r_idx==1,1,2)],
+                    site_idx=s_idx,
+                    minimalDist=ifelse(r_idx==1,minimalDist_1,minimalDist))
+        if (length(sp)==0) next
+        new_round = lapply(as.vector(sp),classify_and_align_evt,
+                           data=data,centers=centers,
+                           before=before,after=after)
+        pred = predict_data(new_round,centers,
+                            nb_channels = n_chan,
+                            data_length = n_samples)
+        data = data - pred
+        res = sapply(out_names,
+                     function(n) sum(sapply(new_round, function(l) l[[1]] == n)))
+        res = c(length(sp),res)
+        names(res) = c("Total",out_names)
+        if (verbose &gt; 1) {
+            print(res)
+            cat("\n")
+        }
+        if (r_idx==1)
+            round_all = new_round
+        else
+            round_all = c(round_all,new_round)
+    }
+
+    ## Get the global prediction
+    pred = predict_data(round_all,centers,
+                        nb_channels=n_chan,
+                        data_length=n_samples)
+    ## Get the residuals
+    resid = data0 - pred
+    ## Repeat inital detection on resid
+    sp = get_sp(dataM=resid,
+                f_length=filter_length_1,
+		MAD=filtered_data_mad[,1],
+                site_idx=detection_cycle[1],
+                minimalDist=minimalDist_1)
+    ## make events objects from this stuff
+    unknown = mkEvents(sp,resid,before,after)
+    ## get global counts
+    res = sapply(out_names,
+                 function(n) sum(sapply(round_all, function(l) l[[1]] == n)))
+    res["?"] = length(sp)
+    res=c(sum(res),res)
+    names(res) = c("Total",out_names)
+    if (verbose &gt; 0) {
+        cat("Global counts at classification's end:\n")
+        print(res)
+    }
+    ## Get centers
+    obs_nb = lapply(out_names[-length(out_names)],
+                    function(cn) sum(sapply(round_all, function(l) l[[1]]==cn)))
+    names(obs_nb) = out_names[-length(out_names)]
+    spike_trains = lapply(out_names[-length(out_names)],
+                          function(cn) {
+                              if (obs_nb[cn] &lt;= 1)
+                                  return(numeric(0))
+                              else
+                                  res = sapply(round_all[sapply(round_all, function(l) l[[1]]==cn)],
+                                               function(l)
+                                                   round(l[[2]]+l[[3]]))
+                              res[res&gt;0 &amp; res&lt;n_samples]
+                          }
+                              )    
+    centersN = lapply(1:length(spike_trains),
+                      function(st_idx) {
+                          if (length(spike_trains[[st_idx]]) == 0)
+                              centers[[st_idx]]
+                          else
+                              mk_center_list(spike_trains[[st_idx]],data0,
+                                             before=before,after=after)
+                      }
+                      )
+    names(centersN) = out_names[-length(out_names)]
+    list(prediction=pred,
+         residual=resid,
+         counts=res,
+         unknown=unknown,
+         centers=centersN,
+         classification=round_all)
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org9024fd8" class="outline-3">
+<h3 id="org9024fd8"><span class="section-number-3">3.2</span> <code>get_data</code></h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Function <code>get_data</code> should read data from an (HDF5) file and return a matrix suitable as argument <code>data</code> in <code>all_at_once</code>. 
+We define it here to take the following arguments:
+</p>
+
+<ul class="org-ul">
+<li><b>trial_idx</b>: the trial index.</li>
+<li><b>stim</b>: the name of the <code>group</code> in HDF5 jargon.</li>
+<li><b>channels</b>: a vector of channel names.</li>
+<li><b>file</b>: the name of the file containing the data.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org14630ab">get_data = function(trial_idx,
+                    stim="Spontaneous_1",
+                    channels=c("ch02","ch03","ch05","ch07"),
+                    file="locust20010214_part1.hdf5") {
+    prefix = ifelse(trial_idx&lt;10,
+                    paste0("/",stim,"/trial_0",trial_idx),
+                    paste0("/",stim,"/trial_",trial_idx)
+                    )
+    sapply(channels,
+           function(n) {
+               h5read(file, paste0(prefix,"/",n))
+           })
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd1458d2" class="outline-3">
+<h3 id="orgd1458d2"><span class="section-number-3">3.3</span> <code>sort_many_trials</code> definition</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+We define now function <code>sort_many_trials</code>. This function takes the following formal parameters:
+</p>
+
+<ul class="org-ul">
+<li><b>inter_trial_time</b>: the time (<i>in sample points</i>) between two successive trials. Example <code>10*15000</code>.</li>
+<li><b>get_data_fct</b>: a function loading the data of a single trial (like <code>get_data</code> we just defined). This function should take a trial number as its first argument and a sequence name as its second.</li>
+<li><b>stim_name</b>: the sequence name making the second argument of function <code>get_data_fct</code>. Example "1-Hexanol".</li>
+<li><b>trial_nbs</b>: a vector containing the indices of the trials to sort. Example <code>1:30</code>. It can be <code>c(1:20,23:30)</code> if the <code>LabBook</code> states that there was some noise during trials 21 and 22. It can also be <code>30:1</code> if we want to sort the trial sequence backwards.</li>
+<li><b>centers</b>: a list use as argument <code>centers</code> in <code>all_at_once</code>.</li>
+<li><b>counts</b>:  a vector with the number of counts each unit got at the previous stage.</li>
+<li><b>all_at_once_call_list</b>: a named list with the arguments used in the previous call to <code>all_at_once</code> except the first two.</li>
+<li><b>layout_matrix</b>: a matrix controlling the layout of the diagnostic plots generated while the function is running.</li>
+<li><b>new_weight_in_update</b>: the maximal weight of the new template in the estimation of the current one.</li>
+</ul>
+
+<p>
+The policy controlling the template evolution is:
+</p>
+
+<ul class="org-ul">
+<li>If no spikes were attributed to the neuron at the last trial, the template remains the same.</li>
+<li>If <code>o&gt;0</code> spikes were attributed to the neuron at the last trial and <code>n</code> spikes were attributed to it at the present trial, the new template is obtained as a weighted average of the last one and the present one (obtained as the pointwise median of the actual events) where the weight of the new is <code>w = new_weight_in_update*min(1,n/o)</code> and the weight of the last one is <code>1-w</code>.</li>
+</ul>
+
+<p>
+The function returns a list with the following elements:
+</p>
+
+<ul class="org-ul">
+<li><b>centers</b>: the last estimation of the templates.</li>
+<li><b>counts</b>: the last counts.</li>
+<li><b>centers_L</b>: a list of matrices. Each matrix contains the successive template for each neuron (used to track template evolution).</li>
+<li><b>counts_M</b>: a matrix with the successive counts.</li>
+<li><b>spike_trains</b>: a list of spike trains, one per neuron.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org2932455">sort_many_trials = function(inter_trial_time,
+                            get_data_fct,
+                            stim_name,
+                            trial_nbs,
+                            centers,
+                            counts,
+                            all_at_once_call_list,
+                            layout_matrix=matrix(1:10,nr=5),
+                            new_weight_in_update=0.01
+                            ) {
+    centers_old = centers
+    counts_old = counts
+    counts_M = matrix(0,nr=length(trial_nbs),nc=length(counts_old))
+    centers_L = lapply(centers,
+                       function(c) {
+                           res = matrix(0,nr=length(c$center),nc=length(trial_nbs))
+                           res[,1] = c$center
+                           res
+                       }
+                       )
+    names(centers_L) = names(centers)
+    nbc = length(centers)
+    spike_trains = vector("list",nbc)
+    names(spike_trains) = paste("Cluster",1:nbc)
+    idx=1
+    for (trial_idx in trial_nbs) {
+        ref_data = get_data_fct(trial_idx,stim_name)
+        cat(paste0("***************\nDoing now trial ",trial_idx," of ",stim_name,"\n"))
+        analysis = do.call(all_at_once,
+                           c(list(data=ref_data,centers=centers),all_at_once_call_list))
+        cat(paste0("Trial ",trial_idx," done!\n******************\n"))
+        centers_new = analysis$centers
+        counts_new = analysis$counts
+        counts_M[idx,] = counts_new
+        centers = centers_new
+        for (c_idx in 1:length(centers)){
+            n = counts_new[c_idx+1]
+            o = counts_old[c_idx+1]
+            w = new_weight_in_update*ifelse(o&gt;0,min(1,n/o),0) ## New template weight
+            centers[[c_idx]]$center=w*centers_new[[c_idx]]$center+(1-w)*centers_old[[c_idx]]$center
+            centers[[c_idx]]$centerD=w*centers_new[[c_idx]]$centerD+(1-w)*centers_old[[c_idx]]$centerD
+            centers[[c_idx]]$centerDD=w*centers_new[[c_idx]]$centerDD+(1-w)*centers_old[[c_idx]]$centerDD
+            centers[[c_idx]]$centerD_norm2=sum(centers[[c_idx]]$centerD^2)
+            centers[[c_idx]]$centerDD_norm2=sum(centers[[c_idx]]$centerDD^2)
+            centers[[c_idx]]$centerD_dot_centerDD=sum(centers[[c_idx]]$centerD*centers[[c_idx]]$centerDD)
+            centers_L[[c_idx]][,idx] = centers[[c_idx]]$center
+        }
+        layout(layout_matrix)
+        par(mar=c(1,3,3,1))
+        the_pch = if (nbc&lt;10) c(paste(1:nbc),"?")
+                  else c(paste(1:9),letters[1:(nbc-9)],"?")
+        matplot(counts_M[,2:length(counts_old)],type="b",
+                pch=the_pch)
+        c_range = range(sapply(centers_L,
+                               function(m) range(m[,1:idx])))
+        for (i in 1:nbc) {
+            if (idx&lt;3)
+                matplot(centers_L[[i]][,1:idx],type="l",col=1,lty=1,lwd=0.5,
+                        main=paste("Unit",i),ylim=c_range)
+            else
+                matplot(centers_L[[i]][,1:idx],type="l",col=c(4,rep(1,idx-2),2),
+                        lty=1,lwd=0.5,main=paste("Unit",i),ylim=c_range)
+        }
+        centers_old = centers
+        counts_old = counts_new
+        round_all = analysis$classification
+        st = lapply(paste("Cluster",1:nbc),
+                    function(cn) sapply(round_all[sapply(round_all,
+                                                         function(l) l[[1]]==cn)],
+                                        function(l) l[[2]]+l[[3]]))
+        names(st) = paste("Cluster",1:nbc)
+        for (cn in paste("Cluster",1:nbc)) {
+            if (length(st[[cn]]) &gt; 0)
+                spike_trains[[cn]] = c(spike_trains[[cn]],
+                (trial_idx-1)*inter_trial_time + sort(st[[cn]]))
+        }
+        idx = idx+1
+    }
+    spike_trains = lapply(spike_trains,sort)
+    list(centers=centers,
+         counts=counts_new,
+         spike_trains=spike_trains,
+         counts_M=counts_M,
+         centers_L=centers_L,
+         trial_nbs=trial_nbs,
+	 call=match.call())
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0e473f7" class="outline-2">
+<h2 id="org0e473f7"><span class="section-number-2">4</span> Some diagnostic functions</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-org2423870" class="outline-3">
+<h3 id="org2423870"><span class="section-number-3">4.1</span> Functions that can be used for single trials</h3>
+<div class="outline-text-3" id="text-4-1">
+</div><div id="outline-container-org5ead5d1" class="outline-4">
+<h4 id="org5ead5d1"><span class="section-number-4">4.1.1</span> ISI distributions</h4>
+<div class="outline-text-4" id="text-4-1-1">
+<p>
+We define a <code>plot_isi</code> function that plots the <code>ECDF</code> (empirical cumulative distribution function) of the <code>ISI</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd9ef2cc">plot_isi = function(isi, ## vector of ISIs
+                    xlab="ISI (s)",
+                    ylab="ECFD",
+                    xlim=c(0,0.5), 
+                    sampling_frequency=15000,
+                    ... ## additional arguments passed to plot
+                    ) {
+    isi = sort(isi)/sampling_frequency
+    n = length(isi)
+    plot(isi,(1:n)/n,type="s",
+         xlab=xlab,ylab=ylab,
+         xlim=xlim,...)
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb4a409b" class="outline-4">
+<h4 id="orgb4a409b"><span class="section-number-4">4.1.2</span> Forward and Backward Recurrence Times</h4>
+<div class="outline-text-4" id="text-4-1-2">
+<p>
+The forward recurrence time (<code>FRT</code>) between neuron A and B is the elapsed time between a spike in A and the next spike in B. The backward recurrence time (<code>BRT</code>) is the same thing except that we look for the former spike in B. If A and B are not correlated, the expected density of the FRT is the survival function (1-CDF) of the ISI from B divided by the mean ISI of B (the same holds for the BRT under the null hypothesis after taking the opposite). All that is correct if the data are <i>stationary</i>.
+</p>
+
+
+<p>
+We define next a function <code>test_rt</code> that plots a variance stabilized version of the histograms of the FRT and BRT minus the variance stabilized version under the null. The variance stabilization version is replacing the histogram bin counts \(y\) by \(\sqrt{y} + \sqrt{y+1}\). This transformation stabilizes the variance at 1. The idea of this test comes from <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1334896/?tool=pubmed">Johnson and Kiang (1976) Biophys J 16:719-734</a> and the variance stabilization transformation is discussed in <a href="http://www.jstor.org/stable/2236611?seq=1#page_scan_tab_contents">Freeman and Tukey (1950) Ann Mathematical Statistics 21:607-611</a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0dfa339">test_rt = function(ref_train, 
+                   test_train,
+                   sampling_frequency=15000,
+                   nbins=50, ## the number of breaks in the histogram
+		   single_trial_duration = ceiling(max(c(ref_train,test_train))/sampling_frequency), 
+                   xlab="Recurrence time (s)",
+                   ylab="Stabilized counts - stabilized expected counts",
+		   subdivisions = 10000, ## argument of integrate
+                   ... ## additional parameters passed to plot
+                   ) {
+    rt = ref_train/sampling_frequency
+    tt = test_train/sampling_frequency
+    rt_L = vector("list",0)
+    tt_L = vector("list",0)
+    idx_max = max(c(rt,tt))%/%single_trial_duration
+    if ( idx_max == 0) {
+        rt_L = list(rt)
+        tt_L = list(tt)
+    } else {
+        idx = 0
+        while (idx &lt;= idx_max) {
+            start_trial_time = idx*single_trial_duration
+            end_trial_time = start_trial_time + single_trial_duration
+            rt_t = rt[start_trial_time &lt;= rt &amp; rt &lt; end_trial_time]
+            tt_t = tt[start_trial_time &lt;= tt &amp; tt &lt; end_trial_time]
+            if (length(rt_t) &gt; 0 &amp;&amp; length(tt_t) &gt; 0) {
+                rt_L = c(rt_L,list(rt_t-start_trial_time))
+                tt_L = c(tt_L,list(tt_t-start_trial_time))
+            }
+            idx = idx + 1
+        }
+    }
+    tt_isi_L = lapply(tt_L,diff)
+    it = unlist(tt_isi_L)
+    p_it=ecdf(it) ## ECDF of ISI from test
+    mu_it=mean(it)
+    s_it=function(t) (1-p_it(t))/mu_it ## expected density of FRT/BRT under the null
+    ## Get the BRT and FRT
+    res = lapply(1:length(rt_L),
+                 function(idx) {
+                     rt_t = rt_L[[idx]]
+                     tt_t = tt_L[[idx]]
+                     rt_t = rt_t[min(tt_t) &lt; rt_t &amp; rt_t &lt; max(tt_t)]
+                     RT = sapply(rt_t,
+                                 function(t) c(max(tt_t[tt_t&lt;=t])-t,
+                                               min(tt_t[tt_t&gt;=t])-t)
+                                 )
+                 })
+    frt = sort(unlist(lapply(res, function(l) l[2,])))
+    brt = sort(-unlist(lapply(res, function(l) l[1,])))
+    n = length(frt)
+    frt_h = hist(frt,breaks=nbins,plot=FALSE)
+    frt_c_s = sqrt(frt_h$counts)+sqrt(frt_h$counts+1) ## stabilized version of the FRT counts
+    ## expected FRT counts under the null
+    frt_c_e = sapply(1:(length(frt_h$breaks)-1),
+                     function(i) integrate(s_it,frt_h$breaks[i],frt_h$breaks[i+1],subdivisions = subdivisions)$value
+                     )
+    frt_c_e_s = sqrt(frt_c_e*n) + sqrt(frt_c_e*n+1) ## stabilized version of the expected FRT counts
+    brt_h = hist(brt,breaks=nbins,plot=FALSE)
+    brt_c_s = sqrt(brt_h$counts)+sqrt(brt_h$counts+1) ## stabilized version of the BRT counts
+    ## expected BRT counts under the null
+    brt_c_e = sapply(1:(length(brt_h$breaks)-1),
+                     function(i) integrate(s_it,brt_h$breaks[i],brt_h$breaks[i+1],subdivisions = subdivisions)$value
+                     )
+    brt_c_e_s = sqrt(brt_c_e*n) + sqrt(brt_c_e*n+1) ## stabilized version of the expected BRT counts
+    X = c(rev(-brt_h$mids),frt_h$mids)
+    Y = c(rev(brt_c_s-brt_c_e_s),frt_c_s-frt_c_e_s)
+    plot(X,Y,type="n",
+         xlab=xlab,
+         ylab=ylab,
+         ...)
+    abline(h=0,col="grey")
+    abline(v=0,col="grey")
+    lines(X,Y,type="s")
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org197d38f" class="outline-3">
+<h3 id="org197d38f"><span class="section-number-3">4.2</span> Functions for use after a call to <code>sort_many_trials</code></h3>
+<div class="outline-text-3" id="text-4-2">
+</div><div id="outline-container-org2d51137" class="outline-4">
+<h4 id="org2d51137"><span class="section-number-4">4.2.1</span> <code>counts_evolutions</code></h4>
+<div class="outline-text-4" id="text-4-2-1">
+<p>
+Plots the evolution of the counts attributed to each neuron in the model together with the number of unclassified events.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge228659">counts_evolution = function(smt_res ## result of a sort_many_trials call
+                           ) {
+    nbc = length(smt_res$centers)
+    the_pch = if (nbc&lt;10) c(paste(1:nbc),"?")
+                  else c(paste(1:9),letters[1:(nbc-9)],"?")
+    matplot(smt_res$trial_nbs,
+            smt_res$counts_M[,2:(nbc+2)],
+            type="b",pch=the_pch,
+            main="Counts evolution",xlab="Trial index",ylab="Number of events")
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org98bfe19" class="outline-4">
+<h4 id="org98bfe19"><span class="section-number-4">4.2.2</span> <code>waveform_evolution</code></h4>
+<div class="outline-text-4" id="text-4-2-2">
+<p>
+Plots the evolution of the waveform / templates of each neuron
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org673ed98">waveform_evolution = function(smt_res, ## result of a sort_many_trials call
+                              threshold_factor=4, ## threshold used
+                              layout_matrix=matrix(1:lenght(smt_res$centers_L),nr=lenght(smt_res$centers_L))
+                              ) {
+    nbc = length(smt_res$centers)
+    nt = length(smt_res$trial_nbs)
+    layout(layout_matrix)
+    par(mar=c(1,3,4,1))
+    for (i in 1:nbc) {
+        matplot(smt_res$centers_L[[i]],
+                type="l",col=c(4,rep(1,nt-2),2),lty=1,lwd=0.5,
+                main=paste("Unit",i),ylab="")
+        abline(h=-threshold_factor,col="grey")
+        }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org17474ed" class="outline-4">
+<h4 id="org17474ed"><span class="section-number-4">4.2.3</span> <code>cp_isi</code></h4>
+<div class="outline-text-4" id="text-4-2-3">
+<p>
+Plots the observed counting process together with the ISI density for each neuron in the model.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc5e64f4">cp_isi=function(smt_res, ## result of a sort_many_trials call
+                inter_trial_time=10, ## time between trials in seconds
+                sampling_rate=15000, ## sampling rate in Hz
+                nbins=50, ## number of bins for isi histogram
+                isi_max=1, ## largest isi in isi histogram
+                layout_matrix=matrix(1:(2*lenght(smt_res$centers_L)),nr=lenght(smt_res$centers_L),byrow=TRUE)
+                ) {
+    t_duration = inter_trial_time
+    n_trials = length(smt_res$trial_nbs)
+    nbc = length(smt_res$centers)
+    still_there = nbc - sum(sapply(smt_res$spike_trains,
+                                   function(l)
+                                       is.null(l) || length(l) &lt;= n_trials))
+    layout(layout_matrix)
+    par(mar=c(4,4,4,1))
+    for (cn in names(smt_res$spike_trains)) {
+        if (is.null(smt_res$spike_trains[[cn]]) || length(smt_res$spike_trains[[cn]]) &lt;= n_trials) next
+        st = smt_res$spike_trains[[cn]]/sampling_rate
+        plot(st,1:length(st),
+             main=paste("Observed CP for unit",cn),
+             xlab="Time (s)",ylab="Nb of evts",type="s")
+        isi = diff(st)
+        isi = isi[isi &lt;= isi_max]
+        hist(isi,breaks=nbins,
+             prob=TRUE,xlim=c(0,0.5),
+             main=paste("ISI dist for unit",cn),
+             xlab="Interval (s)",ylab="Density (1/s)")
+    } 
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2784075" class="outline-4">
+<h4 id="org2784075"><span class="section-number-4">4.2.4</span> <code>cp_isi_raster</code></h4>
+<div class="outline-text-4" id="text-4-2-4">
+<p>
+Plots the observed counting process together with the ISI density and the raster for each neuron in the model.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgdb871a1">cp_isi_raster=function(smt_res, ## result of a sort_many_trials call
+                      inter_trial_time=10, ## time between trials in seconds
+                      sampling_rate=15000, ## sampling rate in Hz
+                      nbins=50, ## number of bins for isi histogram
+                      isi_max=1, ## largest isi in isi histogram
+                      layout_matrix=matrix(1:(3*lenght(smt_res$centers_L)),nr=lenght(smt_res$centers_L),byrow=TRUE)
+                      ) {
+    t_duration = inter_trial_time
+    n_trials = length(smt_res$trial_nbs)
+    nbc = length(smt_res$centers)
+    still_there = nbc - sum(sapply(smt_res$spike_trains,
+                                   function(l)
+                                       is.null(l) || length(l) &lt;= n_trials))
+    layout(layout_matrix)
+    par(mar=c(4,4,4,1))
+    for (cn in names(smt_res$spike_trains)) {
+        if (is.null(smt_res$spike_trains[[cn]]) || length(smt_res$spike_trains[[cn]]) &lt;= n_trials) next
+        st = smt_res$spike_trains[[cn]]/sampling_rate
+        plot(st,1:length(st),
+             main=paste("Observed CP for unit",cn),
+             xlab="Time (s)",ylab="Nb of evts",type="s")
+        isi = diff(st)
+        isi = isi[isi &lt;= isi_max]
+        hist(isi,breaks=nbins,
+             prob=TRUE,xlim=c(0,0.5),
+             main=paste("ISI dist for unit",cn),
+             xlab="Interval (s)",ylab="Density (1/s)")
+        plot(c(0,t_duration),c(0,n_trials+1),type="n",axes=FALSE,
+             xlab="",ylab="",main=paste("Raster of unit",cn))
+        for (t_idx in 1:n_trials) {
+            sub_st = st[(t_idx-1)*t_duration &lt;= st &amp;
+                        st &lt; t_idx*t_duration] - (t_idx-1)*t_duration
+            if (length(sub_st) &gt; 0)
+                points(sub_st, rep(t_idx,length(sub_st)), pch=".")
+        }
+    } 
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Christophe Pouzat</p>
-<p class="date">Created: 2016-12-08 jeu. 20:59</p>
+<p class="date">Created: 2016-12-09 ven. 12:20</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

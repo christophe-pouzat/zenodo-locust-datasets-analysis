@@ -1073,3 +1073,425 @@ predict_data <- function(class_pos_jitter_list,
     }
     res
 }
+
+all_at_once = function(data, ## an unormalized data matrix
+                       centers, ## a list of centers
+                       thres=4*c(1,1,1,1), ## threshold vector
+                       filter_length_1=5, ## length of first filter
+                       filter_length=5, ## length of subsequent filters
+                       minimalDist_1=15, ## dead time length imposed at first detection
+                       minimalDist=10, ## dead time length imposed at subsequent detection
+                       before, ## parameter of centers
+                       after, ## parameter of centers
+                       detection_cycle=c(0,1,2,3,4), ## where is detection done during the peeling
+                       verbose=2 ## verbosity level
+                       ) {
+    n_samples = dim(data)[1] ## Number of sample points
+    n_chan = dim(data)[2] ## Number of channels
+    n_rounds = length(detection_cycle)
+    if (verbose > 0) {
+        ## print five number summary
+        cat("The five number summary is:\n")
+        print(summary(data,digits=2))
+        cat("\n")
+    }
+    ## normalize the data
+    data.mad = apply(data,2,mad)
+    data = t((t(data)-apply(data,2,median))/data.mad)
+    filtered_data_mad = sapply(c(filter_length_1,filter_length),
+                               function(l) {
+                                   lDf = -data
+                                   lDf = filter(lDf,rep(1,l)/l)
+                                   lDf[is.na(lDf)] = 0
+                                   apply(lDf,2,mad)
+                               })
+    ## Define local function detecting spikes
+    get_sp = function(dataM,
+                      f_length,
+                      MAD,
+                      site_idx=0,
+                      minimalDist=15) {
+        lDf = -dataM
+        lDf = filter(lDf,rep(1,f_length)/f_length)
+        lDf[is.na(lDf)] = 0
+        lDf = t(t(lDf)/MAD)
+        bellow.thrs = t(t(lDf) < thres)
+        lDfr = lDf
+        lDfr[bellow.thrs] = 0
+        if (site_idx == 0)
+            res = peaks(apply(lDfr,1,sum),minimalDist)
+        else
+            res = peaks(lDfr[,site_idx],minimalDist)
+        res[res>before & res < dim(dataM)[1]-after]
+    }
+    
+    out_names = c(names(centers),"?") ## Possible names for classification
+    data0 = data ## The normalized version of the data
+    for (r_idx in 1:n_rounds) {
+        s_idx = detection_cycle[r_idx]
+        if (verbose > 1 && s_idx==0)
+            cat(paste("Doing now round",r_idx-1,"detecting on all sites\n"))
+        if (verbose > 1 && s_idx!=0)
+            cat(paste("Doing now round",r_idx-1,"detecting on site",s_idx,"\n"))
+        sp = get_sp(dataM=data,
+                    f_length=ifelse(r_idx==1,filter_length_1,filter_length),
+                    MAD=filtered_data_mad[,ifelse(r_idx==1,1,2)],
+                    site_idx=s_idx,
+                    minimalDist=ifelse(r_idx==1,minimalDist_1,minimalDist))
+        if (length(sp)==0) next
+        new_round = lapply(as.vector(sp),classify_and_align_evt,
+                           data=data,centers=centers,
+                           before=before,after=after)
+        pred = predict_data(new_round,centers,
+                            nb_channels = n_chan,
+                            data_length = n_samples)
+        data = data - pred
+        res = sapply(out_names,
+                     function(n) sum(sapply(new_round, function(l) l[[1]] == n)))
+        res = c(length(sp),res)
+        names(res) = c("Total",out_names)
+        if (verbose > 1) {
+            print(res)
+            cat("\n")
+        }
+        if (r_idx==1)
+            round_all = new_round
+        else
+            round_all = c(round_all,new_round)
+    }
+
+    ## Get the global prediction
+    pred = predict_data(round_all,centers,
+                        nb_channels=n_chan,
+                        data_length=n_samples)
+    ## Get the residuals
+    resid = data0 - pred
+    ## Repeat inital detection on resid
+    sp = get_sp(dataM=resid,
+                f_length=filter_length_1,
+		MAD=filtered_data_mad[,1],
+                site_idx=detection_cycle[1],
+                minimalDist=minimalDist_1)
+    ## make events objects from this stuff
+    unknown = mkEvents(sp,resid,before,after)
+    ## get global counts
+    res = sapply(out_names,
+                 function(n) sum(sapply(round_all, function(l) l[[1]] == n)))
+    res["?"] = length(sp)
+    res=c(sum(res),res)
+    names(res) = c("Total",out_names)
+    if (verbose > 0) {
+        cat("Global counts at classification's end:\n")
+        print(res)
+    }
+    ## Get centers
+    obs_nb = lapply(out_names[-length(out_names)],
+                    function(cn) sum(sapply(round_all, function(l) l[[1]]==cn)))
+    names(obs_nb) = out_names[-length(out_names)]
+    spike_trains = lapply(out_names[-length(out_names)],
+                          function(cn) {
+                              if (obs_nb[cn] <= 1)
+                                  return(numeric(0))
+                              else
+                                  res = sapply(round_all[sapply(round_all, function(l) l[[1]]==cn)],
+                                               function(l)
+                                                   round(l[[2]]+l[[3]]))
+                              res[res>0 & res<n_samples]
+                          }
+                              )    
+    centersN = lapply(1:length(spike_trains),
+                      function(st_idx) {
+                          if (length(spike_trains[[st_idx]]) == 0)
+                              centers[[st_idx]]
+                          else
+                              mk_center_list(spike_trains[[st_idx]],data0,
+                                             before=before,after=after)
+                      }
+                      )
+    names(centersN) = out_names[-length(out_names)]
+    list(prediction=pred,
+         residual=resid,
+         counts=res,
+         unknown=unknown,
+         centers=centersN,
+         classification=round_all)
+}
+get_data = function(trial_idx,
+                    stim="Spontaneous_1",
+                    channels=c("ch02","ch03","ch05","ch07"),
+                    file="locust20010214_part1.hdf5") {
+    prefix = ifelse(trial_idx<10,
+                    paste0("/",stim,"/trial_0",trial_idx),
+                    paste0("/",stim,"/trial_",trial_idx)
+                    )
+    sapply(channels,
+           function(n) {
+               h5read(file, paste0(prefix,"/",n))
+           })
+}
+sort_many_trials = function(inter_trial_time,
+                            get_data_fct,
+                            stim_name,
+                            trial_nbs,
+                            centers,
+                            counts,
+                            all_at_once_call_list,
+                            layout_matrix=matrix(1:10,nr=5),
+                            new_weight_in_update=0.01
+                            ) {
+    centers_old = centers
+    counts_old = counts
+    counts_M = matrix(0,nr=length(trial_nbs),nc=length(counts_old))
+    centers_L = lapply(centers,
+                       function(c) {
+                           res = matrix(0,nr=length(c$center),nc=length(trial_nbs))
+                           res[,1] = c$center
+                           res
+                       }
+                       )
+    names(centers_L) = names(centers)
+    nbc = length(centers)
+    spike_trains = vector("list",nbc)
+    names(spike_trains) = paste("Cluster",1:nbc)
+    idx=1
+    for (trial_idx in trial_nbs) {
+        ref_data = get_data_fct(trial_idx,stim_name)
+        cat(paste0("***************\nDoing now trial ",trial_idx," of ",stim_name,"\n"))
+        analysis = do.call(all_at_once,
+                           c(list(data=ref_data,centers=centers),all_at_once_call_list))
+        cat(paste0("Trial ",trial_idx," done!\n******************\n"))
+        centers_new = analysis$centers
+        counts_new = analysis$counts
+        counts_M[idx,] = counts_new
+        centers = centers_new
+        for (c_idx in 1:length(centers)){
+            n = counts_new[c_idx+1]
+            o = counts_old[c_idx+1]
+            w = new_weight_in_update*ifelse(o>0,min(1,n/o),0) ## New template weight
+            centers[[c_idx]]$center=w*centers_new[[c_idx]]$center+(1-w)*centers_old[[c_idx]]$center
+            centers[[c_idx]]$centerD=w*centers_new[[c_idx]]$centerD+(1-w)*centers_old[[c_idx]]$centerD
+            centers[[c_idx]]$centerDD=w*centers_new[[c_idx]]$centerDD+(1-w)*centers_old[[c_idx]]$centerDD
+            centers[[c_idx]]$centerD_norm2=sum(centers[[c_idx]]$centerD^2)
+            centers[[c_idx]]$centerDD_norm2=sum(centers[[c_idx]]$centerDD^2)
+            centers[[c_idx]]$centerD_dot_centerDD=sum(centers[[c_idx]]$centerD*centers[[c_idx]]$centerDD)
+            centers_L[[c_idx]][,idx] = centers[[c_idx]]$center
+        }
+        layout(layout_matrix)
+        par(mar=c(1,3,3,1))
+        the_pch = if (nbc<10) c(paste(1:nbc),"?")
+                  else c(paste(1:9),letters[1:(nbc-9)],"?")
+        matplot(counts_M[,2:length(counts_old)],type="b",
+                pch=the_pch)
+        c_range = range(sapply(centers_L,
+                               function(m) range(m[,1:idx])))
+        for (i in 1:nbc) {
+            if (idx<3)
+                matplot(centers_L[[i]][,1:idx],type="l",col=1,lty=1,lwd=0.5,
+                        main=paste("Unit",i),ylim=c_range)
+            else
+                matplot(centers_L[[i]][,1:idx],type="l",col=c(4,rep(1,idx-2),2),
+                        lty=1,lwd=0.5,main=paste("Unit",i),ylim=c_range)
+        }
+        centers_old = centers
+        counts_old = counts_new
+        round_all = analysis$classification
+        st = lapply(paste("Cluster",1:nbc),
+                    function(cn) sapply(round_all[sapply(round_all,
+                                                         function(l) l[[1]]==cn)],
+                                        function(l) l[[2]]+l[[3]]))
+        names(st) = paste("Cluster",1:nbc)
+        for (cn in paste("Cluster",1:nbc)) {
+            if (length(st[[cn]]) > 0)
+                spike_trains[[cn]] = c(spike_trains[[cn]],
+                (trial_idx-1)*inter_trial_time + sort(st[[cn]]))
+        }
+        idx = idx+1
+    }
+    spike_trains = lapply(spike_trains,sort)
+    list(centers=centers,
+         counts=counts_new,
+         spike_trains=spike_trains,
+         counts_M=counts_M,
+         centers_L=centers_L,
+         trial_nbs=trial_nbs,
+	 call=match.call())
+}          
+plot_isi = function(isi, ## vector of ISIs
+                    xlab="ISI (s)",
+                    ylab="ECFD",
+                    xlim=c(0,0.5), 
+                    sampling_frequency=15000,
+                    ... ## additional arguments passed to plot
+                    ) {
+    isi = sort(isi)/sampling_frequency
+    n = length(isi)
+    plot(isi,(1:n)/n,type="s",
+         xlab=xlab,ylab=ylab,
+         xlim=xlim,...)
+}
+test_rt = function(ref_train, 
+                   test_train,
+                   sampling_frequency=15000,
+                   nbins=50, ## the number of breaks in the histogram
+		   single_trial_duration = ceiling(max(c(ref_train,test_train))/sampling_frequency), 
+                   xlab="Recurrence time (s)",
+                   ylab="Stabilized counts - stabilized expected counts",
+		   subdivisions = 10000, ## argument of integrate
+                   ... ## additional parameters passed to plot
+                   ) {
+    rt = ref_train/sampling_frequency
+    tt = test_train/sampling_frequency
+    rt_L = vector("list",0)
+    tt_L = vector("list",0)
+    idx_max = max(c(rt,tt))%/%single_trial_duration
+    if ( idx_max == 0) {
+        rt_L = list(rt)
+        tt_L = list(tt)
+    } else {
+        idx = 0
+        while (idx <= idx_max) {
+            start_trial_time = idx*single_trial_duration
+            end_trial_time = start_trial_time + single_trial_duration
+            rt_t = rt[start_trial_time <= rt & rt < end_trial_time]
+            tt_t = tt[start_trial_time <= tt & tt < end_trial_time]
+            if (length(rt_t) > 0 && length(tt_t) > 0) {
+                rt_L = c(rt_L,list(rt_t-start_trial_time))
+                tt_L = c(tt_L,list(tt_t-start_trial_time))
+            }
+            idx = idx + 1
+        }
+    }
+    tt_isi_L = lapply(tt_L,diff)
+    it = unlist(tt_isi_L)
+    p_it=ecdf(it) ## ECDF of ISI from test
+    mu_it=mean(it)
+    s_it=function(t) (1-p_it(t))/mu_it ## expected density of FRT/BRT under the null
+    ## Get the BRT and FRT
+    res = lapply(1:length(rt_L),
+                 function(idx) {
+                     rt_t = rt_L[[idx]]
+                     tt_t = tt_L[[idx]]
+                     rt_t = rt_t[min(tt_t) < rt_t & rt_t < max(tt_t)]
+                     RT = sapply(rt_t,
+                                 function(t) c(max(tt_t[tt_t<=t])-t,
+                                               min(tt_t[tt_t>=t])-t)
+                                 )
+                 })
+    frt = sort(unlist(lapply(res, function(l) l[2,])))
+    brt = sort(-unlist(lapply(res, function(l) l[1,])))
+    n = length(frt)
+    frt_h = hist(frt,breaks=nbins,plot=FALSE)
+    frt_c_s = sqrt(frt_h$counts)+sqrt(frt_h$counts+1) ## stabilized version of the FRT counts
+    ## expected FRT counts under the null
+    frt_c_e = sapply(1:(length(frt_h$breaks)-1),
+                     function(i) integrate(s_it,frt_h$breaks[i],frt_h$breaks[i+1],subdivisions = subdivisions)$value
+                     )
+    frt_c_e_s = sqrt(frt_c_e*n) + sqrt(frt_c_e*n+1) ## stabilized version of the expected FRT counts
+    brt_h = hist(brt,breaks=nbins,plot=FALSE)
+    brt_c_s = sqrt(brt_h$counts)+sqrt(brt_h$counts+1) ## stabilized version of the BRT counts
+    ## expected BRT counts under the null
+    brt_c_e = sapply(1:(length(brt_h$breaks)-1),
+                     function(i) integrate(s_it,brt_h$breaks[i],brt_h$breaks[i+1],subdivisions = subdivisions)$value
+                     )
+    brt_c_e_s = sqrt(brt_c_e*n) + sqrt(brt_c_e*n+1) ## stabilized version of the expected BRT counts
+    X = c(rev(-brt_h$mids),frt_h$mids)
+    Y = c(rev(brt_c_s-brt_c_e_s),frt_c_s-frt_c_e_s)
+    plot(X,Y,type="n",
+         xlab=xlab,
+         ylab=ylab,
+         ...)
+    abline(h=0,col="grey")
+    abline(v=0,col="grey")
+    lines(X,Y,type="s")
+}
+counts_evolution = function(smt_res ## result of a sort_many_trials call
+                           ) {
+    nbc = length(smt_res$centers)
+    the_pch = if (nbc<10) c(paste(1:nbc),"?")
+                  else c(paste(1:9),letters[1:(nbc-9)],"?")
+    matplot(smt_res$trial_nbs,
+            smt_res$counts_M[,2:(nbc+2)],
+            type="b",pch=the_pch,
+            main="Counts evolution",xlab="Trial index",ylab="Number of events")
+}
+waveform_evolution = function(smt_res, ## result of a sort_many_trials call
+                              threshold_factor=4, ## threshold used
+                              layout_matrix=matrix(1:lenght(smt_res$centers_L),nr=lenght(smt_res$centers_L))
+                              ) {
+    nbc = length(smt_res$centers)
+    nt = length(smt_res$trial_nbs)
+    layout(layout_matrix)
+    par(mar=c(1,3,4,1))
+    for (i in 1:nbc) {
+        matplot(smt_res$centers_L[[i]],
+                type="l",col=c(4,rep(1,nt-2),2),lty=1,lwd=0.5,
+                main=paste("Unit",i),ylab="")
+        abline(h=-threshold_factor,col="grey")
+        }
+}
+cp_isi=function(smt_res, ## result of a sort_many_trials call
+                inter_trial_time=10, ## time between trials in seconds
+                sampling_rate=15000, ## sampling rate in Hz
+                nbins=50, ## number of bins for isi histogram
+                isi_max=1, ## largest isi in isi histogram
+                layout_matrix=matrix(1:(2*lenght(smt_res$centers_L)),nr=lenght(smt_res$centers_L),byrow=TRUE)
+                ) {
+    t_duration = inter_trial_time
+    n_trials = length(smt_res$trial_nbs)
+    nbc = length(smt_res$centers)
+    still_there = nbc - sum(sapply(smt_res$spike_trains,
+                                   function(l)
+                                       is.null(l) || length(l) <= n_trials))
+    layout(layout_matrix)
+    par(mar=c(4,4,4,1))
+    for (cn in names(smt_res$spike_trains)) {
+        if (is.null(smt_res$spike_trains[[cn]]) || length(smt_res$spike_trains[[cn]]) <= n_trials) next
+        st = smt_res$spike_trains[[cn]]/sampling_rate
+        plot(st,1:length(st),
+             main=paste("Observed CP for unit",cn),
+             xlab="Time (s)",ylab="Nb of evts",type="s")
+        isi = diff(st)
+        isi = isi[isi <= isi_max]
+        hist(isi,breaks=nbins,
+             prob=TRUE,xlim=c(0,0.5),
+             main=paste("ISI dist for unit",cn),
+             xlab="Interval (s)",ylab="Density (1/s)")
+    } 
+}
+cp_isi_raster=function(smt_res, ## result of a sort_many_trials call
+                      inter_trial_time=10, ## time between trials in seconds
+                      sampling_rate=15000, ## sampling rate in Hz
+                      nbins=50, ## number of bins for isi histogram
+                      isi_max=1, ## largest isi in isi histogram
+                      layout_matrix=matrix(1:(3*lenght(smt_res$centers_L)),nr=lenght(smt_res$centers_L),byrow=TRUE)
+                      ) {
+    t_duration = inter_trial_time
+    n_trials = length(smt_res$trial_nbs)
+    nbc = length(smt_res$centers)
+    still_there = nbc - sum(sapply(smt_res$spike_trains,
+                                   function(l)
+                                       is.null(l) || length(l) <= n_trials))
+    layout(layout_matrix)
+    par(mar=c(4,4,4,1))
+    for (cn in names(smt_res$spike_trains)) {
+        if (is.null(smt_res$spike_trains[[cn]]) || length(smt_res$spike_trains[[cn]]) <= n_trials) next
+        st = smt_res$spike_trains[[cn]]/sampling_rate
+        plot(st,1:length(st),
+             main=paste("Observed CP for unit",cn),
+             xlab="Time (s)",ylab="Nb of evts",type="s")
+        isi = diff(st)
+        isi = isi[isi <= isi_max]
+        hist(isi,breaks=nbins,
+             prob=TRUE,xlim=c(0,0.5),
+             main=paste("ISI dist for unit",cn),
+             xlab="Interval (s)",ylab="Density (1/s)")
+        plot(c(0,t_duration),c(0,n_trials+1),type="n",axes=FALSE,
+             xlab="",ylab="",main=paste("Raster of unit",cn))
+        for (t_idx in 1:n_trials) {
+            sub_st = st[(t_idx-1)*t_duration <= st &
+                        st < t_idx*t_duration] - (t_idx-1)*t_duration
+            if (length(sub_st) > 0)
+                points(sub_st, rep(t_idx,length(sub_st)), pch=".")
+        }
+    } 
+}
