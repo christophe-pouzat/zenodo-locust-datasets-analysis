@@ -1,0 +1,4234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2016-12-10 sam. 14:57 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sorting data set 20000421 tetrode D2 (channels 13, 14, 15, 16)</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Christophe Pouzat" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Sorting data set 20000421 tetrode D2 (channels 13, 14, 15, 16)</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org8104c1b">1. Introduction</a>
+<ul>
+<li><a href="#org9d194e4">1.1. Getting the data</a></li>
+<li><a href="#org2bce500">1.2. Getting the code</a></li>
+</ul>
+</li>
+<li><a href="#orgad1e20f">2. Tetrode D2 (channels 13, 14, 15, 16) analysis</a>
+<ul>
+<li><a href="#org2c5e90e">2.1. Loading the data</a></li>
+<li><a href="#orgd5c466e">2.2. Five number summary</a></li>
+<li><a href="#orgc2141e9">2.3. Plot the data</a></li>
+<li><a href="#org842a0bb">2.4. Data normalization</a></li>
+<li><a href="#orgafb7841">2.5. Spike detection</a></li>
+<li><a href="#org0506ba7">2.6. Cuts</a></li>
+<li><a href="#orgf580e13">2.7. Events</a></li>
+<li><a href="#org8ff073c">2.8. Removing obvious superposition</a></li>
+<li><a href="#org63d9dc1">2.9. Dimension reduction</a></li>
+<li><a href="#org430dc03">2.10. Exporting for <code>GGobi</code></a></li>
+<li><a href="#org3db0d4d">2.11. kmeans clustering with 5 and 4 clusters</a></li>
+<li><a href="#org716f6db">2.12. Long cuts creation</a></li>
+<li><a href="#org193a373">2.13. Peeling</a>
+<ul>
+<li><a href="#org3a355ca">2.13.1. Round 0</a></li>
+<li><a href="#orgd6a12ff">2.13.2. Round 1</a></li>
+</ul>
+</li>
+<li><a href="#org7dad853">2.14. Getting the spike trains</a></li>
+<li><a href="#orgd4a26c7">2.15. Getting the inter spike intervals and the forward and backward recurrence times</a>
+<ul>
+<li><a href="#org59ea3ed">2.15.1. ISI distributions</a></li>
+<li><a href="#org9cee733">2.15.2. Forward and Backward Recurrence Times</a></li>
+</ul>
+</li>
+<li><a href="#orgfff4c19">2.16. Testing "all at once"</a></li>
+</ul>
+</li>
+<li><a href="#org8a4fb11">3. Analyzing a sequence of trials</a>
+<ul>
+<li><a href="#org88087f7">3.1. Create a directory were results get saved</a></li>
+<li><a href="#orge41a159">3.2. Define a "taylored" version of <code>sort_many_trials</code></a></li>
+</ul>
+</li>
+<li><a href="#org80ae960">4. Systematic analysis of the 30 trials from <code>1-Hexanol</code></a>
+<ul>
+<li><a href="#org426eb66">4.1. Doing the job</a></li>
+<li><a href="#org75352f1">4.2. Diagnostic plots</a></li>
+<li><a href="#org544e4e2">4.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgfb17967">5. 25 trials with <code>Hexanal</code></a>
+<ul>
+<li><a href="#org3fd4a91">5.1. Do the job</a></li>
+<li><a href="#org2b90241">5.2. Diagnostic plots</a></li>
+<li><a href="#orgc0c7e7d">5.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgf10de26">6. 25 trials with <code>Cis-3-Hexen-1-ol</code></a>
+<ul>
+<li><a href="#orga9de996">6.1. Do the job</a></li>
+<li><a href="#org4d53cfd">6.2. Diagnostic plots</a></li>
+<li><a href="#org35b2e50">6.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orga7419fc">7. 25 trials with <code>Trans-2-Hexen-1-ol</code></a>
+<ul>
+<li><a href="#orgfacb5a2">7.1. Do the job</a></li>
+<li><a href="#orgad26c35">7.2. Diagnostic plots</a></li>
+<li><a href="#orga1d071e">7.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgc60723d">8. 25 trials with <code>1-Hexen-3-ol</code></a>
+<ul>
+<li><a href="#org3940097">8.1. Do the job</a></li>
+<li><a href="#orgbcb1f0c">8.2. Diagnostic plots</a></li>
+<li><a href="#org8560fbe">8.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgb53b9ee">9. 25 trials with <code>3-Pentanone</code></a>
+<ul>
+<li><a href="#orgeb65dce">9.1. Do the job</a></li>
+<li><a href="#orgaf0767a">9.2. Diagnostic plots</a></li>
+<li><a href="#org0e1f99a">9.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org369f7cd">10. 25 trials with <code>1-Heptanol</code></a>
+<ul>
+<li><a href="#org9dcd540">10.1. Do the job</a></li>
+<li><a href="#org9af53f6">10.2. Diagnostic plots</a></li>
+<li><a href="#orge4340a9">10.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org74e20c8">11. 25 trials with <code>1-Octanol (10^-0) first</code></a>
+<ul>
+<li><a href="#org69331f5">11.1. Do the job</a></li>
+<li><a href="#org43da8bf">11.2. Diagnostic plots</a></li>
+<li><a href="#orgc228ffd">11.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org06ec8b2">12. 25 trials with <code>2-Heptanone</code></a>
+<ul>
+<li><a href="#org82ecddc">12.1. Do the job</a></li>
+<li><a href="#org87d4846">12.2. Diagnostic plots</a></li>
+<li><a href="#org6932f7d">12.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgfffb89f">13. 25 trials with <code>3-Heptanone</code></a>
+<ul>
+<li><a href="#orga293695">13.1. Do the job</a></li>
+<li><a href="#org5340c95">13.2. Diagnostic plots</a></li>
+<li><a href="#orgc214b13">13.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgcd644a8">14. 25 trials with <code>Citral</code></a>
+<ul>
+<li><a href="#orgf363582">14.1. Do the job</a></li>
+<li><a href="#org0832f64">14.2. Diagnostic plots</a></li>
+<li><a href="#orgc3f05b6">14.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org6afc78a">15. 25 trials with <code>Apple</code></a>
+<ul>
+<li><a href="#org2e20e97">15.1. Do the job</a></li>
+<li><a href="#orga2191ec">15.2. Diagnostic plots</a></li>
+<li><a href="#orgd888d1f">15.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org13b3481">16. 25 trials with <code>Mint</code></a>
+<ul>
+<li><a href="#org4d9da82">16.1. Do the job</a></li>
+<li><a href="#orga45f771">16.2. Diagnostic plots</a></li>
+<li><a href="#org80b9a64">16.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org2fc8cf6">17. 25 trials with <code>Strawberry</code></a>
+<ul>
+<li><a href="#org10abbe5">17.1. Do the job</a></li>
+<li><a href="#org99db96c">17.2. Diagnostic plots</a></li>
+<li><a href="#orgd11ccf1">17.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org1504cef">18. 25 trials with <code>Amyl Acetate</code></a>
+<ul>
+<li><a href="#orgdff3796">18.1. Do the job</a></li>
+<li><a href="#org322e97e">18.2. Diagnostic plots</a></li>
+<li><a href="#orgf9d9e08">18.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgcec2744">19. 25 trials with <code>Octaldehyde</code></a>
+<ul>
+<li><a href="#org349aefa">19.1. Do the job</a></li>
+<li><a href="#org1f8d1fe">19.2. Diagnostic plots</a></li>
+<li><a href="#org87f10f3">19.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org71972be">20. 25 trials with <code>1-Octanol (10^-5)</code></a>
+<ul>
+<li><a href="#org9db3fdf">20.1. Do the job</a></li>
+<li><a href="#orgb01ed12">20.2. Diagnostic plots</a></li>
+<li><a href="#orgb86265e">20.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orge69e647">21. 25 trials with <code>1-Octanol (10^-4)</code></a>
+<ul>
+<li><a href="#orgab9a861">21.1. Do the job</a></li>
+<li><a href="#orgcbedba0">21.2. Diagnostic plots</a></li>
+<li><a href="#orga8fa428">21.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orge066f7d">22. 25 trials with <code>1-Octanol (10^-3)</code></a>
+<ul>
+<li><a href="#org4023932">22.1. Do the job</a></li>
+<li><a href="#orgda4a567">22.2. Diagnostic plots</a></li>
+<li><a href="#org0dff42e">22.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org3684b45">23. 25 trials with <code>1-Octanol (10^-2)</code></a>
+<ul>
+<li><a href="#orge29a6d4">23.1. Do the job</a></li>
+<li><a href="#org143c6e9">23.2. Diagnostic plots</a></li>
+<li><a href="#orgf13458e">23.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#orgc864e94">24. 25 trials with <code>1-Octanol (10^-1)</code></a>
+<ul>
+<li><a href="#org27d8442">24.1. Do the job</a></li>
+<li><a href="#org63d6d97">24.2. Diagnostic plots</a></li>
+<li><a href="#org664c9da">24.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org0c9437f">25. 25 trials with <code>1-Octanol (10^-0) second</code></a>
+<ul>
+<li><a href="#org2cf13d7">25.1. Do the job</a></li>
+<li><a href="#org793ca23">25.2. Diagnostic plots</a></li>
+<li><a href="#org88d1c9f">25.3. Save results</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8104c1b" class="outline-2">
+<h2 id="org8104c1b"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This is the description of how to do the (spike) sorting of tetrode D2 (channels 13, 14, 15, 16) from data set <code>locust20000421</code>.
+</p>
+</div>
+
+<div id="outline-container-org9d194e4" class="outline-3">
+<h3 id="org9d194e4"><span class="section-number-3">1.1</span> Getting the data</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+The data are in file <code>locust20000421.hdf5</code> located on <a href="https://zenodo.org/record/21589">zenodo</a> and can be downloaded interactivelly with a web browser or by typing at the command line:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh" id="orga976c53">wget https://zenodo.org/record/21589/files/locust20000421.hdf5
+</pre>
+</div>
+
+<p>
+In the sequel I will assume that <code>R</code> has been started in the directory where the data were downloaded (in other words, the working direcory should be the one containing the data.
+</p>
+
+<p>
+The data are in <a href="https://support.hdfgroup.org/HDF5/">HDF5</a> format and the easiest way to get them into <code>R</code> is to install the <code>rhdf5</code> package from <a href="http://www.bioconductor.org/packages/release/bioc/html/rhdf5.html">Bioconductor</a>. Once the installation is done, the library is loaded into <code>R</code> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgadd0749">library(rhdf5)
+</pre>
+</div>
+
+<p>
+We can then get a (long and detailed) listing of our data file content with (result not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga344926">h5ls("locust20000421.hdf5")
+</pre>
+</div>
+
+<p>
+We can get the content of <code>LabBook</code> <code>metadata</code> <i>from the shell</i> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="orgc9d156a">h5dump -a "LabBook" locust20000421.hdf5
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2bce500" class="outline-3">
+<h3 id="org2bce500"><span class="section-number-3">1.2</span> Getting the code</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+The code can be sourced as follows:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf6ebae9">source("https://raw.githubusercontent.com/christophe-pouzat/zenodo-locust-datasets-analysis/master/R_Sorting_Code/sorting_with_r.R")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgad1e20f" class="outline-2">
+<h2 id="orgad1e20f"><span class="section-number-2">2</span> Tetrode D2 (channels 13, 14, 15, 16) analysis</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We now want to get our "model", that is a dictionnary of waveforms (one waveform per neuron and per recording site). To that end we are going to use the first 60 s of data contained in the <code>Spontaneous</code> <code>Group</code> (in <code>HDF5</code> jargon). 
+</p>
+</div>
+
+<div id="outline-container-org2c5e90e" class="outline-3">
+<h3 id="org2c5e90e"><span class="section-number-3">2.1</span> Loading the data</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+So we start by loading the data from channels 13, 14, 15, 16 into <code>R</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd18ff68">lD = rbind(cbind(h5read("locust20000421.hdf5", "/Spontaneous/ch13"),
+                 h5read("locust20000421.hdf5", "/Spontaneous/ch14"),
+                 h5read("locust20000421.hdf5", "/Spontaneous/ch15"),
+                 h5read("locust20000421.hdf5", "/Spontaneous/ch16")))
+dim(lD)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">892928</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-orgd5c466e" class="outline-3">
+<h3 id="orgd5c466e"><span class="section-number-3">2.2</span> Five number summary</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+We get the <a href="https://en.wikipedia.org/wiki/Five-number_summary">Five number summary</a> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfe436b9">summary(lD,digits=2)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Min.   :1541</td>
+<td class="org-left">Min.   :1462</td>
+<td class="org-left">Min.   :1267</td>
+<td class="org-left">Min.   :1670</td>
+</tr>
+
+<tr>
+<td class="org-left">1st Qu.:2008</td>
+<td class="org-left">1st Qu.:2005</td>
+<td class="org-left">1st Qu.:2022</td>
+<td class="org-left">1st Qu.:2023</td>
+</tr>
+
+<tr>
+<td class="org-left">Median :2047</td>
+<td class="org-left">Median :2049</td>
+<td class="org-left">Median :2065</td>
+<td class="org-left">Median :2063</td>
+</tr>
+
+<tr>
+<td class="org-left">Mean   :2046</td>
+<td class="org-left">Mean   :2048</td>
+<td class="org-left">Mean   :2063</td>
+<td class="org-left">Mean   :2063</td>
+</tr>
+
+<tr>
+<td class="org-left">3rd Qu.:2085</td>
+<td class="org-left">3rd Qu.:2092</td>
+<td class="org-left">3rd Qu.:2106</td>
+<td class="org-left">3rd Qu.:2103</td>
+</tr>
+
+<tr>
+<td class="org-left">Max.   :2498</td>
+<td class="org-left">Max.   :2480</td>
+<td class="org-left">Max.   :2612</td>
+<td class="org-left">Max.   :2392</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+It shows that the channels have very similar properties as far as the median and the inter-quartile range (IQR) are concerned. The minimum is much smaller on the third channel. This suggests that the largest spikes are going to be found here (remember that spikes are going mainly downwards).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc2141e9" class="outline-3">
+<h3 id="orgc2141e9"><span class="section-number-3">2.3</span> Plot the data</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+We "convert" the data matrix <code>lD</code> into a <code>time series</code> object with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfcccfa6">lD = ts(lD,start=0,freq=15e3)
+</pre>
+</div>
+
+<p>
+We can then plot the whole data with (not shown since it makes a very figure):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org88ffe47">plot(lD)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org842a0bb" class="outline-3">
+<h3 id="org842a0bb"><span class="section-number-3">2.4</span> Data normalization</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+As always we normalize such that the <a href="https://en.wikipedia.org/wiki/Median_absolute_deviation">median absolute deviation</a> (MAD) becomes 1:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org2547628">lD.mad = apply(lD,2,mad)
+lD = t((t(lD)-apply(lD,2,median))/lD.mad)
+lD = ts(lD,start=0,freq=15e3)
+</pre>
+</div>
+
+<p>
+Once this is done we explore interactively the data with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgcc2ceb4">explore(lD,col=c("black","grey70"))
+</pre>
+</div>
+
+<p>
+Most spikes can be seen on the 4 recording sites and there are different spike waveform!
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgafb7841" class="outline-3">
+<h3 id="orgafb7841"><span class="section-number-3">2.5</span> Spike detection</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+Since the spikes are mainly going downwards, we will detect valleys instead of peaks:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7d7f2db">lDf = -lD
+filter_length = 3
+threshold_factor = 5
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf.mad = apply(lDf,2,mad)
+lDf_mad_original = lDf.mad
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) &lt; thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp0 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp0
+</pre>
+</div>
+
+<pre class="example">
+eventsPos object with indexes of 1615 events. 
+  Mean inter event interval: 551.86 sampling points, corresponding SD: 584.61 sampling points 
+  Smallest and largest inter event intervals: 17 and 6721 sampling points.
+</pre>
+
+
+
+<p>
+Every time a filter length / threshold combination is tried, the detection is checked interactively with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf497ee2">explore(sp0,lD,col=c("black","grey50"))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0506ba7" class="outline-3">
+<h3 id="org0506ba7"><span class="section-number-3">2.6</span> Cuts</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+We proceed as usual to get the cut length right:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4074a22">evts = mkEvents(sp0,lD,49,50)
+evts.med = median(evts)
+evts.mad = apply(evts,1,mad)
+plot_range = range(c(evts.med,evts.mad))
+plot(evts.med,type="n",ylab="Amplitude",
+     ylim=plot_range)
+abline(v=seq(0,400,10),col="grey")
+abline(h=c(0,1),col="grey")
+lines(evts.med,lwd=2)
+lines(evts.mad,col=2,lwd=2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/tetD2_cut_length.png" alt="tetD2_cut_length.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Setting the cut length for the data from tetrode D2 (channels 13, 14, 15, 16). We see that we need 15 points before the peak and 20 after.</p>
+</div>
+
+<p>
+We see that we need roughly 15 points before the peak and 20 after.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf580e13" class="outline-3">
+<h3 id="orgf580e13"><span class="section-number-3">2.7</span> Events</h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+We now cut our events:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4731da7">evts = mkEvents(sp0,lD,14,20)
+summary(evts)
+</pre>
+</div>
+
+<pre class="example">
+events object deriving from data set: lD.
+ Events defined as cuts of 35 sampling points on each of the 4 recording sites.
+ The 'reference' time of each event is located at point 15 of the cut.
+ There are 1615 events in the object.
+</pre>
+
+
+<p>
+We can as usual visualize the first 200 events with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc6cf7e6">evts[,1:200]
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/first_200_evts_tetD2.png" alt="first_200_evts_tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 2: </span>First 200 events for the data from tetrode D2 (channels 1, 3, 5, 7).</p>
+</div>
+
+<p>
+There are few superpositions so we try to remove the most obvious ones before doing the dimension reduction.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8ff073c" class="outline-3">
+<h3 id="org8ff073c"><span class="section-number-3">2.8</span> Removing obvious superposition</h3>
+<div class="outline-text-3" id="text-2-8">
+<p>
+Since some spikes have a pronounced early peak, we will look for superposition only on the late phase (last 10 points) of the events. We define function <code>goodEvtsFct</code> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf7ec30c">goodEvtsFct = function(samp,thr=3) {
+    samp.med = apply(samp,1,median)
+    samp.mad = apply(samp,1,mad)
+    samp.r = apply(samp,2,function(x) {x[1:25] = 0;x})
+    apply(samp.r,2,function(x) all(abs(x-samp.med) &lt; thr*samp.mad))
+}
+</pre>
+</div>
+
+<p>
+We apply it with a threshold of 5 times the MAD:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5fdfbf7">goodEvts = goodEvtsFct(evts,5)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org63d9dc1" class="outline-3">
+<h3 id="org63d9dc1"><span class="section-number-3">2.9</span> Dimension reduction</h3>
+<div class="outline-text-3" id="text-2-9">
+<p>
+We do a <code>PCA</code> on our good events set:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgca9a55c">evts.pc = prcomp(t(evts[,goodEvts]))
+</pre>
+</div>
+
+<p>
+We look at the projections on the first 4 principle components:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgab95109">panel.dens = function(x,...) {
+  usr = par("usr")
+  on.exit(par(usr))
+  par(usr = c(usr[1:2], 0, 1.5) )
+  d = density(x, adjust=0.5)
+  x = d$x
+  y = d$y
+  y = y/max(y)
+  lines(x, y, col="grey50", ...)
+}
+pairs(evts.pc$x[,1:4],pch=".",gap=0,diag.panel=panel.dens)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/evts-proj-first-4-pc-tetD2.png" alt="evts-proj-first-4-pc-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 3: </span>Events from tetrode D2 (channels 13, 14, 15, 16) projected onto the first 4 PCs.</p>
+</div>
+
+<p>
+I see at least 4 clusters. We can also look at the projections on the PC pairs defined by the next 4 PCs:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb66a037">pairs(evts.pc$x[,5:8],pch=".",gap=0,diag.panel=panel.dens)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/evts-proj-next-4-pc-tetD2.png" alt="evts-proj-next-4-pc-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 4: </span>Events from tetrode D2 (channels 13, 14, 15, 16) projected onto PC 5 to 8.</p>
+</div>
+
+<p>
+There is not much structure left beyond the 4th PC.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org430dc03" class="outline-3">
+<h3 id="org430dc03"><span class="section-number-3">2.10</span> Exporting for <code>GGobi</code></h3>
+<div class="outline-text-3" id="text-2-10">
+<p>
+We export the events projected onto the first 8 principle components in <code>csv</code> format:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgac8970f">write.csv(evts.pc$x[,1:8],file="tetD2_evts.csv")
+</pre>
+</div>
+
+<p>
+Using the <code>rotation</code> display of <code>GGobi</code> with the first 3 principle components and the <code>2D tour</code> with the first 4 components I see at least 4 clusters but there are probably 5 or 6. So we will start with a <code>kmeans</code> with 5 centers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3db0d4d" class="outline-3">
+<h3 id="org3db0d4d"><span class="section-number-3">2.11</span> kmeans clustering with 5 and 4 clusters</h3>
+<div class="outline-text-3" id="text-2-11">
+<div class="org-src-container">
+<pre class="src src-R" id="org3365c5f">nbc=5
+set.seed(20110928,kind="Mersenne-Twister")
+km = kmeans(evts.pc$x[,1:4],centers=nbc,iter.max=100,nstart=100)
+label = km$cluster
+cluster.med = sapply(1:nbc, function(cIdx) median(evts[,goodEvts][,label==cIdx]))
+sizeC = sapply(1:nbc,function(cIdx) sum(abs(cluster.med[,cIdx])))
+newOrder = sort.int(sizeC,decreasing=TRUE,index.return=TRUE)$ix
+cluster.mad = sapply(1:nbc, function(cIdx) {ce = t(evts[,goodEvts]);ce = ce[label==cIdx,];apply(ce,2,mad)})
+cluster.med = cluster.med[,newOrder]
+cluster.mad = cluster.mad[,newOrder]
+labelb = sapply(1:nbc, function(idx) (1:nbc)[newOrder==idx])[label]
+</pre>
+</div>
+
+
+<p>
+We write a new <code>csv</code> file with the data and the labels:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5000028">write.csv(cbind(evts.pc$x[,1:4],labelb),file="tetD2_sorted.csv")
+</pre>
+</div>
+
+<p>
+It gives what was expected.
+</p>
+
+<p>
+We get a plot showing the events attributed to each unit with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org2fae182">layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,1,1,1))
+for (i in (1:nbc)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/kmeans-5-evts-from-each-tetD2.png" alt="kmeans-5-evts-from-each-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 5: </span>The events of the five clusters of tetrode D2</p>
+</div>
+
+<p>
+2 and 3 must be the same, 5 shows evidence on the third site that events were missed (the MAD is going downwards at the valley). We fuse clusters 2 and 3.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org700840a">nbc=4
+labelb[labelb==3]=2
+labelb[labelb==4]=3
+labelb[labelb==5]=4
+</pre>
+</div>
+
+<p>
+We write a new <code>csv</code> file with the data and the labels:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7f88397">write.csv(cbind(evts.pc$x[,1:4],labelb),file="tetD2b_sorted.csv")
+</pre>
+</div>
+
+<p>
+We get a plot showing the events attributed to each unit with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org69b9c4c">layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,1,1,1))
+for (i in (1:nbc)) {
+    ei = labelb==i
+    ni = sum(ei)
+    plot(evts[,goodEvts][,ei][,1:ifelse(ni&gt;200,200,ni)],y.bar=5)
+}
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/kmeans-4-evts-from-each-tetD2.png" alt="kmeans-4-evts-from-each-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 6: </span>The first 200 events of the four clusters of tetrode D2</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org716f6db" class="outline-3">
+<h3 id="org716f6db"><span class="section-number-3">2.12</span> Long cuts creation</h3>
+<div class="outline-text-3" id="text-2-12">
+<p>
+For the peeling process we need templates that start and end at 0 (we will otherwise generate artifacts when we subtract). We proceed "as usual" with (I tried first with the default value for parameters <code>before</code> and <code>after</code> but I reduced their values after looking at the centers, see the next figure):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org41c47d8">c_before = 49
+c_after = 80
+centers = lapply(1:nbc, function(i)
+    mk_center_list(sp0[goodEvts][labelb==i],lD,
+                   before=c_before,after=c_after))
+names(centers) = paste("Cluster",1:nbc)
+</pre>
+</div>
+
+
+<p>
+We then make sure that our cuts are long enough by looking at them:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7d2f7db">layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,4,1,1))
+the_range=c(min(sapply(centers,function(l) min(l$center))),
+            max(sapply(centers,function(l) max(l$center))))
+for (i in 1:nbc) {
+    template = centers[[i]]$center
+    plot(template,lwd=2,col=2,
+         ylim=the_range,type="l",ylab="")
+    abline(h=0,col="grey50")
+    abline(v=(1:2)*(c_before+c_after)+1,col="grey50")
+    lines(filter(template,rep(1,filter_length)/filter_length),
+          col=1,lty=3,lwd=2)
+    abline(h=-threshold_factor,col="grey",lty=2,lwd=2)
+    lines(centers[[i]]$centerD,lwd=2,col=4)
+}
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/centers-4u-tetD2.png" alt="centers-4u-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 7: </span>The four templates (red) together with their first derivative (blue) all with the same scale. The dashed black curve show the templates filtered with the filter used during spike detection and the horizontal dashed grey line shows the detection threshold.</p>
+</div>
+
+<p>
+Only unit 1 and 3 should reliably pass our threshold&#x2026;
+</p>
+</div>
+</div>
+
+<div id="outline-container-org193a373" class="outline-3">
+<h3 id="org193a373"><span class="section-number-3">2.13</span> Peeling</h3>
+<div class="outline-text-3" id="text-2-13">
+<p>
+We can now do the peeling.
+</p>
+</div>
+
+<div id="outline-container-org3a355ca" class="outline-4">
+<h4 id="org3a355ca"><span class="section-number-4">2.13.1</span> Round 0</h4>
+<div class="outline-text-4" id="text-2-13-1">
+<p>
+We classify, predict, subtract and check how many non-classified events we get:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org105324b">round0 = lapply(as.vector(sp0),classify_and_align_evt,
+                data=lD,centers=centers,
+                before=c_before,after=c_after)
+pred0 = predict_data(round0,centers,data_length = dim(lD)[1])
+lD_1 = lD - pred0
+sum(sapply(round0, function(l) l[[1]] == '?'))
+</pre>
+</div>
+
+<pre class="example">
+2
+</pre>
+
+<p>
+We can see the difference before / after peeling for the data between 1.1 and 1.2 s:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc793b7f">ii = 1:1500 + 1.1*15000
+tt = ii/15000
+par(mar=c(1,1,1,1))
+plot(tt, lD[ii,1], axes = FALSE,
+     type="l",ylim=c(-50,10),
+     xlab="",ylab="")
+lines(tt, lD_1[ii,1], col='red')
+lines(tt, lD[ii,2]-15, col='black')
+lines(tt, lD_1[ii,2]-15, col='red')
+lines(tt, lD[ii,3]-25, col='black')
+lines(tt, lD_1[ii,3]-25, col='red')
+lines(tt, lD[ii,4]-40, col='black')
+lines(tt, lD_1[ii,4]-40, col='red')
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/peeling-0-4u-tetD2.png" alt="peeling-0-4u-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 8: </span>The first peeling illustrated on 100 ms of data, the raw data are in black and the first subtration in red.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd6a12ff" class="outline-4">
+<h4 id="orgd6a12ff"><span class="section-number-4">2.13.2</span> Round 1</h4>
+<div class="outline-text-4" id="text-2-13-2">
+<p>
+We keep going, using the subtracted data <code>lD_1</code> as "raw data", detecting on all sites using the original <code>MAD</code> for normalization and a shorter minimal allowed time between detected spikes:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org905b63f">lDf = -lD_1
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) &lt; thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp1 = peaks(apply(lDfr,1,sum),10)
+remove(lDfr)
+sp1
+</pre>
+</div>
+
+<pre class="example">
+eventsPos object with indexes of 43 events. 
+  Mean inter event interval: 20903.57 sampling points, corresponding SD: 21759.44 sampling points 
+  Smallest and largest inter event intervals: 14 and 80499 sampling points.
+</pre>
+
+
+<p>
+We classify, predict, subtract and check how many non-classified events we get:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7d0cd1f">round1 = lapply(as.vector(sp1),classify_and_align_evt,
+                data=lD_1,centers=centers,
+                before=c_before,after=c_after)
+pred1 = predict_data(round1,centers,data_length = dim(lD)[1])
+lD_2 = lD_1 - pred1
+sum(sapply(round1, function(l) l[[1]] == '?'))
+</pre>
+</div>
+
+<pre class="example">
+3
+</pre>
+
+<p>
+We look at what's left with (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge97f76e">explore(sp1,lD_2,col=c("black","grey50"))
+</pre>
+</div>
+
+<p>
+We decide to stop here.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7dad853" class="outline-3">
+<h3 id="org7dad853"><span class="section-number-3">2.14</span> Getting the spike trains</h3>
+<div class="outline-text-3" id="text-2-14">
+<div class="org-src-container">
+<pre class="src src-R" id="org467398d">round_all = c(round0,round1)
+spike_trains = lapply(paste("Cluster",1:nbc),
+                      function(cn) sort(sapply(round_all[sapply(round_all,
+                                                           function(l) l[[1]]==cn)],
+                                          function(l) l[[2]]+l[[3]])))
+names(spike_trains) = paste("Cluster",1:nbc)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd4a26c7" class="outline-3">
+<h3 id="orgd4a26c7"><span class="section-number-3">2.15</span> Getting the inter spike intervals and the forward and backward recurrence times</h3>
+<div class="outline-text-3" id="text-2-15">
+</div><div id="outline-container-org59ea3ed" class="outline-4">
+<h4 id="org59ea3ed"><span class="section-number-4">2.15.1</span> ISI distributions</h4>
+<div class="outline-text-4" id="text-2-15-1">
+<p>
+We first get the <code>ISI</code> (inter spike intervals) of each unit:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org59bab1f">isi = sapply(spike_trains, diff)
+names(isi) = names(spike_trains)
+</pre>
+</div>
+
+<p>
+We get the ISI ECDF for the four units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgab270b1">layout(matrix(1:nbc,nr=nbc/2))
+par(mar=c(4,5,6,1))
+for (cn in names(isi)) plot_isi(isi[[cn]],main=cn)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/isi-ecdf-4u-tetD2.png" alt="isi-ecdf-4u-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 9: </span>ISI ECDF for the four units.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9cee733" class="outline-4">
+<h4 id="org9cee733"><span class="section-number-4">2.15.2</span> Forward and Backward Recurrence Times</h4>
+<div class="outline-text-4" id="text-2-15-2">
+<p>
+The forward recurrence time (<code>FRT</code>) between neuron A and B is the elapsed time between a spike in A and the next spike in B. The backward recurrence time (<code>BRT</code>) is the same thing except that we look for the former spike in B. If A and B are not correlated, the expected density of the FRT is the survival function (1-CDF) of the ISI from B divided by the mean ISI of B (the same holds for the BRT under the null hypothesis after taking the opposite). All that is correct if the data are <i>stationary</i>.
+</p>
+
+<p>
+On the data at hand that gives:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgbd38a3d">layout_matrix = matrix(0,nr=nbc,nc=nbc)
+counter = 1
+for (i in 1:nbc)
+    for (j in 1:nbc)
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:nbc)
+    for (j in 1:nbc)
+        if (i != j)
+            test_rt(spike_trains[[i]],
+                    spike_trains[[j]],
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/rt-test-4u-tetD2.png" alt="rt-test-4u-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 10: </span>Graphical tests of the Backward and Forward Reccurrence Times distrution agaisnt the null hypothesis (no interaction). If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfff4c19" class="outline-3">
+<h3 id="orgfff4c19"><span class="section-number-3">2.16</span> Testing "all at once"</h3>
+<div class="outline-text-3" id="text-2-16">
+<p>
+We test the function with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7741e97">## We need again an un-normalized version of the data
+ref_data = rbind(cbind(h5read("locust20000421.hdf5", "/Spontaneous/ch13"),
+                       h5read("locust20000421.hdf5", "/Spontaneous/ch14"),
+                       h5read("locust20000421.hdf5", "/Spontaneous/ch15"),
+                       h5read("locust20000421.hdf5", "/Spontaneous/ch16")))
+## We can now use our function
+aao=all_at_once(data=ref_data, centers, thres=threshold_factor*c(1,1,1,1), 
+                filter_length_1=filter_length, filter_length=filter_length, 
+                minimalDist_1=15, minimalDist=10, 
+                before=c_before, after=c_after, 
+                detection_cycle=c(0,0), verbose=2)
+</pre>
+</div>
+
+<pre class="example">
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   :1541   Min.   :1462   Min.   :1267   Min.   :1670  
+ 1st Qu.:2008   1st Qu.:2005   1st Qu.:2022   1st Qu.:2023  
+ Median :2047   Median :2049   Median :2065   Median :2063  
+ Mean   :2046   Mean   :2048   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2085   3rd Qu.:2092   3rd Qu.:2106   3rd Qu.:2103  
+ Max.   :2498   Max.   :2480   Max.   :2612   Max.   :2392  
+
+Doing now round 0 detecting on all sites
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+     1615       191       609       413       400         2 
+
+Doing now round 1 detecting on all sites
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+       43         1        16         5        18         3 
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+     1656       192       625       418       418         3
+</pre>
+
+<p>
+We see that we are getting back the numbers we obtained before step by step.
+</p>
+
+<p>
+We can compare the "old" and "new" centers with (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0a32793">layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,4,1,1))
+for (i in 1:nbc) {
+    plot(centers[[i]]$center,lwd=2,col=2,
+         ylim=the_range,type="l")
+    abline(h=0,col="grey50")
+    abline(v=(c_before+c_after)+1,col="grey50")
+    lines(aao$centers[[i]]$center,lwd=1,col=4)
+}
+</pre>
+</div>
+
+<p>
+They are not exactly identical since the new version is computed with all events (superposed or not) attributed to each neuron.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8a4fb11" class="outline-2">
+<h2 id="org8a4fb11"><span class="section-number-2">3</span> Analyzing a sequence of trials</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-org88087f7" class="outline-3">
+<h3 id="org88087f7"><span class="section-number-3">3.1</span> Create a directory were results get saved</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+We will carry out an analysis of sequences of 30/25 trials with a given odor. At the end of the analysis of the sequence we will save some intermediate <code>R</code> object in a directory we are now creating.:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org18f656d">if (!dir.exists("tetD2_analysis"))
+    dir.create("tetD2_analysis")
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge41a159" class="outline-3">
+<h3 id="orge41a159"><span class="section-number-3">3.2</span> Define a "taylored" version of <code>sort_many_trials</code></h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+In order to save space and to avoid typos, we define next a taylored version of <code>sort_many_trials</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org8a74790">smt = function(stim_name,
+               trial_nbs=1:25,
+               centers,
+               counts) {
+    sort_many_trials(inter_trial_time=10*15000,
+                     get_data_fct=function(i,s) get_data(i,s,
+                                                         channels = c("ch13","ch14","ch15","ch16"),
+                                                         file="locust20000421.hdf5"),
+                     stim_name=stim_name,
+                     trial_nbs=trial_nbs,
+                     centers=centers,
+                     counts=counts,
+                     all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                filter_length_1=filter_length, filter_length=filter_length, 
+                                                minimalDist_1=15, minimalDist=10, 
+                                                before=c_before, after=c_after, 
+                                                detection_cycle=c(0,0), verbose=1),
+                     layout_matrix=matrix(c(1,1:5),nr=3),new_weight_in_update=0.01
+                     )
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org80ae960" class="outline-2">
+<h2 id="org80ae960"><span class="section-number-2">4</span> Systematic analysis of the 30 trials from <code>1-Hexanol</code></h2>
+<div class="outline-text-2" id="text-4">
+<p>
+The <code>LabBook</code> mentions that a drop of solution was added at trial 13 but looking at the data, no major corruption occurs except for a very sharp artifact so we keep that trial.
+</p>
+</div>
+
+
+<div id="outline-container-org426eb66" class="outline-3">
+<h3 id="org426eb66"><span class="section-number-3">4.1</span> Doing the job</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org5d33157">a_1_Hexanol_tetD2=smt(stim_name="1-Hexanol",
+                      trial_nbs=1:30,
+                      centers=aao$centers,
+                      counts=aao$counts)
+</pre>
+</div>
+
+<pre class="example">
+***************
+Doing now trial 1 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1614   Min.   :1478   Min.   :1420   Min.   :1734  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2047   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2333   Max.   :2436   Max.   :2507   Max.   :2343  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      229        16        86        72        55         0 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1677   Min.   :1469   Min.   :1334   Min.   :1724  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2393   Max.   :2522   Max.   :2545   Max.   :2361  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      240        17       100        57        66         0 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1663   Min.   :1495   Min.   :1318   Min.   :1703  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2390   Max.   :2444   Max.   :2509   Max.   :2341  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      215        20        86        58        51         0 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1617   Min.   :1407   Min.   :1175   Min.   :1702  
+ 1st Qu.:2008   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2093   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2384   Max.   :2514   Max.   :2512   Max.   :2363  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      245        12        86        79        68         0 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1674   Min.   :1567   Min.   :1379   Min.   :1722  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2023   1st Qu.:2022  
+ Median :2047   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2093   3rd Qu.:2106   3rd Qu.:2105  
+ Max.   :2393   Max.   :2457   Max.   :2466   Max.   :2360  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      210        10       105        34        60         1 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1645   Min.   :1554   Min.   :1366   Min.   :1709  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2360   Max.   :2459   Max.   :2494   Max.   :2365  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      219        20        81        66        52         0 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1660   Min.   :1500   Min.   :1421   Min.   :1729  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2361   Max.   :2505   Max.   :2519   Max.   :2381  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      213        21        92        46        54         0 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1638   Min.   :1511   Min.   :1276   Min.   :1727  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2373   Max.   :2450   Max.   :2494   Max.   :2349  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      243        32        86        71        54         0 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1674   Min.   :1510   Min.   :1356   Min.   :1715  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2047   Median :2051   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2363   Max.   :2438   Max.   :2499   Max.   :2381  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      239        16        97        74        52         0 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1613   Min.   :1491   Min.   :1402   Min.   :1668  
+ 1st Qu.:2007   1st Qu.:2004   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2095   3rd Qu.:2108   3rd Qu.:2105  
+ Max.   :2364   Max.   :2531   Max.   :2521   Max.   :2325  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      240        26        74        79        60         1 
+Trial 10 done!
+******************
+***************
+Doing now trial 11 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1622   Min.   :1398   Min.   :1328   Min.   :1577  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2369   Max.   :2520   Max.   :2603   Max.   :2341  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      246        38        73        57        77         1 
+Trial 11 done!
+******************
+***************
+Doing now trial 12 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1698   Min.   :1495   Min.   :1425   Min.   :1755  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2047   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2374   Max.   :2476   Max.   :2489   Max.   :2389  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      201        17        71        48        65         0 
+Trial 12 done!
+******************
+***************
+Doing now trial 13 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1528   Min.   :1430   Min.   :1275   Min.   :1314  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :4095   Max.   :4095   Max.   :4095   Max.   :4095  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      213         5        71        61        74         2 
+Trial 13 done!
+******************
+***************
+Doing now trial 14 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1607   Min.   :1468   Min.   :1304   Min.   :1696  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2095   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2375   Max.   :2522   Max.   :2528   Max.   :2401  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      226        42        62        65        55         2 
+Trial 14 done!
+******************
+***************
+Doing now trial 15 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1693   Min.   :1490   Min.   :1385   Min.   :1727  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2378   Max.   :2524   Max.   :2536   Max.   :2351  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      192        18        57        60        57         0 
+Trial 15 done!
+******************
+***************
+Doing now trial 16 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1567   Min.   :1469   Min.   :1279   Min.   :1689  
+ 1st Qu.:2008   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2065   Median :2065  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2349   Max.   :2458   Max.   :2499   Max.   :2386  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      211        18        79        63        50         1 
+Trial 16 done!
+******************
+***************
+Doing now trial 17 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1681   Min.   :1523   Min.   :1267   Min.   :1706  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2333   Max.   :2465   Max.   :2513   Max.   :2343  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      196        17        67        58        54         0 
+Trial 17 done!
+******************
+***************
+Doing now trial 18 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1656   Min.   :1413   Min.   :1312   Min.   :1675  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2095   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2358   Max.   :2458   Max.   :2513   Max.   :2343  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      216        32        64        80        40         0 
+Trial 18 done!
+******************
+***************
+Doing now trial 19 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1664   Min.   :1475   Min.   :1360   Min.   :1745  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2050   Median :2066   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2095   3rd Qu.:2108   3rd Qu.:2106  
+ Max.   :2397   Max.   :2496   Max.   :2559   Max.   :2380  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      259        21        76        97        64         1 
+Trial 19 done!
+******************
+***************
+Doing now trial 20 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1604   Min.   :1479   Min.   :1444   Min.   :1729  
+ 1st Qu.:2008   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2352   Max.   :2503   Max.   :2557   Max.   :2365  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      203        16        72        50        65         0 
+Trial 20 done!
+******************
+***************
+Doing now trial 21 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1667   Min.   :1516   Min.   :1385   Min.   :1683  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2066   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2343   Max.   :2437   Max.   :2614   Max.   :2481  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      244        14        90        71        69         0 
+Trial 21 done!
+******************
+***************
+Doing now trial 22 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1693   Min.   :1446   Min.   :1370   Min.   :1681  
+ 1st Qu.:2007   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2357   Max.   :2531   Max.   :2512   Max.   :2387  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      221        38        65        57        61         0 
+Trial 22 done!
+******************
+***************
+Doing now trial 23 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1658   Min.   :1479   Min.   :1367   Min.   :1641  
+ 1st Qu.:2008   1st Qu.:2005   1st Qu.:2022   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2065   Median :2065  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2352   Max.   :2514   Max.   :2549   Max.   :2382  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      214        23        73        71        46         1 
+Trial 23 done!
+******************
+***************
+Doing now trial 24 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1597   Min.   :1424   Min.   :1387   Min.   :1732  
+ 1st Qu.:2008   1st Qu.:2005   1st Qu.:2022   1st Qu.:2023  
+ Median :2048   Median :2051   Median :2066   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2088   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2377   Max.   :2455   Max.   :2526   Max.   :2355  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      254        32        90        76        55         1 
+Trial 24 done!
+******************
+***************
+Doing now trial 25 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1559   Min.   :1523   Min.   :1399   Min.   :1728  
+ 1st Qu.:2008   1st Qu.:2005   1st Qu.:2023   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2065   Median :2065  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2335   Max.   :2433   Max.   :2500   Max.   :2375  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      240        29        79        58        73         1 
+Trial 25 done!
+******************
+***************
+Doing now trial 26 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1680   Min.   :1411   Min.   :1322   Min.   :1736  
+ 1st Qu.:2008   1st Qu.:2006   1st Qu.:2023   1st Qu.:2023  
+ Median :2048   Median :2051   Median :2065   Median :2065  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2107   3rd Qu.:2104  
+ Max.   :2371   Max.   :2493   Max.   :2484   Max.   :2325  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      221        22        67        75        57         0 
+Trial 26 done!
+******************
+***************
+Doing now trial 27 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1669   Min.   :1458   Min.   :1403   Min.   :1681  
+ 1st Qu.:2008   1st Qu.:2006   1st Qu.:2023   1st Qu.:2022  
+ Median :2048   Median :2051   Median :2065   Median :2065  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2095   3rd Qu.:2107   3rd Qu.:2105  
+ Max.   :2386   Max.   :2484   Max.   :2460   Max.   :2381  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      262        45        73        75        69         0 
+Trial 27 done!
+******************
+***************
+Doing now trial 28 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1643   Min.   :1413   Min.   :1244   Min.   :1719  
+ 1st Qu.:2008   1st Qu.:2006   1st Qu.:2023   1st Qu.:2023  
+ Median :2048   Median :2050   Median :2065   Median :2065  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2330   Max.   :2527   Max.   :2450   Max.   :2345  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      207        12        66        72        57         0 
+Trial 28 done!
+******************
+***************
+Doing now trial 29 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1653   Min.   :1542   Min.   :1395   Min.   :1710  
+ 1st Qu.:2008   1st Qu.:2006   1st Qu.:2023   1st Qu.:2023  
+ Median :2048   Median :2051   Median :2066   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2087   3rd Qu.:2093   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2308   Max.   :2474   Max.   :2563   Max.   :2388  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      212        12        79        53        68         0 
+Trial 29 done!
+******************
+***************
+Doing now trial 30 of 1-Hexanol
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1645   Min.   :1488   Min.   :1385   Min.   :1718  
+ 1st Qu.:2009   1st Qu.:2007   1st Qu.:2024   1st Qu.:2024  
+ Median :2048   Median :2051   Median :2065   Median :2064  
+ Mean   :2047   Mean   :2049   Mean   :2063   Mean   :2063  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2343   Max.   :2407   Max.   :2484   Max.   :2378  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      209         2        69        64        72         2 
+Trial 30 done!
+******************
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-org75352f1" class="outline-3">
+<h3 id="org75352f1"><span class="section-number-3">4.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7ca3852">counts_evolution(a_1_Hexanol_tetD2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Hexanol-count-evolution-tetD2.png" alt="1-Hexanol-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 11: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 30 trials of <code>1-Hexanol</code> for tetrode D2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfc5daa6">waveform_evolution(a_1_Hexanol_tetD2,threshold_factor)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Hexanol-waveform-evolution-tetD2.png" alt="1-Hexanol-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 12: </span>Evolution of the templates of each unit during the 30 trials with <code>1-Hexanol</code> for tetrode D2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities ad raster plots are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org468d3d6">cp_isi_raster(a_1_Hexanol_tetD2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Hexanol-CP-and-ISI-dist-tetD2.png" alt="1-Hexanol-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 13: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Hexanol.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org544e4e2" class="outline-3">
+<h3 id="org544e4e2"><span class="section-number-3">4.3</span> Save results</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org25d0e70">save(a_1_Hexanol_tetD2,
+     file=paste0("tetD2_analysis/tetD2_","1-Hexanol","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga5ea528">for (c_idx in 1:length(a_1_Hexanol_tetD2$spike_trains))
+    cat(a_1_Hexanol_tetD2$spike_trains[[c_idx]],
+        file=paste0("locust20000421_spike_trains/locust20000421_1-Hexanol_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfb17967" class="outline-2">
+<h2 id="orgfb17967"><span class="section-number-2">5</span> 25 trials with <code>Hexanal</code></h2>
+<div class="outline-text-2" id="text-5">
+<p>
+We will carry out an analysis of the 25 trials from <code>Hexanal</code>. The <code>LabBook</code> mentions that a drop of solution was added at trial 18 but looking at the data, no major corruption occurs except for a very sharp artifact:
+</p>
+</div>
+
+<div id="outline-container-org3fd4a91" class="outline-3">
+<h3 id="org3fd4a91"><span class="section-number-3">5.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-5-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org3c30a66">a_Hexanal_tetD2=smt(stim_name="Hexanal",
+                    centers=a_1_Hexanol_tetD2$centers,
+                    counts=a_1_Hexanol_tetD2$counts)
+</pre>
+</div>
+
+<pre class="example">
+***************
+Doing now trial 1 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1636   Min.   :1456   Min.   :1395   Min.   :1744  
+ 1st Qu.:2009   1st Qu.:2007   1st Qu.:2024   1st Qu.:2024  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2094   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2383   Max.   :2430   Max.   :2465   Max.   :2344  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      257        27        64        80        86         0 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1650   Min.   :1459   Min.   :1380   Min.   :1694  
+ 1st Qu.:2009   1st Qu.:2007   1st Qu.:2024   1st Qu.:2024  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2377   Max.   :2433   Max.   :2504   Max.   :2341  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      252        16        80        87        69         0 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1644   Min.   :1481   Min.   :1393   Min.   :1700  
+ 1st Qu.:2009   1st Qu.:2007   1st Qu.:2024   1st Qu.:2024  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2094   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2362   Max.   :2407   Max.   :2439   Max.   :2330  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      260        12        67        96        85         0 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1627   Min.   :1429   Min.   :1185   Min.   :1698  
+ 1st Qu.:2009   1st Qu.:2007   1st Qu.:2024   1st Qu.:2024  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2087   3rd Qu.:2094   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2327   Max.   :2417   Max.   :2556   Max.   :2329  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      284        12       104       103        65         0 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1629   Min.   :1513   Min.   :1422   Min.   :1723  
+ 1st Qu.:2009   1st Qu.:2007   1st Qu.:2024   1st Qu.:2024  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2104  
+ Max.   :2318   Max.   :2425   Max.   :2428   Max.   :2345  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      208        15        63        57        73         0 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1671   Min.   :1447   Min.   :1402   Min.   :1733  
+ 1st Qu.:2009   1st Qu.:2007   1st Qu.:2025   1st Qu.:2024  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2094   3rd Qu.:2105   3rd Qu.:2104  
+ Max.   :2332   Max.   :2530   Max.   :2490   Max.   :2372  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      205        27        40        56        80         2 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1638   Min.   :1516   Min.   :1466   Min.   :1730  
+ 1st Qu.:2010   1st Qu.:2007   1st Qu.:2024   1st Qu.:2024  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2368   Max.   :2432   Max.   :2459   Max.   :2337  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      240        11        66        69        94         0 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1601   Min.   :1460   Min.   :1393   Min.   :1705  
+ 1st Qu.:2010   1st Qu.:2008   1st Qu.:2024   1st Qu.:2024  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2104  
+ Max.   :2326   Max.   :2454   Max.   :2535   Max.   :2356  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      219        15        62        75        66         1 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1657   Min.   :1456   Min.   :1278   Min.   :1673  
+ 1st Qu.:2010   1st Qu.:2007   1st Qu.:2024   1st Qu.:2025  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2106   3rd Qu.:2103  
+ Max.   :2393   Max.   :2446   Max.   :2457   Max.   :2346  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      252        11        79        93        69         0 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1646   Min.   :1458   Min.   :1318   Min.   :1714  
+ 1st Qu.:2010   1st Qu.:2007   1st Qu.:2025   1st Qu.:2025  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2353   Max.   :2410   Max.   :2445   Max.   :2355  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      247        17        73        72        85         0 
+Trial 10 done!
+******************
+***************
+Doing now trial 11 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1644   Min.   :1451   Min.   :1290   Min.   :1698  
+ 1st Qu.:2010   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2397   Max.   :2446   Max.   :2451   Max.   :2333  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      218        18        46        86        68         0 
+Trial 11 done!
+******************
+***************
+Doing now trial 12 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1637   Min.   :1512   Min.   :1382   Min.   :1729  
+ 1st Qu.:2010   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2047   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2337   Max.   :2423   Max.   :2533   Max.   :2314  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      233        24        62        59        85         3 
+Trial 12 done!
+******************
+***************
+Doing now trial 13 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1607   Min.   :1511   Min.   :1409   Min.   :1710  
+ 1st Qu.:2010   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2327   Max.   :2421   Max.   :2400   Max.   :2359  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      274        20        76        91        87         0 
+Trial 13 done!
+******************
+***************
+Doing now trial 14 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1640   Min.   :1483   Min.   :1443   Min.   :1697  
+ 1st Qu.:2010   1st Qu.:2007   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2094   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2421   Max.   :2444   Max.   :2479   Max.   :2350  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      278        18        85        63       111         1 
+Trial 14 done!
+******************
+***************
+Doing now trial 15 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1634   Min.   :1452   Min.   :1371   Min.   :1716  
+ 1st Qu.:2010   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2331   Max.   :2423   Max.   :2452   Max.   :2327  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      273        12        69        92       100         0 
+Trial 15 done!
+******************
+***************
+Doing now trial 16 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1599   Min.   :1488   Min.   :1392   Min.   :1682  
+ 1st Qu.:2011   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2106   3rd Qu.:2103  
+ Max.   :2352   Max.   :2365   Max.   :2438   Max.   :2369  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      276        11        83        92        90         0 
+Trial 16 done!
+******************
+***************
+Doing now trial 17 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1613   Min.   :1506   Min.   :1349   Min.   :1732  
+ 1st Qu.:2011   1st Qu.:2008   1st Qu.:2026   1st Qu.:2025  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2085   3rd Qu.:2093   3rd Qu.:2104   3rd Qu.:2103  
+ Max.   :2329   Max.   :2426   Max.   :2477   Max.   :2313  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      199        16        46        43        94         0 
+Trial 17 done!
+******************
+***************
+Doing now trial 18 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1634   Min.   :1395   Min.   :1196   Min.   :1694  
+ 1st Qu.:2010   1st Qu.:2007   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2106   3rd Qu.:2104  
+ Max.   :2713   Max.   :2678   Max.   :2564   Max.   :2833  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      257        33        78        73        72         1 
+Trial 18 done!
+******************
+***************
+Doing now trial 19 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1616   Min.   :1462   Min.   :1400   Min.   :1726  
+ 1st Qu.:2011   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2085   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2341   Max.   :2387   Max.   :2402   Max.   :2327  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      261        11        68        70       111         1 
+Trial 19 done!
+******************
+***************
+Doing now trial 20 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1610   Min.   :1439   Min.   :1396   Min.   :1736  
+ 1st Qu.:2011   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2085   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2384   Max.   :2416   Max.   :2410   Max.   :2320  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      237        12        56        72        96         1 
+Trial 20 done!
+******************
+***************
+Doing now trial 21 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1623   Min.   :1456   Min.   :1374   Min.   :1742  
+ 1st Qu.:2011   1st Qu.:2008   1st Qu.:2026   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2085   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2337   Max.   :2463   Max.   :2424   Max.   :2325  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      235        21        61        67        86         0 
+Trial 21 done!
+******************
+***************
+Doing now trial 22 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1628   Min.   :1514   Min.   :1405   Min.   :1698  
+ 1st Qu.:2011   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2085   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2350   Max.   :2447   Max.   :2412   Max.   :2323  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      210        16        67        59        68         0 
+Trial 22 done!
+******************
+***************
+Doing now trial 23 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1478   Min.   :1315   Min.   :1212   Min.   :1620  
+ 1st Qu.:2011   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2085   3rd Qu.:2093   3rd Qu.:2106   3rd Qu.:2103  
+ Max.   :2350   Max.   :2385   Max.   :2441   Max.   :2337  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      256        17        71        86        81         1 
+Trial 23 done!
+******************
+***************
+Doing now trial 24 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1634   Min.   :1500   Min.   :1444   Min.   :1736  
+ 1st Qu.:2011   1st Qu.:2008   1st Qu.:2026   1st Qu.:2025  
+ Median :2048   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2085   3rd Qu.:2093   3rd Qu.:2104   3rd Qu.:2103  
+ Max.   :2322   Max.   :2388   Max.   :2453   Max.   :2316  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      223        12        59        55        96         1 
+Trial 24 done!
+******************
+***************
+Doing now trial 25 of Hexanal
+The five number summary is:
+      ch13           ch14           ch15           ch16     
+ Min.   :1528   Min.   :1416   Min.   :1302   Min.   :1686  
+ 1st Qu.:2010   1st Qu.:2008   1st Qu.:2025   1st Qu.:2025  
+ Median :2049   Median :2051   Median :2066   Median :2065  
+ Mean   :2048   Mean   :2050   Mean   :2064   Mean   :2064  
+ 3rd Qu.:2086   3rd Qu.:2093   3rd Qu.:2105   3rd Qu.:2103  
+ Max.   :2350   Max.   :2367   Max.   :2552   Max.   :2326  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      230        10        73        63        83         1 
+Trial 25 done!
+******************
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-org2b90241" class="outline-3">
+<h3 id="org2b90241"><span class="section-number-3">5.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0560c04">counts_evolution(a_Hexanal_tetD2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Hexanal-count-evolution-tetD2.png" alt="Hexanal-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 14: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>Hexanal</code> for tetrode D2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org131a181">waveform_evolution(a_Hexanal_tetD2,threshold_factor)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Hexanal-waveform-evolution-tetD2.png" alt="Hexanal-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 15: </span>Evolution of the templates of each unit during the 25 trials of <code>Hexanal</code> for tetrode D2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1964923">cp_isi_raster(a_Hexanal_tetD2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Hexanal-CP-and-ISI-dist-tetD2.png" alt="Hexanal-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 16: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Hexanal.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc0c7e7d" class="outline-3">
+<h3 id="orgc0c7e7d"><span class="section-number-3">5.3</span> Save results</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3bc97f9">save(a_Hexanal_tetD2,
+     file=paste0("tetD2_analysis/tetD2_","Hexanal","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgcc20970">for (c_idx in 1:length(a_Hexanal_tetD2$spike_trains))
+    cat(a_Hexanal_tetD2$spike_trains[[c_idx]],
+        file=paste0("locust20000421_spike_trains/locust20000421_Hexanal_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf10de26" class="outline-2">
+<h2 id="orgf10de26"><span class="section-number-2">6</span> 25 trials with <code>Cis-3-Hexen-1-ol</code></h2>
+<div class="outline-text-2" id="text-6">
+<p>
+We will carry out an analysis of the 25 trials from <code>Cis-3-Hexen-1-ol</code>.  
+</p>
+</div>
+
+<div id="outline-container-orga9de996" class="outline-3">
+<h3 id="orga9de996"><span class="section-number-3">6.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+We do not print out the output to save space.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org8960794">a_Cis_3_Hexen_1_ol_tetD2=smt(stim_name="Cis-3-Hexen-1-ol",
+                             centers=a_Hexanal_tetD2$centers,
+                             counts=a_Hexanal_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org4d53cfd" class="outline-3">
+<h3 id="org4d53cfd"><span class="section-number-3">6.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Cis-3-Hexen-1-ol-count-evolution-tetD2.png" alt="Cis-3-Hexen-1-ol-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 17: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 30 trials of <code>Cis-3-Hexen-1-ol</code> for tetrode D2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1fba688">waveform_evolution(a_Cis_3_Hexen_1_ol_tetD2,threshold_factor)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Cis-3-Hexen-1-ol-waveform-evolution-tetD2.png" alt="Cis-3-Hexen-1-ol-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 18: </span>Evolution of the templates of each unit during the 25 trials of <code>Cis-3-Hexen-1-ol</code> for stereode Ca.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Cis-3-Hexen-1-ol-CP-and-ISI-dist-tetD2.png" alt="Cis-3-Hexen-1-ol-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 19: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Cis-3-Hexen-1-ol.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org35b2e50" class="outline-3">
+<h3 id="org35b2e50"><span class="section-number-3">6.3</span> Save results</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org31be34e">save(a_Cis_3_Hexen_1_ol_tetD2,
+     file=paste0("tetD2_analysis/tetD2_","Cis-3-Hexen-1-ol","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf53c85b">for (c_idx in 1:length(a_Cis_3_Hexen_1_ol_tetD2$spike_trains))
+    if (!is.null(a_Cis_3_Hexen_1_ol_tetD2$spike_trains[[c_idx]]))
+        cat(a_Cis_3_Hexen_1_ol_tetD2$spike_trains[[c_idx]],
+	    file=paste0("locust20000421_spike_trains/locust20000421_Cis-3-Hexen-1-ol_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga7419fc" class="outline-2">
+<h2 id="orga7419fc"><span class="section-number-2">7</span> 25 trials with <code>Trans-2-Hexen-1-ol</code></h2>
+<div class="outline-text-2" id="text-7">
+<p>
+We will carry out an analysis of the 25 trials from <code>Trans-2-Hexen-1-ol</code>. 
+</p>
+</div>
+<div id="outline-container-orgfacb5a2" class="outline-3">
+<h3 id="orgfacb5a2"><span class="section-number-3">7.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-7-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgea60144">stim_name = "Trans-2-Hexen-1-ol"
+a_Trans_2_Hexen_1_ol_tetD2=smt(stim_name=stim_name,
+                               centers=a_Cis_3_Hexen_1_ol_tetD2$centers,
+                               counts=a_Cis_3_Hexen_1_ol_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgad26c35" class="outline-3">
+<h3 id="orgad26c35"><span class="section-number-3">7.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Trans-2-Hexen-1-ol-count-evolution-tetD2.png" alt="Trans-2-Hexen-1-ol-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 20: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>Trans-2-Hexen-1-ol</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Trans-2-Hexen-1-ol-waveform-evolution-tetD2.png" alt="Trans-2-Hexen-1-ol-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 21: </span>Evolution of the templates of each unit during the 25 trials of <code>Trans-2-Hexen-1-ol</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Trans-2-Hexen-1-ol-CP-and-ISI-dist-tetD2.png" alt="Trans-2-Hexen-1-ol-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 22: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Trans-2-Hexen-1-ol.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga1d071e" class="outline-3">
+<h3 id="orga1d071e"><span class="section-number-3">7.3</span> Save results</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgce6e3b8">save(a_Trans_2_Hexen_1_ol_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgec8558c">for (c_idx in 1:length(a_Trans_2_Hexen_1_ol_tetD2$spike_trains))
+    if (!is.null(a_Trans_2_Hexen_1_ol_tetD2$spike_trains[[c_idx]]))
+        cat(a_Trans_2_Hexen_1_ol_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_Trans-2-Hexen-1-ol_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc60723d" class="outline-2">
+<h2 id="orgc60723d"><span class="section-number-2">8</span> 25 trials with <code>1-Hexen-3-ol</code></h2>
+<div class="outline-text-2" id="text-8">
+<p>
+We will carry out an analysis of the 25 trials from <code>1-Hexen-3-ol</code>. 
+</p>
+</div>
+<div id="outline-container-org3940097" class="outline-3">
+<h3 id="org3940097"><span class="section-number-3">8.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-8-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgee9d600">stim_name = "1-Hexen-3-ol"
+a_1_Hexen_3_ol_tetD2=smt(stim_name=stim_name,
+                         centers=a_Trans_2_Hexen_1_ol_tetD2$centers,
+                         counts=a_Trans_2_Hexen_1_ol_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgbcb1f0c" class="outline-3">
+<h3 id="orgbcb1f0c"><span class="section-number-3">8.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Hexen-3-ol-count-evolution-tetD2.png" alt="1-Hexen-3-ol-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 23: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>1-Hexen-3-ol</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Hexen-3-ol-waveform-evolution-tetD2.png" alt="1-Hexen-3-ol-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 24: </span>Evolution of the templates of each unit during the 25 trials of <code>1-Hexen-3-ol</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Hexen-3-ol-CP-and-ISI-dist-tetD2.png" alt="1-Hexen-3-ol-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 25: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Hexen-3-ol.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8560fbe" class="outline-3">
+<h3 id="org8560fbe"><span class="section-number-3">8.3</span> Save results</h3>
+<div class="outline-text-3" id="text-8-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org8ccaa04">save(a_1_Hexen_3_ol_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgdab62e8">for (c_idx in 1:length(a_1_Hexen_3_ol_tetD2$spike_trains))
+    if (!is.null(a_1_Hexen_3_ol_tetD2$spike_trains[[c_idx]]))
+        cat(a_1_Hexen_3_ol_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_1-Hexen-3-ol_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb53b9ee" class="outline-2">
+<h2 id="orgb53b9ee"><span class="section-number-2">9</span> 25 trials with <code>3-Pentanone</code></h2>
+<div class="outline-text-2" id="text-9">
+<p>
+We will carry out an analysis of the 25 trials from <code>3-Pentanone</code>. 
+</p>
+</div>
+<div id="outline-container-orgeb65dce" class="outline-3">
+<h3 id="orgeb65dce"><span class="section-number-3">9.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-9-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org765e86d">stim_name = "3-Pentanone"
+a_3_Pentanone_tetD2=smt(stim_name=stim_name,
+                        centers=a_1_Hexen_3_ol_tetD2$centers,
+                        counts=a_1_Hexen_3_ol_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgaf0767a" class="outline-3">
+<h3 id="orgaf0767a"><span class="section-number-3">9.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-9-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/3-Pentanone-count-evolution-tetD2.png" alt="3-Pentanone-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 26: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>3-Pentanone</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/3-Pentanone-waveform-evolution-tetD2.png" alt="3-Pentanone-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 27: </span>Evolution of the templates of each of the first four units during the 25 trials of <code>3-Pentanone</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/3-Pentanone-CP-and-ISI-dist-tetD2.png" alt="3-Pentanone-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 28: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 3-Pentanone.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0e1f99a" class="outline-3">
+<h3 id="org0e1f99a"><span class="section-number-3">9.3</span> Save results</h3>
+<div class="outline-text-3" id="text-9-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgbeee3c1">save(a_3_Pentanone_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1c20979">for (c_idx in 1:length(a_3_Pentanone_tetD2$spike_trains))
+    if (!is.null(a_3_Pentanone_tetD2$spike_trains[[c_idx]]))
+        cat(a_3_Pentanone_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_3-Pentanone_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org369f7cd" class="outline-2">
+<h2 id="org369f7cd"><span class="section-number-2">10</span> 25 trials with <code>1-Heptanol</code></h2>
+<div class="outline-text-2" id="text-10">
+<p>
+We will carry out an analysis of the 25 trials from <code>1-Heptanol</code>. 
+</p>
+</div>
+<div id="outline-container-org9dcd540" class="outline-3">
+<h3 id="org9dcd540"><span class="section-number-3">10.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-10-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org932dc64">stim_name = "1-Heptanol"
+a_1_Heptanol_tetD2=smt(stim_name=stim_name,
+                       centers=a_3_Pentanone_tetD2$centers,
+                       counts=a_3_Pentanone_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org9af53f6" class="outline-3">
+<h3 id="org9af53f6"><span class="section-number-3">10.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-10-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Heptanol-count-evolution-tetD2.png" alt="1-Heptanol-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 29: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>1-Heptanol</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Heptanol-waveform-evolution-tetD2.png" alt="1-Heptanol-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 30: </span>Evolution of the templates of each of the first four units during the 25 trials of <code>1-Heptanol</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org692f460">cp_isi_raster(a_1_Heptanol_tetD2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Heptanol-CP-and-ISI-dist-tetD2.png" alt="1-Heptanol-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 31: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Heptanol.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge4340a9" class="outline-3">
+<h3 id="orge4340a9"><span class="section-number-3">10.3</span> Save results</h3>
+<div class="outline-text-3" id="text-10-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org746d9ff">save(a_1_Heptanol_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org75779cf">for (c_idx in 1:length(a_1_Heptanol_tetD2$spike_trains))
+    if (!is.null(a_1_Heptanol_tetD2$spike_trains[[c_idx]]))
+        cat(a_1_Heptanol_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_1-Heptanol_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org74e20c8" class="outline-2">
+<h2 id="org74e20c8"><span class="section-number-2">11</span> 25 trials with <code>1-Octanol (10^-0) first</code></h2>
+<div class="outline-text-2" id="text-11">
+<p>
+We will carry out an analysis of the 25 trials from <code>1-Octanol (10^-0) first</code>. 
+</p>
+</div>
+<div id="outline-container-org69331f5" class="outline-3">
+<h3 id="org69331f5"><span class="section-number-3">11.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-11-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org9fa35ea">stim_name = "1-Octanol (10^-0) first"
+a_1_Octanol_0_tetD2=smt(stim_name=stim_name,
+                        centers=a_1_Heptanol_tetD2$centers,
+                        counts=a_1_Heptanol_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org43da8bf" class="outline-3">
+<h3 id="org43da8bf"><span class="section-number-3">11.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-11-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-0) first-count-evolution-tetD2.png" alt="1-Octanol (10^-0) first-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 32: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>1-Octanol (10^-0) first</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-0) first-waveform-evolution-tetD2.png" alt="1-Octanol (10^-0) first-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 33: </span>Evolution of the templates of each of the first four units during the 25 trials of <code>1-Octanol (10^-0) first</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org2ce8fe3">cp_isi_raster(a_1_Octanol_0_tetD2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-0) first-CP-and-ISI-dist-tetD2.png" alt="1-Octanol (10^-0) first-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 34: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Octanol (10^-0) first.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc228ffd" class="outline-3">
+<h3 id="orgc228ffd"><span class="section-number-3">11.3</span> Save results</h3>
+<div class="outline-text-3" id="text-11-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge04b1df">save(a_1_Octanol_0_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgbd82408">for (c_idx in 1:length(a_1_Octanol_0_tetD2$spike_trains))
+    if (!is.null(a_1_Octanol_0_tetD2$spike_trains[[c_idx]]))
+        cat(a_1_Octanol_0_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_1-Octanol (10^-0) first_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org06ec8b2" class="outline-2">
+<h2 id="org06ec8b2"><span class="section-number-2">12</span> 25 trials with <code>2-Heptanone</code></h2>
+<div class="outline-text-2" id="text-12">
+<p>
+We will carry out an analysis of the 25 trials from <code>2-Heptanone</code>. 
+</p>
+</div>
+<div id="outline-container-org82ecddc" class="outline-3">
+<h3 id="org82ecddc"><span class="section-number-3">12.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-12-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orge15e5d6">stim_name = "2-Heptanone"
+a_2_Heptanone_tetD2=smt(stim_name=stim_name,
+                        centers=a_1_Octanol_0_tetD2$centers,
+                        counts=a_1_Octanol_0_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org87d4846" class="outline-3">
+<h3 id="org87d4846"><span class="section-number-3">12.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-12-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/2-Heptanone-count-evolution-tetD2.png" alt="2-Heptanone-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 35: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>2-Heptanone</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/2-Heptanone-waveform-evolution-tetD2.png" alt="2-Heptanone-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 36: </span>Evolution of the templates of each unit during the 25 trials of <code>2-Heptanone</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/2-Heptanone-CP-and-ISI-dist-tetD2.png" alt="2-Heptanone-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 37: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 2-Heptanone.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6932f7d" class="outline-3">
+<h3 id="org6932f7d"><span class="section-number-3">12.3</span> Save results</h3>
+<div class="outline-text-3" id="text-12-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org2e7489e">save(a_2_Heptanone_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc904c03">for (c_idx in 1:length(a_2_Heptanone_tetD2$spike_trains))
+    if (!is.null(a_2_Heptanone_tetD2$spike_trains[[c_idx]]))
+        cat(a_2_Heptanone_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_2-Heptanone_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfffb89f" class="outline-2">
+<h2 id="orgfffb89f"><span class="section-number-2">13</span> 25 trials with <code>3-Heptanone</code></h2>
+<div class="outline-text-2" id="text-13">
+<p>
+We will carry out an analysis of the 25 trials from <code>3-Heptanone</code>.  
+</p>
+</div>
+
+<div id="outline-container-orga293695" class="outline-3">
+<h3 id="orga293695"><span class="section-number-3">13.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-13-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgdbd030d">stim_name = "3-Heptanone"
+a_3_Heptanone_tetD2=smt(stim_name=stim_name,
+                        centers=a_2_Heptanone_tetD2$centers,
+                        counts=a_2_Heptanone_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org5340c95" class="outline-3">
+<h3 id="org5340c95"><span class="section-number-3">13.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-13-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/3-Heptanone-count-evolution-tetD2.png" alt="3-Heptanone-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 38: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>3-Heptanone</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/3-Heptanone-waveform-evolution-tetD2.png" alt="3-Heptanone-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 39: </span>Evolution of the templates of each unit during the 25 trials of <code>3-Heptanone</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/3-Heptanone-CP-and-ISI-dist-tetD2.png" alt="3-Heptanone-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 40: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 3-Heptanone.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc214b13" class="outline-3">
+<h3 id="orgc214b13"><span class="section-number-3">13.3</span> Save results</h3>
+<div class="outline-text-3" id="text-13-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0fbd584">save(a_3_Heptanone_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org85aca9b">for (c_idx in 1:length(a_3_Heptanone_tetD2$spike_trains))
+    if (!is.null(a_3_Heptanone_tetD2$spike_trains[[c_idx]]))
+        cat(a_3_Heptanone_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_3-Heptanone_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcd644a8" class="outline-2">
+<h2 id="orgcd644a8"><span class="section-number-2">14</span> 25 trials with <code>Citral</code></h2>
+<div class="outline-text-2" id="text-14">
+<p>
+We will carry out an analysis of the 25 trials from <code>Citral</code>. 
+</p>
+</div>
+<div id="outline-container-orgf363582" class="outline-3">
+<h3 id="orgf363582"><span class="section-number-3">14.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-14-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org4cfeacd">stim_name = "Citral"
+a_Citral_tetD2=smt(stim_name=stim_name,
+                   centers=a_3_Heptanone_tetD2$centers,
+                   counts=a_3_Heptanone_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0832f64" class="outline-3">
+<h3 id="org0832f64"><span class="section-number-3">14.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-14-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Citral-count-evolution-tetD2.png" alt="Citral-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 41: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>Citral</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Citral-waveform-evolution-tetD2.png" alt="Citral-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 42: </span>Evolution of the templates of each unit during the 25 trials of <code>Citral</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Citral-CP-and-ISI-dist-tetD2.png" alt="Citral-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 43: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Citral.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc3f05b6" class="outline-3">
+<h3 id="orgc3f05b6"><span class="section-number-3">14.3</span> Save results</h3>
+<div class="outline-text-3" id="text-14-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge5e8783">save(a_Citral_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfa1f40c">for (c_idx in 1:length(a_Citral_tetD2$spike_trains))
+    if (!is.null(a_Citral_tetD2$spike_trains[[c_idx]]))
+        cat(a_Citral_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_Citral_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6afc78a" class="outline-2">
+<h2 id="org6afc78a"><span class="section-number-2">15</span> 25 trials with <code>Apple</code></h2>
+<div class="outline-text-2" id="text-15">
+<p>
+We will carry out an analysis of the 25 trials from <code>Apple</code>. 
+</p>
+</div>
+<div id="outline-container-org2e20e97" class="outline-3">
+<h3 id="org2e20e97"><span class="section-number-3">15.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-15-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orge8f45f0">stim_name = "Apple"
+a_Apple_tetD2=smt(stim_name=stim_name,
+                  centers=a_Citral_tetD2$centers,
+                  counts=a_Citral_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga2191ec" class="outline-3">
+<h3 id="orga2191ec"><span class="section-number-3">15.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-15-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Apple-count-evolution-tetD2.png" alt="Apple-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 44: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>Apple</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5900910">waveform_evolution(a_Apple_tetD2,threshold_factor)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Apple-waveform-evolution-tetD2.png" alt="Apple-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 45: </span>Evolution of the templates of each unit during the 25 trials of <code>Apple</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Apple-CP-and-ISI-dist-tetD2.png" alt="Apple-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 46: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Apple.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd888d1f" class="outline-3">
+<h3 id="orgd888d1f"><span class="section-number-3">15.3</span> Save results</h3>
+<div class="outline-text-3" id="text-15-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org47e6d9f">save(a_Apple_tetD2s,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga25d9ce">for (c_idx in 1:length(a_Apple_tetD2$spike_trains))
+    if (!is.null(a_Apple_tetD2$spike_trains[[c_idx]]))
+        cat(a_Apple_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_Apple_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org13b3481" class="outline-2">
+<h2 id="org13b3481"><span class="section-number-2">16</span> 25 trials with <code>Mint</code></h2>
+<div class="outline-text-2" id="text-16">
+<p>
+We will carry out an analysis of the 25 trials from <code>Mint</code>. 
+</p>
+</div>
+<div id="outline-container-org4d9da82" class="outline-3">
+<h3 id="org4d9da82"><span class="section-number-3">16.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-16-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orge01cbf0">stim_name = "Mint"
+a_Mint_tetD2=smt(stim_name=stim_name,
+                 centers=a_Apple_tetD2$centers,
+                 counts=a_Apple_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga45f771" class="outline-3">
+<h3 id="orga45f771"><span class="section-number-3">16.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-16-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Mint-count-evolution-tetD2.png" alt="Mint-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 47: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>Mint</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Mint-waveform-evolution-tetD2.png" alt="Mint-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 48: </span>Evolution of the templates of each unit during the 25 trials of <code>Mint</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Mint-CP-and-ISI-dist-tetD2.png" alt="Mint-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 49: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Mint.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org80b9a64" class="outline-3">
+<h3 id="org80b9a64"><span class="section-number-3">16.3</span> Save results</h3>
+<div class="outline-text-3" id="text-16-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc46509b">save(a_Mint_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5a4488b">for (c_idx in 1:length(a_Mint_sterC$spike_trains))
+    if (!is.null(a_Mint_sterC$spike_trains[[c_idx]]))
+        cat(a_Mint_sterC$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_Mint_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2fc8cf6" class="outline-2">
+<h2 id="org2fc8cf6"><span class="section-number-2">17</span> 25 trials with <code>Strawberry</code></h2>
+<div class="outline-text-2" id="text-17">
+<p>
+We will carry out an analysis of the 25 trials from <code>Strawberry</code>.  
+</p>
+</div>
+
+<div id="outline-container-org10abbe5" class="outline-3">
+<h3 id="org10abbe5"><span class="section-number-3">17.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-17-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgac36e18">stim_name = "Strawberry"
+a_Strawberry_tetD2=smt(stim_name=stim_name,
+                       centers=a_Mint_tetD2$centers,
+                       counts=a_Mint_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org99db96c" class="outline-3">
+<h3 id="org99db96c"><span class="section-number-3">17.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-17-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Strawberry-count-evolution-tetD2.png" alt="Strawberry-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 50: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>Strawberry</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Strawberry-waveform-evolution-tetD2.png" alt="Strawberry-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 51: </span>Evolution of the templates of each unit during the 25 trials of <code>Strawberry</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Strawberry-CP-and-ISI-dist-tetD2.png" alt="Strawberry-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 52: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Strawberry.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd11ccf1" class="outline-3">
+<h3 id="orgd11ccf1"><span class="section-number-3">17.3</span> Save results</h3>
+<div class="outline-text-3" id="text-17-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org39eb693">save(a_Strawberry_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgff68cb9">for (c_idx in 1:length(a_Strawberry_sterC$spike_trains))
+    if (!is.null(a_Strawberry_sterC$spike_trains[[c_idx]]))
+        cat(a_Strawberry_sterC$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_Strawberry_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1504cef" class="outline-2">
+<h2 id="org1504cef"><span class="section-number-2">18</span> 25 trials with <code>Amyl Acetate</code></h2>
+<div class="outline-text-2" id="text-18">
+<p>
+We will carry out an analysis of the 25 trials from <code>Amyl Acetate</code>. 
+</p>
+</div>
+
+<div id="outline-container-orgdff3796" class="outline-3">
+<h3 id="orgdff3796"><span class="section-number-3">18.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-18-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org7395a7d">stim_name = "Amyl Acetate"
+a_Amyl_Acetate_tetD2=smt(stim_name=stim_name,
+                         centers=a_Strawberry_tetD2$centers,
+                         counts=a_Strawberry_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org322e97e" class="outline-3">
+<h3 id="org322e97e"><span class="section-number-3">18.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-18-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Amyl Acetate-count-evolution-tetD2.png" alt="Amyl Acetate-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 53: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>Amyl Acetate</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Amyl Acetate-waveform-evolution-tetD2.png" alt="Amyl Acetate-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 54: </span>Evolution of the templates of each unit during the 25 trials of <code>Amyl Acetate</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Amyl Acetate-CP-and-ISI-dist-tetD2.png" alt="Amyl Acetate-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 55: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Amyl Acetate.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf9d9e08" class="outline-3">
+<h3 id="orgf9d9e08"><span class="section-number-3">18.3</span> Save results</h3>
+<div class="outline-text-3" id="text-18-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org62db9f8">save(a_Amyl_Acetate_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org23899b2">for (c_idx in 1:length(a_Amyl_Acetate_tetD2$spike_trains))
+    if (!is.null(a_Amyl_Acetate_tetD2$spike_trains[[c_idx]]))
+        cat(a_Amyl_Acetate_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_Amyl Acetate_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcec2744" class="outline-2">
+<h2 id="orgcec2744"><span class="section-number-2">19</span> 25 trials with <code>Octaldehyde</code></h2>
+<div class="outline-text-2" id="text-19">
+<p>
+We will carry out an analysis of the 25 trials from <code>Octaldehyde</code>. 
+</p>
+</div>
+<div id="outline-container-org349aefa" class="outline-3">
+<h3 id="org349aefa"><span class="section-number-3">19.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-19-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgb39751e">stim_name = "Octaldehyde"
+a_Octaldehyde_tetD2=smt(stim_name=stim_name,
+                        centers=a_Amyl_Acetate_tetD2$centers,
+                        counts=a_Amyl_Acetate_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org1f8d1fe" class="outline-3">
+<h3 id="org1f8d1fe"><span class="section-number-3">19.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-19-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Octaldehyde-count-evolution-tetD2.png" alt="Octaldehyde-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 56: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>Octaldehyde</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Octaldehyde-waveform-evolution-tetD2.png" alt="Octaldehyde-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 57: </span>Evolution of the templates of each unit during the 25 trials of <code>Octaldehyde</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/Octaldehyde-CP-and-ISI-dist-tetD2.png" alt="Octaldehyde-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 58: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for Octaldehyde.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org87f10f3" class="outline-3">
+<h3 id="org87f10f3"><span class="section-number-3">19.3</span> Save results</h3>
+<div class="outline-text-3" id="text-19-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgaa2a489">save(a_Octaldehyde_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1cc27b4">for (c_idx in 1:length(a_Octaldehyde_tetD2$spike_trains))
+    if (!is.null(a_Octaldehyde_tetD2$spike_trains[[c_idx]]))
+        cat(a_Octaldehyde_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_Octaldehyde_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org71972be" class="outline-2">
+<h2 id="org71972be"><span class="section-number-2">20</span> 25 trials with <code>1-Octanol (10^-5)</code></h2>
+<div class="outline-text-2" id="text-20">
+<p>
+We will carry out an analysis of the 25 trials from <code>1-Octanol (10^-5)</code>.  
+</p>
+</div>
+
+<div id="outline-container-org9db3fdf" class="outline-3">
+<h3 id="org9db3fdf"><span class="section-number-3">20.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-20-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org384ceef">stim_name = "1-Octanol (10^-5)"
+a_1_Octanol_5_tetD2=smt(stim_name=stim_name,
+                        centers=a_Octaldehyde_tetD2$centers,
+                        counts=a_Octaldehyde_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb01ed12" class="outline-3">
+<h3 id="orgb01ed12"><span class="section-number-3">20.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-20-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-5)-count-evolution-tetD2.png" alt="1-Octanol (10^-5)-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 59: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>1-Octanol (10^-5)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-5)-waveform-evolution-tetD2.png" alt="1-Octanol (10^-5)-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 60: </span>Evolution of the templates of each unit during the 25 trials of <code>1-Octanol (10^-5)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-5)-CP-and-ISI-dist-tetD2.png" alt="1-Octanol (10^-5)-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 61: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Octanol (10^-5).</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb86265e" class="outline-3">
+<h3 id="orgb86265e"><span class="section-number-3">20.3</span> Save results</h3>
+<div class="outline-text-3" id="text-20-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5ae51e8">save(a_1_Octanol_5_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0b9e0e3">for (c_idx in 1:length(a_1_Octanol_5_tetD2$spike_trains))
+    if (!is.null(a_1_Octanol_5_tetD2$spike_trains[[c_idx]]))
+        cat(a_1_Octanol_5_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_1-Octanol (10^-5)_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge69e647" class="outline-2">
+<h2 id="orge69e647"><span class="section-number-2">21</span> 25 trials with <code>1-Octanol (10^-4)</code></h2>
+<div class="outline-text-2" id="text-21">
+<p>
+We will carry out an analysis of the 25 trials from <code>1-Octanol (10^-4)</code>. 
+</p>
+</div>
+<div id="outline-container-orgab9a861" class="outline-3">
+<h3 id="orgab9a861"><span class="section-number-3">21.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-21-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org055fadb">stim_name = "1-Octanol (10^-4)"
+a_1_Octanol_4_tetD2=smt(stim_name=stim_name,
+                        centers=a_1_Octanol_5_tetD2$centers,
+                        counts=a_1_Octanol_5_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcbedba0" class="outline-3">
+<h3 id="orgcbedba0"><span class="section-number-3">21.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-21-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-4)-count-evolution-tetD2.png" alt="1-Octanol (10^-4)-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 62: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>1-Octanol (10^-4)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-4)-waveform-evolution-tetD2.png" alt="1-Octanol (10^-4)-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 63: </span>Evolution of the templates of each unit during the 25 trials of <code>1-Octanol (10^-4)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-4)-CP-and-ISI-dist-tetD2.png" alt="1-Octanol (10^-4)-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 64: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Octanol (10^-4).</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga8fa428" class="outline-3">
+<h3 id="orga8fa428"><span class="section-number-3">21.3</span> Save results</h3>
+<div class="outline-text-3" id="text-21-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7061ffe">save(a_1_Octanol_4_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org525b477">for (c_idx in 1:length(a_1_Octanol_4_tetD2$spike_trains))
+    if (!is.null(a_1_Octanol_4_tetD2$spike_trains[[c_idx]]))
+        cat(a_1_Octanol_4_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_1-Octanol (10^-4)_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge066f7d" class="outline-2">
+<h2 id="orge066f7d"><span class="section-number-2">22</span> 25 trials with <code>1-Octanol (10^-3)</code></h2>
+<div class="outline-text-2" id="text-22">
+<p>
+We will carry out an analysis of the 25 trials from <code>1-Octanol (10^-3)</code>. 
+</p>
+</div>
+<div id="outline-container-org4023932" class="outline-3">
+<h3 id="org4023932"><span class="section-number-3">22.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-22-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org9bbd706">stim_name = "1-Octanol (10^-3)"
+a_1_Octanol_3_tetD2=smt(stim_name=stim_name,
+                        centers=a_1_Octanol_4_tetD2$centers,
+                        counts=a_1_Octanol_4_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgda4a567" class="outline-3">
+<h3 id="orgda4a567"><span class="section-number-3">22.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-22-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-3)-count-evolution-tetD2.png" alt="1-Octanol (10^-3)-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 65: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>1-Octanol (10^-3)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-3)-waveform-evolution-tetD2.png" alt="1-Octanol (10^-3)-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 66: </span>Evolution of the templates of each unit during the 25 trials of <code>1-Octanol (10^-3)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-3)-CP-and-ISI-dist-tetD2.png" alt="1-Octanol (10^-3)-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 67: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Octanol (10^-3).</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0dff42e" class="outline-3">
+<h3 id="org0dff42e"><span class="section-number-3">22.3</span> Save results</h3>
+<div class="outline-text-3" id="text-22-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org34a1ea7">save(a_1_Octanol_3_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc4501ea">for (c_idx in 1:length(a_1_Octanol_3_tetD2$spike_trains))
+    if (!is.null(a_1_Octanol_3_tetD2$spike_trains[[c_idx]]))
+        cat(a_1_Octanol_3_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_1-Octanol (10^-3)_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3684b45" class="outline-2">
+<h2 id="org3684b45"><span class="section-number-2">23</span> 25 trials with <code>1-Octanol (10^-2)</code></h2>
+<div class="outline-text-2" id="text-23">
+<p>
+We will carry out an analysis of the 25 trials from <code>1-Octanol (10^-2)</code>.  
+</p>
+</div>
+
+<div id="outline-container-orge29a6d4" class="outline-3">
+<h3 id="orge29a6d4"><span class="section-number-3">23.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-23-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orge85c9dc">stim_name = "1-Octanol (10^-2)"
+a_1_Octanol_2_tetD2=smt(stim_name=stim_name,
+                        centers=a_1_Octanol_3_tetD2$centers,
+                        counts=a_1_Octanol_3_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org143c6e9" class="outline-3">
+<h3 id="org143c6e9"><span class="section-number-3">23.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-23-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-2)-count-evolution-tetD2.png" alt="1-Octanol (10^-2)-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 68: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>1-Octanol (10^-2)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-2)-waveform-evolution-tetD2.png" alt="1-Octanol (10^-2)-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 69: </span>Evolution of the templates of each unit during the 25 trials of <code>1-Octanol (10^-2)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-2)-CP-and-ISI-dist-tetD2.png" alt="1-Octanol (10^-2)-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 70: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Octanol (10^-2).</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf13458e" class="outline-3">
+<h3 id="orgf13458e"><span class="section-number-3">23.3</span> Save results</h3>
+<div class="outline-text-3" id="text-23-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5124808">save(a_1_Octanol_2_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3f52540">for (c_idx in 1:length(a_1_Octanol_2_tetD2$spike_trains))
+    if (!is.null(a_1_Octanol_2_tetD2$spike_trains[[c_idx]]))
+        cat(a_1_Octanol_2_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_1-Octanol (10^-2)_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc864e94" class="outline-2">
+<h2 id="orgc864e94"><span class="section-number-2">24</span> 25 trials with <code>1-Octanol (10^-1)</code></h2>
+<div class="outline-text-2" id="text-24">
+<p>
+We will carry out an analysis of the 25 trials from <code>1-Octanol (10^-1)</code>. 
+</p>
+</div>
+<div id="outline-container-org27d8442" class="outline-3">
+<h3 id="org27d8442"><span class="section-number-3">24.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-24-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org5ea6b9a">stim_name = "1-Octanol (10^-1)"
+a_1_Octanol_1_tetD2=smt(stim_name=stim_name,
+                        centers=a_1_Octanol_2_tetD2$centers,
+                        counts=a_1_Octanol_2_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org63d6d97" class="outline-3">
+<h3 id="org63d6d97"><span class="section-number-3">24.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-24-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-1)-count-evolution-tetD2.png" alt="1-Octanol (10^-1)-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 71: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>1-Octanol (10^-1)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-1)-waveform-evolution-tetD2.png" alt="1-Octanol (10^-1)-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 72: </span>Evolution of the templates of each unit during the 25 trials of <code>1-Octanol (10^-1)</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-1)-CP-and-ISI-dist-tetD2.png" alt="1-Octanol (10^-1)-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 73: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Octanol (10^-1).</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org664c9da" class="outline-3">
+<h3 id="org664c9da"><span class="section-number-3">24.3</span> Save results</h3>
+<div class="outline-text-3" id="text-24-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org29c8239">save(a_1_Octanol_1_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf1f87eb">for (c_idx in 1:length(a_1_Octanol_1_tetD2$spike_trains))
+    if (!is.null(a_1_Octanol_1_tetD2$spike_trains[[c_idx]]))
+        cat(a_1_Octanol_1_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_1-Octanol (10^-1)_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0c9437f" class="outline-2">
+<h2 id="org0c9437f"><span class="section-number-2">25</span> 25 trials with <code>1-Octanol (10^-0) second</code></h2>
+<div class="outline-text-2" id="text-25">
+<p>
+We will carry out an analysis of the 25 trials from <code>1-Octanol (10^-0) second</code>. 
+</p>
+</div>
+<div id="outline-container-org2cf13d7" class="outline-3">
+<h3 id="org2cf13d7"><span class="section-number-3">25.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-25-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org7582cf1">stim_name = "1-Octanol (10^-0) second"
+a_1_Octanol_0b_tetD2=smt(stim_name=stim_name,
+                         centers=a_1_Octanol_1_tetD2$centers,
+                         counts=a_1_Octanol_1_tetD2$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org793ca23" class="outline-3">
+<h3 id="org793ca23"><span class="section-number-3">25.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-25-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-0) second-count-evolution-tetD2.png" alt="1-Octanol (10^-0) second-count-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 74: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 25 trials of <code>1-Octanol (10^-0) second</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-0) second-waveform-evolution-tetD2.png" alt="1-Octanol (10^-0) second-waveform-evolution-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 75: </span>Evolution of the templates of each unit during the 25 trials of <code>1-Octanol (10^-0) second</code> for tetrodeD2.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000421_tetD2_fig/1-Octanol (10^-0) second-CP-and-ISI-dist-tetD2.png" alt="1-Octanol (10^-0) second-CP-and-ISI-dist-tetD2.png" />
+</p>
+<p><span class="figure-number">Figure 76: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for 1-Octanol (10^-0) second.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org88d1c9f" class="outline-3">
+<h3 id="org88d1c9f"><span class="section-number-3">25.3</span> Save results</h3>
+<div class="outline-text-3" id="text-25-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>smt</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0ae6dc2">save(a_1_Octanol_0b_tetD2,
+     file=paste0("tetD2_analysis/tetD2_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc5de402">for (c_idx in 1:length(a_1_Octanol_0b_tetD2$spike_trains))
+    if (!is.null(a_1_Octanol_0b_tetD2$spike_trains[[c_idx]]))
+        cat(a_1_Octanol_0b_tetD2$spike_trains[[c_idx]],file=paste0("locust20000421_spike_trains/locust20000421_1-Octanol (10^-0) second_tetD2_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Christophe Pouzat</p>
+<p class="date">Created: 2016-12-10 sam. 14:57</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
