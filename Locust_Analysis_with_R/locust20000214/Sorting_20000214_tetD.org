@@ -1,0 +1,4158 @@
+# -*- ispell-local-dictionary: "american" -*-
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:nil arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: Sorting data set 20000214 tetrode D (channels 10, 11, 13, 14)
+#+AUTHOR: Christophe Pouzat
+#+EMAIL: christophe.pouzat@parisdescartes.fr
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 25.1.1 (Org mode 9.0)
+#+LaTeX_CLASS: koma-article
+#+LaTeX_CLASS_OPTIONS: [koma,11pt]
+#+LaTeX_HEADER: \usepackage{cmbright}
+#+LaTeX_HEADER: \usepackage[round]{natbib}
+#+LaTeX_HEADER: \usepackage{alltt}
+#+LaTeX_HEADER: \usepackage[usenames,dvipsnames]{xcolor}
+#+LaTeX_HEADER: \renewenvironment{verbatim}{\begin{alltt} \scriptsize \color{Bittersweet} \vspace{0.2cm} }{\vspace{0.2cm} \end{alltt} \normalsize \color{black}}
+#+LaTeX_HEADER: \usepackage{listings}
+#+LaTeX_HEADER: \lstloadlanguages{C,Gnuplot,bash,sh,R}
+#+LaTeX_HEADER: \hypersetup{colorlinks=true,pagebackref=true}
+#+PROPERTY: header-args:R :session *R*
+#+PROPERTY: header-args:R :eval never-export
+#+PROPERTY: header-args:R :output-dir locust20000214_tetD_fig
+#+LINK_HOME: ../../index.html
+#+LINK_UP: ../../index.html
+  
+#+NAME: org-latex-set-up
+#+BEGIN_SRC emacs-lisp :exports none :results silent 
+(setq smartparens-mode nil)
+(require 'ox-latex)
+(setq org-export-latex-listings t)
+(setq org-latex-listings 'listings)
+(setq org-latex-listings-options
+        '(("frame" "lines")
+          ("basicstyle" "\\footnotesize")
+          ("numbers" "left")
+          ("numberstyle" "\\tiny")))
+(add-to-list 'org-latex-classes
+          '("koma-article"
+             "\\documentclass{scrartcl}"
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+             ("\\paragraph{%s}" . "\\paragraph*{%s}")
+             ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+(setq org-latex-pdf-process
+      '("pdflatex -interaction nonstopmode -output-directory %o %f"
+	"bibtex %b" 
+	"pdflatex -interaction nonstopmode -output-directory %o %f" 
+	"pdflatex -interaction nonstopmode -output-directory %o %f"))
+#+END_SRC
+
+* Introduction
+
+This is the description of how to do the (spike) sorting of tetrode D (channels 10, 11, 13, 14) from data set =locust20000214=.
+
+** Getting the data
+
+The data are in file =locust20000214.hdf5= located on [[https://zenodo.org/record/21589][zenodo]] and can be downloaded interactivelly with a web browser or by typing at the command line:
+
+#+NAME: wget-locust20000214
+#+BEGIN_SRC sh :eval never
+wget https://zenodo.org/record/21589/files/locust20000214.hdf5
+#+END_SRC
+
+In the sequel I will assume that =R= has been started in the directory where the data were downloaded (in other words, the working direcory should be the one containing the data.
+
+The data are in [[https://support.hdfgroup.org/HDF5/][HDF5]] format and the easiest way to get them into =R= is to install the =rhdf5= package from [[http://www.bioconductor.org/packages/release/bioc/html/rhdf5.html][Bioconductor]]. Once the installation is done, the library is loaded into =R= with:
+
+#+NAME: load-rhdf5
+#+BEGIN_SRC R :session *R*
+library(rhdf5)
+#+END_SRC
+
+#+RESULTS: load-rhdf5
+| rhdf5     |
+| stats     |
+| graphics  |
+| grDevices |
+| utils     |
+| datasets  |
+| methods   |
+| base      |
+
+We can then get a (long and detailed) listing of our data file content with (result not shown):
+
+#+NAME: locust20000214.hdf5-h5ls
+#+BEGIN_SRC R :eval never
+h5ls("locust20000214.hdf5")
+#+END_SRC
+
+We can get the content of =LabBook= =metadata= /from the shell/ with:
+
+#+NAME: locust20000214_part1.hdf5-h5dump
+#+BEGIN_SRC shell :results output :exports both :eval never
+h5dump -a "LabBook" locust20000214.hdf5
+#+END_SRC
+
+** Getting the code
+
+The code can be sourced as follows:
+
+#+NAME: get-code-4-sorting
+#+BEGIN_SRC R :session *R* :results silent
+source("https://raw.githubusercontent.com/christophe-pouzat/zenodo-locust-datasets-analysis/master/R_Sorting_Code/sorting_with_r.R")
+#+END_SRC
+
+* Tetrode D (channels 10, 11, 13, 14) analysis
+
+We now want to get our "model", that is a dictionnary of waveforms (one waveform per neuron and per recording site). To that end we are going to use the first 60 s of data contained in the =Spontaneous= =Group= (in =HDF5= jargon). 
+
+** Loading the data
+
+So we start by loading the data from channels 10, 11, 13, 14 into =R=, using the first available trial (50) from the trials with =Citral=:
+
+#+NAME: load-tetD-Citral-50-into-lD
+#+BEGIN_SRC R :exports both :session *R*
+lD = get_data(50,"Citral",
+              channels = c("ch10","ch11","ch13","ch14"),
+              file="locust20000214.hdf5")
+dim(lD)
+#+END_SRC
+
+#+RESULTS: load-tetD-Citral-50-into-lD
+| 250000 |
+|      4 |
+
+
+** Five number summary
+
+We get the [[https://en.wikipedia.org/wiki/Five-number_summary][Five number summary]] with:
+
+#+NAME: lD-FNS-tetD
+#+BEGIN_SRC R :exports both :session *R*
+summary(lD,digits=2)
+#+END_SRC
+
+#+RESULTS: lD-FNS-tetD
+| Min.   :1725 | Min.   :1713 | Min.   :1470 | Min.   :1703 |
+| 1st Qu.:2014 | 1st Qu.:2015 | 1st Qu.:2019 | 1st Qu.:2007 |
+| Median :2047 | Median :2049 | Median :2052 | Median :2035 |
+| Mean   :2047 | Mean   :2048 | Mean   :2051 | Mean   :2036 |
+| 3rd Qu.:2081 | 3rd Qu.:2083 | 3rd Qu.:2083 | 3rd Qu.:2065 |
+| Max.   :2323 | Max.   :2311 | Max.   :2438 | Max.   :2493 |
+
+
+It shows that the channels have very similar properties as far as the median and the inter-quartile range (IQR) are concerned. The minimum is much smaller on the third channel. This suggests that the largest spikes are going to be found here (remember that spikes are going mainly downwards).
+
+** Plot the data
+
+We "convert" the data matrix =lD= into a =time series= object with:
+
+#+NAME: lD-to-ts-tetD
+#+BEGIN_SRC R :session *R* :results silent
+lD = ts(lD,start=0,freq=15e3)
+#+END_SRC
+
+We can then plot the whole data with (not shown since it makes a very figure):
+
+#+NAME: plot-lD-tetD
+#+BEGIN_SRC R :eval never
+plot(lD)
+#+END_SRC
+
+** Data normalization
+
+As always we normalize such that the [[https://en.wikipedia.org/wiki/Median_absolute_deviation][median absolute deviation]] (MAD) becomes 1:
+
+#+NAME: lD-normalization-tetD
+#+BEGIN_SRC R :session *R* :results silent
+lD.mad = apply(lD,2,mad)
+lD = t((t(lD)-apply(lD,2,median))/lD.mad)
+lD = ts(lD,start=0,freq=15e3)
+#+END_SRC
+
+Once this is done we explore interactively the data with:
+
+#+NAME: lD-explore-tetD
+#+BEGIN_SRC R :eval never
+explore(lD,col=c("black","grey70"))
+#+END_SRC
+
+There are several neurons but not many. The large one of channel 3 is seen on every channel. The signal to noise ratio is not bad. The polarity on the fourth channel seems to be the opposite of the one of the other three. I should be easier to work with the opposite of channel 4 then:
+
+#+NAME: minus-channel-4
+#+BEGIN_SRC R :session *R* :results silent
+lD[,4]= -lD[,4]
+#+END_SRC 
+
+** Spike detection
+
+Since the spikes are mainly going downwards, we will detect valleys instead of peaks:
+
+#+NAME: lD-detect-spikes-tetD
+#+BEGIN_SRC R :exports both :session *R* :results output
+lDf = -lD
+filter_length = 3
+threshold_factor = 4
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf.mad = apply(lDf,2,mad)
+lDf_mad_original = lDf.mad
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) < thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp0 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp0
+#+END_SRC
+
+#+RESULTS: lD-detect-spikes-tetD
+: 
+: eventsPos object with indexes of 205 events. 
+:   Mean inter event interval: 1185.99 sampling points, corresponding SD: 1283.15 sampling points 
+:   Smallest and largest inter event intervals: 44 and 8530 sampling points.
+
+
+
+Every time a filter length / threshold combination is tried, the detection is checked interactively with:
+
+#+NAME: lD-sp0-check-tetD
+#+BEGIN_SRC R :eval never
+explore(sp0,lD,col=c("black","grey50"))
+#+END_SRC
+
+** Cuts
+
+We proceed as usual to get the cut length right:
+
+#+NAME: cut-length-plot-tetD
+#+HEADER: :width 800 :height 800 :file tetD_cut_length.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+evts = mkEvents(sp0,lD,49,50)
+evts.med = median(evts)
+evts.mad = apply(evts,1,mad)
+plot_range = range(c(evts.med,evts.mad))
+plot(evts.med,type="n",ylab="Amplitude",
+     ylim=plot_range)
+abline(v=seq(0,400,10),col="grey")
+abline(h=c(0,1),col="grey")
+lines(evts.med,lwd=2)
+lines(evts.mad,col=2,lwd=2)
+#+END_SRC
+
+#+CAPTION: Setting the cut length for the data from tetrode D (channels 10, 11, 13, 14). We see that we need 20 points before the peak and 30 after.
+#+RESULTS: cut-length-plot-tetD
+[[file:locust20000214_tetD_fig/tetD_cut_length.png]]
+
+We see that we need roughly 20 points before the peak and 30 after.
+
+** Events
+
+We now cut our events:
+
+#+NAME: lD-events-tetD
+#+BEGIN_SRC R :exports both :results output :session *R*
+evts = mkEvents(sp0,lD,19,30)
+summary(evts)
+#+END_SRC
+
+#+RESULTS: lD-events-tetD
+: 
+: events object deriving from data set: lD.
+:  Events defined as cuts of 50 sampling points on each of the 4 recording sites.
+:  The 'reference' time of each event is located at point 20 of the cut.
+:  There are 205 events in the object.
+
+
+We can as usual visualize the events with:
+
+#+NAME: evts-tetD
+#+HEADER: :width 800 :height 800 :file evts_tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+evts
+#+END_SRC
+
+#+CAPTION: Events for the data from tetrode D (channels 1, 3, 5, 7).
+#+RESULTS: evts-tetD
+[[file:locust20000214_tetD_fig/evts_tetD.png]]
+
+There are very few superposition so we don't try to remove them.
+
+** Dimension reduction
+
+We do a =PCA= on our good events set:
+
+#+NAME: lD-evts-pca-tetD
+#+BEGIN_SRC R :session *R*
+evts.pc = prcomp(t(evts))
+#+END_SRC
+
+#+RESULTS: lD-evts-pca-tetD
+
+We look at the projections on the first 4 principle components:
+
+#+NAME: lD-evts-proj-first-4-pc-tetD
+#+HEADER: :width 800 :height 800 :file evts-proj-first-4-pc-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+panel.dens = function(x,...) {
+  usr = par("usr")
+  on.exit(par(usr))
+  par(usr = c(usr[1:2], 0, 1.5) )
+  d = density(x, adjust=0.5)
+  x = d$x
+  y = d$y
+  y = y/max(y)
+  lines(x, y, col="grey50", ...)
+}
+pairs(evts.pc$x[,1:4],pch=".",gap=0,diag.panel=panel.dens)
+#+END_SRC
+
+#+CAPTION: Events from tetrode D (channels 10, 11, 13, 14) projected onto the first 4 PCs.
+#+RESULTS: lD-evts-proj-first-4-pc-tetD
+[[file:locust20000214_tetD_fig/evts-proj-first-4-pc-tetD.png]]
+
+I see at 2/3 clusters. We can also look at the projections on the PC pairs defined by the next 4 PCs:
+
+#+NAME: lD-evts-proj-next-4-pc-tetD
+#+HEADER: :width 800 :height 800 :file evts-proj-next-4-pc-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+pairs(evts.pc$x[,5:8],pch=".",gap=0,diag.panel=panel.dens)
+#+END_SRC
+
+#+CAPTION: Events from tetrode D (channels 10, 11, 13, 14) projected onto PC 5 to 8.
+#+RESULTS: lD-evts-proj-next-4-pc-tetD
+[[file:locust20000214_tetD_fig/evts-proj-next-4-pc-tetD.png]]
+
+There is not much structure left beyond the 4th PC.
+
+** Exporting for =GGobi=
+
+We export the events projected onto the first 8 principle components in =csv= format:
+
+#+NAME: evts-proj-to-csv-tetD
+#+BEGIN_SRC R :session *R*
+write.csv(evts.pc$x[,1:8],file="tetD_evts.csv")
+#+END_SRC
+
+#+RESULTS: evts-proj-to-csv-tetD
+
+Using the =rotation= display of =GGobi= with the first 3 principle components and the =2D tour= with the first 4 components I see at least 4 clusters but there are probably 5 or 6. So we will start with a =kmeans= with 5 centers.
+
+** kmeans clustering with 3
+
+#+NAME: kmeans-3-tetD
+#+BEGIN_SRC R :session *R* :results silent
+nbc=3
+set.seed(20110928,kind="Mersenne-Twister")
+km = kmeans(evts.pc$x[,1:5],centers=nbc,iter.max=100,nstart=100)
+label = km$cluster
+cluster.med = sapply(1:nbc, function(cIdx) median(evts[,label==cIdx]))
+sizeC = sapply(1:nbc,function(cIdx) sum(abs(cluster.med[,cIdx])))
+newOrder = sort.int(sizeC,decreasing=TRUE,index.return=TRUE)$ix
+cluster.mad = sapply(1:nbc, function(cIdx) {ce = t(evts);ce = ce[label==cIdx,];apply(ce,2,mad)})
+cluster.med = cluster.med[,newOrder]
+cluster.mad = cluster.mad[,newOrder]
+labelb = sapply(1:nbc, function(idx) (1:nbc)[newOrder==idx])[label]
+#+END_SRC
+
+ 
+We write a new =csv= file with the data and the labels:
+
+#+NAME: evts-proj-and-labels-to-csv-tetD
+#+BEGIN_SRC R :session *R* :results silent
+write.csv(cbind(evts.pc$x[,1:5],labelb),file="tetD_sorted.csv")
+#+END_SRC
+
+It gives what was expected.
+
+We get a plot showing the events attributed to each unit with:
+
+#+NAME: kmeans-3-evts-from-each-tetD
+#+HEADER: :width 800 :height 1600 :file kmeans-3-evts-from-each-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,1,1,1))
+for (i in (1:nbc)) plot(evts[,labelb==i],y.bar=5)
+#+END_SRC
+
+#+CAPTION: The events of the six clusters of tetrode D 
+#+RESULTS: kmeans-3-evts-from-each-tetD
+[[file:locust20000214_tetD_fig/kmeans-3-evts-from-each-tetD.png]]
+
+There is nothing interesting in cluster 3 so we can forget about it and us it as a "trash" cluster.
+
+** Long cuts creation
+
+For the peeling process we need templates that start and end at 0 (we will otherwise generate artifacts when we subtract). We proceed "as usual" with (I tried first with the default value for parameters =before= and =after= but I reduced their values after looking at the centers, see the next figure):
+
+#+NAME: centers-tetD
+#+BEGIN_SRC R :session *R*
+c_before = 49
+c_after = 80
+centers = lapply(1:nbc, function(i)
+    mk_center_list(sp0[labelb==i],lD,
+                   before=c_before,after=c_after))
+names(centers) = paste("Cluster",1:nbc)
+#+END_SRC
+
+#+RESULTS: centers-tetD
+| Cluster 1 |
+| Cluster 2 |
+| Cluster 3 |
+
+
+We then make sure that our cuts are long enough by looking at them:
+
+#+NAME: centers-3u-tetD-fig
+#+HEADER: :width 800 :height 1000 :file centers-3u-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,4,1,1))
+the_range=c(min(sapply(centers,function(l) min(l$center))),
+            max(sapply(centers,function(l) max(l$center))))
+for (i in 1:nbc) {
+    template = centers[[i]]$center
+    plot(template,lwd=2,col=2,
+         ylim=the_range,type="l",ylab="")
+    abline(h=0,col="grey50")
+    abline(v=(1:2)*(c_before+c_after)+1,col="grey50")
+    lines(filter(template,rep(1,filter_length)/filter_length),
+          col=1,lty=3,lwd=2)
+    abline(h=-threshold_factor,col="grey",lty=2,lwd=2)
+    lines(centers[[i]]$centerD,lwd=2,col=4)
+}
+#+END_SRC
+
+#+CAPTION: The three templates (red) together with their first derivative (blue) all with the same scale. The dashed black curve show the templates filtered with the filter used during spike detection and the horizontal dashed grey line shows the detection threshold.
+#+RESULTS: centers-3u-tetD-fig
+[[file:locust20000214_tetD_fig/centers-3u-tetD.png]]
+
+Only unit 1 and 2 should reliably pass our threshold while the third two should be multi-unit...
+
+** Peeling
+
+We can now do the peeling.
+
+*** Round 0
+
+We classify, predict, subtract and check how many non-classified events we get:
+
+#+NAME: peeling-0-3u-tetD
+#+BEGIN_SRC R :exports both :session *R*
+round0 = lapply(as.vector(sp0),classify_and_align_evt,
+                data=lD,centers=centers,
+                before=c_before,after=c_after)
+pred0 = predict_data(round0,centers,data_length = dim(lD)[1])
+lD_1 = lD - pred0
+sum(sapply(round0, function(l) l[[1]] == '?'))
+#+END_SRC
+
+#+RESULTS: peeling-0-3u-tetD
+: 2
+
+We can see the difference before / after peeling for the data between 1.8 and 1.9 s:
+
+#+NAME: peeling-0-3u-tetD-fig
+#+HEADER: :width 800 :height 1000 :file peeling-0-3u-tetD.png
+#+BEGIN_SRC R :results output graphics :exports both :session *R*
+ii = 1:1500 + 1.8*15000
+tt = ii/15000
+par(mar=c(1,1,1,1))
+plot(tt, lD[ii,1], axes = FALSE,
+     type="l",ylim=c(-50,10),
+     xlab="",ylab="")
+lines(tt, lD_1[ii,1], col='red')
+lines(tt, lD[ii,2]-15, col='black')
+lines(tt, lD_1[ii,2]-15, col='red')
+lines(tt, lD[ii,3]-25, col='black')
+lines(tt, lD_1[ii,3]-25, col='red')
+lines(tt, lD[ii,4]-40, col='black')
+lines(tt, lD_1[ii,4]-40, col='red')
+#+END_SRC
+
+#+CAPTION: The first peeling illustrated on 100 ms of data, the raw data are in black and the first subtration in red.
+#+RESULTS: peeling-0-3u-tetD-fig
+[[file:locust20000214_tetD_fig/peeling-0-3u-tetD.png]]
+
+*** Round 1
+
+We keep going, using the subtracted data =lD_1= as "raw data", detecting on all sites using the original =MAD= for normalization:
+
+#+NAME: peeling-1-3u-spike-detection-tetD
+#+BEGIN_SRC R :exports both :results output :session *R*
+lDf = -lD_1
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) < thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp1 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp1
+#+END_SRC
+
+#+RESULTS: peeling-1-3u-spike-detection-tetD
+: 
+: eventsPos object with indexes of 11 events. 
+:   Mean inter event interval: 22387.8 sampling points, corresponding SD: 21605.53 sampling points 
+:   Smallest and largest inter event intervals: 30 and 68411 sampling points.
+
+
+We classify, predict, subtract and check how many non-classified events we get:
+
+#+NAME: peeling-1-3u-tetD
+#+BEGIN_SRC R :exports both :session *R*
+round1 = lapply(as.vector(sp1),classify_and_align_evt,
+                data=lD_1,centers=centers,
+                before=c_before,after=c_after)
+pred1 = predict_data(round1,centers,data_length = dim(lD)[1])
+lD_2 = lD_1 - pred1
+sum(sapply(round1, function(l) l[[1]] == '?'))
+#+END_SRC
+
+#+RESULTS: peeling-1-3u-tetD
+: 3
+
+We look at what's left with (not shown):
+
+#+NAME: check-after-round1
+#+BEGIN_SRC R :eval never
+explore(sp1,lD_2,col=c("black","grey50"))
+#+END_SRC
+
+We decide to stop here.
+
+** Getting the spike trains
+
+#+NAME: spike-trains-3u-tetD
+#+BEGIN_SRC R :session *R*
+round_all = c(round0,round1)
+spike_trains = lapply(paste("Cluster",1:nbc),
+                      function(cn) sort(sapply(round_all[sapply(round_all,
+                                                           function(l) l[[1]]==cn)],
+                                          function(l) l[[2]]+l[[3]])))
+names(spike_trains) = paste("Cluster",1:nbc)
+#+END_SRC
+
+#+RESULTS: spike-trains-3u-tetD
+| Cluster 1 |
+| Cluster 2 |
+| Cluster 3 |
+
+** Getting the inter spike intervals and the forward and backward recurrence times
+
+*** ISI distributions
+We first get the =ISI= (inter spike intervals) of each unit:
+
+#+NAME: isi_from_each
+#+BEGIN_SRC R :session *R* :results silent
+isi = sapply(spike_trains, diff)
+names(isi) = names(spike_trains)
+#+END_SRC
+
+We get the ISI ECDF for the five units with:
+
+#+NAME: isi-ecdf-3u-tetD
+#+HEADER: :width 800 :height 800 :file isi-ecdf-3u-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout(matrix(1:(nbc+nbc %% 2),nr=ceiling(nbc/2)))
+par(mar=c(4,5,6,1))
+for (cn in names(isi)) plot_isi(isi[[cn]],main=cn)
+#+END_SRC
+
+#+CAPTION: ISI ECDF for the three units.
+#+RESULTS: isi-ecdf-3u-tetD
+[[file:locust20000214_tetD_fig/isi-ecdf-3u-tetD.png]]
+
+*** Forward and Backward Recurrence Times
+The forward recurrence time (=FRT=) between neuron A and B is the elapsed time between a spike in A and the next spike in B. The backward recurrence time (=BRT=) is the same thing except that we look for the former spike in B. If A and B are not correlated, the expected density of the FRT is the survival function (1-CDF) of the ISI from B divided by the mean ISI of B (the same holds for the BRT under the null hypothesis after taking the opposite). All that is correct if the data are /stationary/.
+  
+On the data at hand that gives:
+
+#+NAME: rt-test-3u-tetD
+#+HEADER: :width 1000 :height 1000 :file rt-test-3u-tetD.png
+#+BEGIN_SRC R :session *R* :results output graphics :exports both
+layout_matrix = matrix(0,nr=nbc,nc=nbc)
+counter = 1
+for (i in 1:nbc)
+    for (j in 1:nbc)
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:nbc)
+    for (j in 1:nbc)
+        if (i != j)
+            test_rt(spike_trains[[i]],
+                    spike_trains[[j]],
+                    ylab="",main=paste("Units",i,"and",j))
+#+END_SRC
+
+#+CAPTION: Graphical tests of the Backward and Forward Reccurrence Times distrution agaisnt the null hypothesis (no interaction). If the null is correct, the curves should be IID draws from a standard normal distribution.
+#+RESULTS: rt-test-3u-tetD
+[[file:locust20000214_tetD_fig/rt-test-3u-tetD.png]]
+
+** Testing =all_at_once=
+
+We test the function with:
+
+#+NAME: all_at_once-test
+#+BEGIN_SRC R :results output :exports both :session *R*
+## We need again an un-normalized version of the data
+ref_data = get_data(50,"Citral",
+              channels = c("ch10","ch11","ch13","ch14"),
+              file="locust20000214.hdf5")
+ref_data[,4] = -ref_data[,4]
+## We can now use our function
+aao=all_at_once(data=ref_data, centers, thres=threshold_factor*c(1,1,1,1), 
+                filter_length_1=filter_length, filter_length=filter_length, 
+                minimalDist_1=15, minimalDist=15, 
+                before=c_before, after=c_after, 
+                detection_cycle=c(0,0), verbose=2)
+#+END_SRC
+
+#+RESULTS: all_at_once-test
+#+begin_example
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1725   Min.   :1713   Min.   :1470   Min.   :-2493  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2323   Max.   :2311   Max.   :2438   Max.   :-1703  
+
+Doing now round 0 detecting on all sites
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      205        57        83        63         2 
+
+Doing now round 1 detecting on all sites
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+       11         3         1         4         3 
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      215        60        84        67         4
+#+end_example
+
+
+We see that we are getting back the numbers we obtained before step by step.
+
+We can compare the "old" and "new" centers with (not shown):
+
+#+NAME: all_at_once-center-comp-sterCa
+#+BEGIN_SRC R :eval never 
+layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,4,1,1))
+for (i in 1:nbc) {
+    plot(centers[[i]]$center,lwd=2,col=2,
+         ylim=the_range,type="l")
+    abline(h=0,col="grey50")
+    abline(v=(c_before+c_after)+1,col="grey50")
+    lines(aao$centers[[i]]$center,lwd=1,col=4)
+}
+#+END_SRC
+
+They are not exactly identical since the new version is computed with all events (superposed or not) attributed to each neuron.
+
+* Analyzing a sequence of trials
+
+** Create a directory were results get saved
+
+We will carry out an analysis of sequences of 30/25 trials with a given odor. At the end of the analysis of the sequence we will save some intermediate =R= object in a directory we are now creating.:
+
+#+NAME: create-tetD_analysis
+#+BEGIN_SRC R :session *R* :results silent
+if (!dir.exists("tetD_analysis"))
+    dir.create("tetD_analysis")
+#+END_SRC
+
+** Define a "taylored" version of =sort_many_trials=
+
+In order to save space and to avoid typos, we define next a taylored version of =sort_many_trials=:
+
+#+NAME: smt
+#+BEGIN_SRC R :session *R* :results silent
+smt = function(stim_name,
+               trial_nbs,
+               centers,
+               counts) {
+    sort_many_trials(inter_trial_time=10*15000,
+                     get_data_fct=function(i,s) {
+                         res=get_data(i,s,
+                                      channels = c("ch10","ch11","ch13","ch14"),
+                                      file="locust20000214.hdf5")
+                         res[,4] = -res[,4]
+                         res
+                     },
+                     stim_name=stim_name,
+                     trial_nbs=trial_nbs,
+                     centers=centers,
+                     counts=counts,
+                     all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                filter_length_1=filter_length, filter_length=filter_length, 
+                                                minimalDist_1=15, minimalDist=15, 
+                                                before=c_before, after=c_after, 
+                                                detection_cycle=c(0,0), verbose=1),
+                     layout_matrix=matrix(1:4,nr=2),new_weight_in_update=0.01
+                     )
+}
+#+END_SRC
+
+
+* Systematic analysis of the 21 trials from =Citral=
+
+
+** Doing the job
+
+#+NAME: Citral-tetD
+#+BEGIN_SRC R :exports both :results output :session *R*
+a_Citral_tetD=smt(stim_name="Citral",
+                  trial_nbs=50:70,
+                  centers=aao$centers,
+                  counts=aao$counts)
+#+END_SRC
+
+#+RESULTS: Citral-tetD
+#+begin_example
+***************
+Doing now trial 50 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1725   Min.   :1713   Min.   :1470   Min.   :-2493  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2323   Max.   :2311   Max.   :2438   Max.   :-1703  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      216        58        84        69         5 
+Trial 50 done!
+******************
+***************
+Doing now trial 51 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1686   Min.   :1660   Min.   :1443   Min.   :-2516  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2322   Max.   :2305   Max.   :2474   Max.   :-1700  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      238        75        95        61         7 
+Trial 51 done!
+******************
+***************
+Doing now trial 52 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1707   Min.   :1595   Min.   :1466   Min.   :-2506  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2291   Max.   :2302   Max.   :2440   Max.   :-1748  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      221        37       126        51         7 
+Trial 52 done!
+******************
+***************
+Doing now trial 53 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1695   Min.   :1689   Min.   :1455   Min.   :-2510  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2283   Max.   :2306   Max.   :2441   Max.   :-1758  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      161        36        65        51         9 
+Trial 53 done!
+******************
+***************
+Doing now trial 54 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1682   Min.   :1699   Min.   :1451   Min.   :-2513  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2322   Max.   :2348   Max.   :2538   Max.   :-1732  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      171        45        77        38        11 
+Trial 54 done!
+******************
+***************
+Doing now trial 55 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1674   Min.   :1640   Min.   :1359   Min.   :-2519  
+ 1st Qu.:2014   1st Qu.:2014   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2290   Max.   :2360   Max.   :2421   Max.   :-1720  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      215        36       116        59         4 
+Trial 55 done!
+******************
+***************
+Doing now trial 56 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1701   Min.   :1683   Min.   :1434   Min.   :-2490  
+ 1st Qu.:2014   1st Qu.:2014   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2296   Max.   :2302   Max.   :2426   Max.   :-1714  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      224        56       103        57         8 
+Trial 56 done!
+******************
+***************
+Doing now trial 57 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1625   Min.   :1386   Min.   :1455   Min.   :-2586  
+ 1st Qu.:2013   1st Qu.:2014   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2006  
+ Max.   :3182   Max.   :2945   Max.   :2614   Max.   : -833  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      212        55        53        70        34 
+Trial 57 done!
+******************
+***************
+Doing now trial 58 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1637   Min.   :1673   Min.   :1399   Min.   :-2543  
+ 1st Qu.:2012   1st Qu.:2014   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2464   Max.   :2309   Max.   :2449   Max.   :-1722  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      220        47        87        70        16 
+Trial 58 done!
+******************
+***************
+Doing now trial 59 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1729   Min.   :1691   Min.   :1470   Min.   :-2492  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2361   Max.   :2293   Max.   :2432   Max.   :-1732  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      195        19       110        57         9 
+Trial 59 done!
+******************
+***************
+Doing now trial 60 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1701   Min.   :1677   Min.   :1489   Min.   :-2504  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2294   Max.   :2361   Max.   :2454   Max.   :-1710  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      216        62        94        51         9 
+Trial 60 done!
+******************
+***************
+Doing now trial 61 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1669   Min.   :1653   Min.   :1411   Min.   :-2509  
+ 1st Qu.:2014   1st Qu.:2014   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2304   Max.   :2324   Max.   :2464   Max.   :-1721  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      295        76       158        54         7 
+Trial 61 done!
+******************
+***************
+Doing now trial 62 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1682   Min.   :1660   Min.   :1353   Min.   :-2513  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2302   Max.   :2298   Max.   :2424   Max.   :-1748  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      176        28        79        64         5 
+Trial 62 done!
+******************
+***************
+Doing now trial 63 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1699   Min.   :1686   Min.   :1468   Min.   :-2485  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2007  
+ Max.   :2328   Max.   :2313   Max.   :2468   Max.   :-1728  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      167        32        84        46         5 
+Trial 63 done!
+******************
+***************
+Doing now trial 64 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1685   Min.   :1460   Min.   :-2495  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2329   Max.   :2304   Max.   :2437   Max.   :-1742  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      226        52       113        53         8 
+Trial 64 done!
+******************
+***************
+Doing now trial 65 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1691   Min.   :1703   Min.   :1421   Min.   :-2516  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2302   Max.   :2304   Max.   :2494   Max.   :-1713  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      243        60       121        51        11 
+Trial 65 done!
+******************
+***************
+Doing now trial 66 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1689   Min.   :1643   Min.   :1363   Min.   :-2556  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2006  
+ Max.   :2299   Max.   :2306   Max.   :2464   Max.   :-1721  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      227        58        96        63        10 
+Trial 66 done!
+******************
+***************
+Doing now trial 67 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1672   Min.   :1685   Min.   :1426   Min.   :-2520  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2320   Max.   :2279   Max.   :2461   Max.   :-1729  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      205        57        91        55         2 
+Trial 67 done!
+******************
+***************
+Doing now trial 68 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1688   Min.   :1683   Min.   :1470   Min.   :-2493  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2307   Max.   :2314   Max.   :2424   Max.   :-1745  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      185        72        63        40        10 
+Trial 68 done!
+******************
+***************
+Doing now trial 69 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1615   Min.   :1657   Min.   :1295   Min.   :-2567  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2386   Max.   :2328   Max.   :2435   Max.   :-1740  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      198        52        80        59         7 
+Trial 69 done!
+******************
+***************
+Doing now trial 70 of Citral
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1637   Min.   :1662   Min.   :1391   Min.   :-2508  
+ 1st Qu.:2014   1st Qu.:2014   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2291   Max.   :2324   Max.   :2481   Max.   :-1710  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      241        48       131        55         7 
+Trial 70 done!
+******************
+#+end_example
+
+
+
+** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Citral-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Citral-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Citral_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 3) or unclassified ("?") during the 21 trials of =Citral= for tetrode D.
+#+RESULTS: Citral-count-evolution-tetD
+[[file:locust20000214_tetD_fig/Citral-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Citral-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1000 :file Citral-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Citral_tetD,threshold_factor)
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each unit during the 21 trials with =Citral= for tetrode D.
+#+RESULTS: Citral-waveform-evolution-tetD
+[[file:locust20000214_tetD_fig/Citral-waveform-evolution-tetD.png]]
+
+The observed counting processes, inter spike intervals densities and raster plots are (we have to do a little of processing since we start at trial 50 and not 1):
+
+#+NAME: Citral-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1000 :file Citral-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+for (i in 1:nbc) a_Citral_tetD$spike_trains[[i]] = a_Citral_tetD$spike_trains[[i]]-49*10*15000 
+cp_isi_raster(a_Citral_tetD)
+#+END_SRC
+
+#+CAPTION: Observed counting processes, empirical inter spike interval distributions and raster plots for Citral.
+#+RESULTS: Citral-CP-and-ISI-dist-tetD
+[[file:locust20000214_tetD_fig/Citral-CP-and-ISI-dist-tetD.png]]
+
+** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Citral
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Citral_tetD,
+     file=paste0("tetD_analysis/tetD_","Citral","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Citral_tetD$spike_trains))
+    cat(a_Citral_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20000214_spike_trains/locust20000214_Citral_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+* 120 trials with =Cherry=
+
+** Do the job
+
+#+NAME: Cherry-tetD
+#+BEGIN_SRC R :exports both :results output :session *R*
+a_Cherry_tetD=smt(stim_name="Cherry",
+                    trial_nbs=1:120,
+                    centers=a_Citral_tetD$centers,
+                    counts=a_Citral_tetD$counts)
+#+END_SRC
+
+#+RESULTS: Cherry-tetD
+#+begin_example
+***************
+Doing now trial 1 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1672   Min.   :1637   Min.   :1348   Min.   :-2587  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2301   Max.   :2324   Max.   :2513   Max.   :-1705  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      269        70       148        49         2 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1646   Min.   :1665   Min.   :1413   Min.   :-2592  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2339   Max.   :2314   Max.   :2472   Max.   :-1708  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      248        56       148        39         5 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1677   Min.   :1670   Min.   :1396   Min.   :-2552  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2285   Max.   :2303   Max.   :2473   Max.   :-1718  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      177        50        61        61         5 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1615   Min.   :1667   Min.   :1343   Min.   :-2551  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2292   Max.   :2326   Max.   :2506   Max.   :-1714  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      181        38        81        55         7 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1666   Min.   :1694   Min.   :1396   Min.   :-2540  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2385   Max.   :2361   Max.   :2518   Max.   :-1723  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      245        75        97        69         4 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1665   Min.   :1672   Min.   :1426   Min.   :-2561  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2307   Max.   :2305   Max.   :2523   Max.   :-1703  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      223        59       102        56         6 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1643   Min.   :1686   Min.   :1430   Min.   :-2542  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2347   Max.   :2319   Max.   :2476   Max.   :-1721  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      204        65        84        51         4 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1660   Min.   :1650   Min.   :1370   Min.   :-2566  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2317   Max.   :2332   Max.   :2448   Max.   :-1714  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      259        94       104        58         3 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1686   Min.   :1669   Min.   :1411   Min.   :-2523  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2336   Max.   :2381   Max.   :2501   Max.   :-1733  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      190        34        81        69         6 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1646   Min.   :1646   Min.   :1346   Min.   :-2520  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2301   Max.   :2339   Max.   :2421   Max.   :-1693  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      166        39        64        60         3 
+Trial 10 done!
+******************
+***************
+Doing now trial 11 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1678   Min.   :1645   Min.   :1435   Min.   :-2562  
+ 1st Qu.:2013   1st Qu.:2014   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2290   Max.   :2305   Max.   :2508   Max.   :-1702  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      281       106       124        47         4 
+Trial 11 done!
+******************
+***************
+Doing now trial 12 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1595   Min.   :1645   Min.   :1399   Min.   :-2523  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2319   Max.   :2328   Max.   :2461   Max.   :-1710  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      190        60        74        54         2 
+Trial 12 done!
+******************
+***************
+Doing now trial 13 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1655   Min.   :1671   Min.   :1436   Min.   :-2536  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2300   Max.   :2333   Max.   :2519   Max.   :-1714  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      233        59       116        51         7 
+Trial 13 done!
+******************
+***************
+Doing now trial 14 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1710   Min.   :1693   Min.   :1406   Min.   :-2518  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2289   Max.   :2299   Max.   :2451   Max.   :-1708  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      195        31        84        69        11 
+Trial 14 done!
+******************
+***************
+Doing now trial 15 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1671   Min.   :1676   Min.   :1355   Min.   :-2549  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2314   Max.   :2321   Max.   :2466   Max.   :-1707  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      199        43        89        59         8 
+Trial 15 done!
+******************
+***************
+Doing now trial 16 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1642   Min.   :1649   Min.   :1430   Min.   :-2521  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2310   Max.   :2294   Max.   :2458   Max.   :-1645  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      238        94        85        54         5 
+Trial 16 done!
+******************
+***************
+Doing now trial 17 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1664   Min.   :1628   Min.   :1415   Min.   :-2535  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2323   Max.   :2318   Max.   :2435   Max.   :-1715  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      189        40        81        66         2 
+Trial 17 done!
+******************
+***************
+Doing now trial 18 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1663   Min.   :1611   Min.   :1221   Min.   :-2566  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2299   Max.   :2346   Max.   :2499   Max.   :-1684  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      196        46        86        60         4 
+Trial 18 done!
+******************
+***************
+Doing now trial 19 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1674   Min.   :1649   Min.   :1409   Min.   :-2529  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2345   Max.   :2341   Max.   :2471   Max.   :-1694  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      259        90       109        53         7 
+Trial 19 done!
+******************
+***************
+Doing now trial 20 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1707   Min.   :1689   Min.   :1457   Min.   :-2523  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2270   Max.   :2294   Max.   :2437   Max.   :-1716  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      162        12        93        49         8 
+Trial 20 done!
+******************
+***************
+Doing now trial 21 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1685   Min.   :1325   Min.   :-2567  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2320   Max.   :2363   Max.   :2498   Max.   :-1683  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      203        48        78        70         7 
+Trial 21 done!
+******************
+***************
+Doing now trial 22 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1630   Min.   :1641   Min.   :1317   Min.   :-2585  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2366   Max.   :2337   Max.   :2501   Max.   :-1705  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      286        97       121        58        10 
+Trial 22 done!
+******************
+***************
+Doing now trial 23 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1665   Min.   :1651   Min.   :1382   Min.   :-2540  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2316   Max.   :2317   Max.   :2473   Max.   :-1703  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      229        90        69        63         7 
+Trial 23 done!
+******************
+***************
+Doing now trial 24 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1688   Min.   :1647   Min.   :1389   Min.   :-2573  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2324   Max.   :2325   Max.   :2477   Max.   :-1713  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      252        70       125        53         4 
+Trial 24 done!
+******************
+***************
+Doing now trial 25 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1665   Min.   :1682   Min.   :1354   Min.   :-2540  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2342   Max.   :2347   Max.   :2603   Max.   :-1702  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      203        35       116        47         5 
+Trial 25 done!
+******************
+***************
+Doing now trial 26 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1683   Min.   :1670   Min.   :1373   Min.   :-2559  
+ 1st Qu.:2014   1st Qu.:2014   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2318   Max.   :2331   Max.   :2501   Max.   :-1695  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      248       103        93        47         5 
+Trial 26 done!
+******************
+***************
+Doing now trial 27 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1648   Min.   :1651   Min.   :1352   Min.   :-2582  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2318   Max.   :2302   Max.   :2463   Max.   :-1692  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      182        36        80        64         2 
+Trial 27 done!
+******************
+***************
+Doing now trial 28 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1661   Min.   :1639   Min.   :1354   Min.   :-2585  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2321   Max.   :2300   Max.   :2505   Max.   :-1712  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      241        45       135        55         6 
+Trial 28 done!
+******************
+***************
+Doing now trial 29 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1664   Min.   :1675   Min.   :1395   Min.   :-2576  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2299   Max.   :2336   Max.   :2500   Max.   :-1669  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      219        59        98        58         4 
+Trial 29 done!
+******************
+***************
+Doing now trial 30 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1699   Min.   :1648   Min.   :1367   Min.   :-2565  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2319   Max.   :2326   Max.   :2503   Max.   :-1698  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      255        77       107        65         6 
+Trial 30 done!
+******************
+***************
+Doing now trial 31 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1650   Min.   :1645   Min.   :1389   Min.   :-2591  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2306   Max.   :2334   Max.   :2502   Max.   :-1719  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      209        50        87        68         4 
+Trial 31 done!
+******************
+***************
+Doing now trial 32 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1670   Min.   :1678   Min.   :1351   Min.   :-2556  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2323   Max.   :2316   Max.   :2485   Max.   :-1719  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      222        58        99        61         4 
+Trial 32 done!
+******************
+***************
+Doing now trial 33 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1630   Min.   :1669   Min.   :1408   Min.   :-2547  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2324   Max.   :2313   Max.   :2492   Max.   :-1688  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      242        50       130        60         2 
+Trial 33 done!
+******************
+***************
+Doing now trial 34 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1689   Min.   :1688   Min.   :1369   Min.   :-2541  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2315   Max.   :2344   Max.   :2460   Max.   :-1690  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      230        55       108        62         5 
+Trial 34 done!
+******************
+***************
+Doing now trial 35 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1668   Min.   :1679   Min.   :1385   Min.   :-2571  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2312   Max.   :2335   Max.   :2470   Max.   :-1710  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      277        81       122        67         7 
+Trial 35 done!
+******************
+***************
+Doing now trial 36 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1686   Min.   :1673   Min.   :1396   Min.   :-2534  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2332   Max.   :2291   Max.   :2465   Max.   :-1694  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      166        31        72        58         5 
+Trial 36 done!
+******************
+***************
+Doing now trial 37 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1610   Min.   :1644   Min.   :1278   Min.   :-2551  
+ 1st Qu.:2014   1st Qu.:2014   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2336   Max.   :2339   Max.   :2472   Max.   :-1710  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      302        91       150        52         9 
+Trial 37 done!
+******************
+***************
+Doing now trial 38 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1694   Min.   :1661   Min.   :1402   Min.   :-2588  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2341   Max.   :2374   Max.   :2518   Max.   :-1689  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      153        29        63        58         3 
+Trial 38 done!
+******************
+***************
+Doing now trial 39 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1620   Min.   :1630   Min.   :1362   Min.   :-2566  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2035  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2332   Max.   :2324   Max.   :2541   Max.   :-1694  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      283       140        91        43         9 
+Trial 39 done!
+******************
+***************
+Doing now trial 40 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1709   Min.   :1677   Min.   :1383   Min.   :-2561  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2337   Max.   :2343   Max.   :2588   Max.   :-1642  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      207        34        99        67         7 
+Trial 40 done!
+******************
+***************
+Doing now trial 41 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1602   Min.   :1599   Min.   :1190   Min.   :-2581  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2048   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2006  
+ Max.   :2302   Max.   :2330   Max.   :2550   Max.   :-1699  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      274       109       104        54         7 
+Trial 41 done!
+******************
+***************
+Doing now trial 42 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1688   Min.   :1678   Min.   :1357   Min.   :-2568  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2305   Max.   :2302   Max.   :2518   Max.   :-1683  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      193        58        93        32        10 
+Trial 42 done!
+******************
+***************
+Doing now trial 43 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1683   Min.   :1683   Min.   :1405   Min.   :-2563  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2322   Max.   :2314   Max.   :2481   Max.   :-1694  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      225        64        87        67         7 
+Trial 43 done!
+******************
+***************
+Doing now trial 44 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1692   Min.   :1392   Min.   :-2557  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2385   Max.   :2307   Max.   :2519   Max.   :-1704  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      228        37       112        76         3 
+Trial 44 done!
+******************
+***************
+Doing now trial 45 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1604   Min.   :1656   Min.   :1397   Min.   :-2553  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2316   Max.   :2347   Max.   :2471   Max.   :-1717  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      210        40       112        55         3 
+Trial 45 done!
+******************
+***************
+Doing now trial 46 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1680   Min.   :1684   Min.   :1407   Min.   :-2557  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2315   Max.   :2321   Max.   :2465   Max.   :-1721  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      236        61        87        82         6 
+Trial 46 done!
+******************
+***************
+Doing now trial 47 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1697   Min.   :1662   Min.   :1370   Min.   :-2552  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2331   Max.   :2351   Max.   :2477   Max.   :-1679  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      253        77       111        62         3 
+Trial 47 done!
+******************
+***************
+Doing now trial 48 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1658   Min.   :1655   Min.   :1334   Min.   :-2577  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2316   Max.   :2326   Max.   :2458   Max.   :-1704  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      200        47        98        51         4 
+Trial 48 done!
+******************
+***************
+Doing now trial 49 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1674   Min.   :1360   Min.   :-2548  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2325   Max.   :2316   Max.   :2499   Max.   :-1669  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      252        58       136        56         2 
+Trial 49 done!
+******************
+***************
+Doing now trial 50 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1687   Min.   :1694   Min.   :1421   Min.   :-2563  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2312   Max.   :2321   Max.   :2461   Max.   :-1706  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      183        33        79        64         7 
+Trial 50 done!
+******************
+***************
+Doing now trial 51 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1641   Min.   :1669   Min.   :1418   Min.   :-2560  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2303   Max.   :2305   Max.   :2464   Max.   :-1713  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      182        36        78        63         5 
+Trial 51 done!
+******************
+***************
+Doing now trial 52 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1670   Min.   :1599   Min.   :1200   Min.   :-2620  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2282   Max.   :2312   Max.   :2488   Max.   :-1673  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      186        42        75        60         9 
+Trial 52 done!
+******************
+***************
+Doing now trial 53 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1611   Min.   :1579   Min.   :1316   Min.   :-2594  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2346   Max.   :2378   Max.   :2460   Max.   :-1664  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      237       100        90        42         5 
+Trial 53 done!
+******************
+***************
+Doing now trial 54 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1620   Min.   :1660   Min.   :1349   Min.   :-2583  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2313   Max.   :2329   Max.   :2457   Max.   :-1722  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      187        29        82        68         8 
+Trial 54 done!
+******************
+***************
+Doing now trial 55 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1637   Min.   :1690   Min.   :1383   Min.   :-2556  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2295   Max.   :2314   Max.   :2455   Max.   :-1672  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      205        28       118        54         5 
+Trial 55 done!
+******************
+***************
+Doing now trial 56 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1653   Min.   :1605   Min.   :1174   Min.   :-2602  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2307   Max.   :2326   Max.   :2453   Max.   :-1697  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      197        42       102        51         2 
+Trial 56 done!
+******************
+***************
+Doing now trial 57 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1666   Min.   :1642   Min.   :1381   Min.   :-2569  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2283   Max.   :2304   Max.   :2460   Max.   :-1717  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      271        65       145        54         7 
+Trial 57 done!
+******************
+***************
+Doing now trial 58 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1659   Min.   :1666   Min.   :1380   Min.   :-2569  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2410   Max.   :2367   Max.   :2516   Max.   :-1676  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      263        79       119        60         5 
+Trial 58 done!
+******************
+***************
+Doing now trial 59 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1671   Min.   :1670   Min.   :1344   Min.   :-2527  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2322   Max.   :2317   Max.   :2480   Max.   :-1707  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      200        42        94        62         2 
+Trial 59 done!
+******************
+***************
+Doing now trial 60 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1610   Min.   :1577   Min.   :1172   Min.   :-2588  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2300   Max.   :2315   Max.   :2493   Max.   :-1737  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      232        57       115        50        10 
+Trial 60 done!
+******************
+***************
+Doing now trial 61 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1674   Min.   :1647   Min.   :1392   Min.   :-2556  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2314   Max.   :2319   Max.   :2476   Max.   :-1670  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      233        60       104        68         1 
+Trial 61 done!
+******************
+***************
+Doing now trial 62 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1581   Min.   :1561   Min.   :1221   Min.   :-2654  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2321   Max.   :2334   Max.   :2482   Max.   :-1704  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      238        92        79        64         3 
+Trial 62 done!
+******************
+***************
+Doing now trial 63 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1710   Min.   :1677   Min.   :1395   Min.   :-2539  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2292   Max.   :2314   Max.   :2442   Max.   :-1705  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      220        34       100        77         9 
+Trial 63 done!
+******************
+***************
+Doing now trial 64 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1613   Min.   :1567   Min.   :1238   Min.   :-2566  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2320   Max.   :2331   Max.   :2480   Max.   :-1733  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      210        63        81        56        10 
+Trial 64 done!
+******************
+***************
+Doing now trial 65 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1693   Min.   :1672   Min.   :1415   Min.   :-2545  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2298   Max.   :2310   Max.   :2458   Max.   :-1697  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      256        65       110        73         8 
+Trial 65 done!
+******************
+***************
+Doing now trial 66 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1683   Min.   :1679   Min.   :1390   Min.   :-2556  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2313   Max.   :2326   Max.   :2457   Max.   :-1696  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      222        63       113        43         3 
+Trial 66 done!
+******************
+***************
+Doing now trial 67 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1692   Min.   :1660   Min.   :1404   Min.   :-2565  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2302   Max.   :2324   Max.   :2511   Max.   :-1706  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      198        52       103        43         0 
+Trial 67 done!
+******************
+***************
+Doing now trial 68 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1696   Min.   :1672   Min.   :1429   Min.   :-2498  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2343   Max.   :2320   Max.   :2504   Max.   :-1728  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      188        19        72        87        10 
+Trial 68 done!
+******************
+***************
+Doing now trial 69 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1679   Min.   :1661   Min.   :1395   Min.   :-2528  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2361   Max.   :2342   Max.   :2486   Max.   :-1692  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      200        49        97        50         4 
+Trial 69 done!
+******************
+***************
+Doing now trial 70 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1667   Min.   :1621   Min.   :1412   Min.   :-2543  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2327   Max.   :2317   Max.   :2462   Max.   :-1709  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      211        60        80        66         5 
+Trial 70 done!
+******************
+***************
+Doing now trial 71 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1670   Min.   :1700   Min.   :1379   Min.   :-2542  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2324   Max.   :2317   Max.   :2507   Max.   :-1728  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      216        55       103        49         9 
+Trial 71 done!
+******************
+***************
+Doing now trial 72 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1649   Min.   :1649   Min.   :1357   Min.   :-2558  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2299   Max.   :2324   Max.   :2452   Max.   :-1723  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      189        48        71        65         5 
+Trial 72 done!
+******************
+***************
+Doing now trial 73 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1692   Min.   :1652   Min.   :1385   Min.   :-2549  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2296   Max.   :2305   Max.   :2443   Max.   :-1712  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      200        49        96        51         4 
+Trial 73 done!
+******************
+***************
+Doing now trial 74 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1688   Min.   :1690   Min.   :1404   Min.   :-2520  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2293   Max.   :2326   Max.   :2522   Max.   :-1711  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      204        44        90        70         0 
+Trial 74 done!
+******************
+***************
+Doing now trial 75 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1676   Min.   :1661   Min.   :1398   Min.   :-2577  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2317   Max.   :2309   Max.   :2513   Max.   :-1717  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      183        50        69        53        11 
+Trial 75 done!
+******************
+***************
+Doing now trial 76 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1672   Min.   :1668   Min.   :1369   Min.   :-2565  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2290   Max.   :2346   Max.   :2472   Max.   :-1715  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      215        59        98        47        11 
+Trial 76 done!
+******************
+***************
+Doing now trial 77 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1687   Min.   :1674   Min.   :1367   Min.   :-2543  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2336   Max.   :2321   Max.   :2485   Max.   :-1712  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      233        47       101        80         5 
+Trial 77 done!
+******************
+***************
+Doing now trial 78 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1694   Min.   :1649   Min.   :1369   Min.   :-2543  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2297   Max.   :2315   Max.   :2482   Max.   :-1704  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      221        51       112        51         7 
+Trial 78 done!
+******************
+***************
+Doing now trial 79 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1630   Min.   :1662   Min.   :1334   Min.   :-2558  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2048   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2350   Max.   :2359   Max.   :2521   Max.   :-1684  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      272       105        97        67         3 
+Trial 79 done!
+******************
+***************
+Doing now trial 80 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1660   Min.   :1689   Min.   :1417   Min.   :-2538  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2289   Max.   :2319   Max.   :2501   Max.   :-1694  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      238        44       109        79         6 
+Trial 80 done!
+******************
+***************
+Doing now trial 81 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1712   Min.   :1343   Min.   :-2563  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2330   Max.   :2330   Max.   :2492   Max.   :-1718  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      218        42       112        58         6 
+Trial 81 done!
+******************
+***************
+Doing now trial 82 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1689   Min.   :1628   Min.   :1398   Min.   :-2551  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2293   Max.   :2304   Max.   :2445   Max.   :-1712  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      213        37       102        66         8 
+Trial 82 done!
+******************
+***************
+Doing now trial 83 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1692   Min.   :1685   Min.   :1393   Min.   :-2544  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2290   Max.   :2324   Max.   :2497   Max.   :-1712  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      185        24        92        63         6 
+Trial 83 done!
+******************
+***************
+Doing now trial 84 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1677   Min.   :1719   Min.   :1379   Min.   :-2573  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2277   Max.   :2321   Max.   :2457   Max.   :-1735  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      179        20        85        69         5 
+Trial 84 done!
+******************
+***************
+Doing now trial 85 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1695   Min.   :1657   Min.   :1397   Min.   :-2536  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2343   Max.   :2350   Max.   :2507   Max.   :-1708  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      212        47        96        62         7 
+Trial 85 done!
+******************
+***************
+Doing now trial 86 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1641   Min.   :1593   Min.   :1133   Min.   :-2558  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2339   Max.   :2351   Max.   :2486   Max.   :-1716  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      213        44       107        57         5 
+Trial 86 done!
+******************
+***************
+Doing now trial 87 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1672   Min.   :1666   Min.   :1276   Min.   :-2538  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2333   Max.   :2336   Max.   :2484   Max.   :-1729  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      214        56        95        59         4 
+Trial 87 done!
+******************
+***************
+Doing now trial 88 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1642   Min.   :1683   Min.   :1386   Min.   :-2554  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2323   Max.   :2325   Max.   :2525   Max.   :-1719  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      228        63       105        53         7 
+Trial 88 done!
+******************
+***************
+Doing now trial 89 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1628   Min.   :1620   Min.   :1389   Min.   :-2498  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2455   Max.   :2321   Max.   :2516   Max.   :-1717  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      178        33        69        71         5 
+Trial 89 done!
+******************
+***************
+Doing now trial 90 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1674   Min.   :1690   Min.   :1307   Min.   :-2517  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2316   Max.   :2367   Max.   :2461   Max.   :-1755  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      228        49       107        66         6 
+Trial 90 done!
+******************
+***************
+Doing now trial 91 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1638   Min.   :1665   Min.   :1198   Min.   :-2568  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2050   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2305   Max.   :2325   Max.   :2482   Max.   :-1741  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      280        88       119        71         2 
+Trial 91 done!
+******************
+***************
+Doing now trial 92 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1593   Min.   :1578   Min.   :1218   Min.   :-2602  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2276   Max.   :2306   Max.   :2498   Max.   :-1709  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      177        19        54        97         7 
+Trial 92 done!
+******************
+***************
+Doing now trial 93 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1629   Min.   :1679   Min.   :1362   Min.   :-2552  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2339   Max.   :2338   Max.   :2486   Max.   :-1720  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      212        60        86        57         9 
+Trial 93 done!
+******************
+***************
+Doing now trial 94 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1656   Min.   :1625   Min.   :1372   Min.   :-2528  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2354   Max.   :2316   Max.   :2497   Max.   :-1724  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      191        32        95        58         6 
+Trial 94 done!
+******************
+***************
+Doing now trial 95 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1686   Min.   :1646   Min.   :1338   Min.   :-2552  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2351   Max.   :2351   Max.   :2495   Max.   :-1698  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      217        63        82        65         7 
+Trial 95 done!
+******************
+***************
+Doing now trial 96 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1639   Min.   :1673   Min.   :1329   Min.   :-2521  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2285   Max.   :2372   Max.   :2484   Max.   :-1714  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      216        71        73        66         6 
+Trial 96 done!
+******************
+***************
+Doing now trial 97 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1658   Min.   :1657   Min.   :1405   Min.   :-2551  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2330   Max.   :2335   Max.   :2513   Max.   :-1656  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      242       106        85        46         5 
+Trial 97 done!
+******************
+***************
+Doing now trial 98 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1681   Min.   :1340   Min.   :-2611  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2305   Max.   :2308   Max.   :2475   Max.   :-1742  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      171        13        98        54         6 
+Trial 98 done!
+******************
+***************
+Doing now trial 99 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1656   Min.   :1673   Min.   :1343   Min.   :-2531  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2317   Max.   :2310   Max.   :2526   Max.   :-1725  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      174        35        85        48         6 
+Trial 99 done!
+******************
+***************
+Doing now trial 100 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1628   Min.   :1650   Min.   :1367   Min.   :-2550  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2299   Max.   :2334   Max.   :2472   Max.   :-1720  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      221        66       101        54         0 
+Trial 100 done!
+******************
+***************
+Doing now trial 101 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1677   Min.   :1604   Min.   :1268   Min.   :-2516  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2300   Max.   :2318   Max.   :2473   Max.   :-1694  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      228        62        93        69         4 
+Trial 101 done!
+******************
+***************
+Doing now trial 102 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1656   Min.   :1667   Min.   :1400   Min.   :-2516  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2350   Max.   :2321   Max.   :2480   Max.   :-1710  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      242        90        74        68        10 
+Trial 102 done!
+******************
+***************
+Doing now trial 103 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1684   Min.   :1667   Min.   :1387   Min.   :-2511  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2310   Max.   :2311   Max.   :2494   Max.   :-1720  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      195        37        73        82         3 
+Trial 103 done!
+******************
+***************
+Doing now trial 104 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1631   Min.   :1614   Min.   :1373   Min.   :-2586  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2336   Max.   :2304   Max.   :2493   Max.   :-1705  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      249        77       104        63         5 
+Trial 104 done!
+******************
+***************
+Doing now trial 105 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1698   Min.   :1649   Min.   :1408   Min.   :-2540  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2299   Max.   :2303   Max.   :2458   Max.   :-1744  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      191        53        86        48         4 
+Trial 105 done!
+******************
+***************
+Doing now trial 106 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1673   Min.   :1652   Min.   :1340   Min.   :-2524  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2327   Max.   :2302   Max.   :2438   Max.   :-1709  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      237        82        92        62         1 
+Trial 106 done!
+******************
+***************
+Doing now trial 107 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1679   Min.   :1609   Min.   :1210   Min.   :-2565  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2345   Max.   :2322   Max.   :2468   Max.   :-1741  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      236        65        94        67        10 
+Trial 107 done!
+******************
+***************
+Doing now trial 108 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1676   Min.   :1656   Min.   :1339   Min.   :-2530  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2328   Max.   :2318   Max.   :2474   Max.   :-1720  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      194        54        82        50         8 
+Trial 108 done!
+******************
+***************
+Doing now trial 109 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1716   Min.   :1679   Min.   :1431   Min.   :-2489  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2322   Max.   :2325   Max.   :2449   Max.   :-1738  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      183        47        66        64         6 
+Trial 109 done!
+******************
+***************
+Doing now trial 110 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1679   Min.   :1672   Min.   :1379   Min.   :-2544  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2292   Max.   :2317   Max.   :2488   Max.   :-1759  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      180        30        56        89         5 
+Trial 110 done!
+******************
+***************
+Doing now trial 111 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1673   Min.   :1657   Min.   :1357   Min.   :-2541  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2319   Max.   :2310   Max.   :2475   Max.   :-1720  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      206        35        93        72         6 
+Trial 111 done!
+******************
+***************
+Doing now trial 112 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1653   Min.   :1618   Min.   :1178   Min.   :-2575  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2307   Max.   :2327   Max.   :2467   Max.   :-1734  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      260        85       116        48        11 
+Trial 112 done!
+******************
+***************
+Doing now trial 113 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1672   Min.   :1669   Min.   :1366   Min.   :-2521  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2350   Max.   :2302   Max.   :2510   Max.   :-1718  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      255        68       111        71         5 
+Trial 113 done!
+******************
+***************
+Doing now trial 114 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1683   Min.   :1632   Min.   :1383   Min.   :-2549  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2358   Max.   :2313   Max.   :2471   Max.   :-1724  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      246        56       122        59         9 
+Trial 114 done!
+******************
+***************
+Doing now trial 115 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1703   Min.   :1703   Min.   :1403   Min.   :-2574  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2295   Max.   :2311   Max.   :2492   Max.   :-1741  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      224        49       120        52         3 
+Trial 115 done!
+******************
+***************
+Doing now trial 116 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1623   Min.   :1579   Min.   :1258   Min.   :-2578  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2048   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2048   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2323   Max.   :2376   Max.   :2493   Max.   :-1725  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      250       108        90        40        12 
+Trial 116 done!
+******************
+***************
+Doing now trial 117 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1710   Min.   :1668   Min.   :1408   Min.   :-2530  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2301   Max.   :2326   Max.   :2431   Max.   :-1731  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      194        30        98        59         7 
+Trial 117 done!
+******************
+***************
+Doing now trial 118 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1708   Min.   :1701   Min.   :1412   Min.   :-2482  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2296   Max.   :2287   Max.   :2461   Max.   :-1757  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      160        12        75        69         4 
+Trial 118 done!
+******************
+***************
+Doing now trial 119 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1687   Min.   :1678   Min.   :1383   Min.   :-2509  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2294   Max.   :2321   Max.   :2461   Max.   :-1735  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      220        36       110        65         9 
+Trial 119 done!
+******************
+***************
+Doing now trial 120 of Cherry
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1655   Min.   :1634   Min.   :1295   Min.   :-2575  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2295   Max.   :2323   Max.   :2508   Max.   :-1736  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      255        99        99        50         7 
+Trial 120 done!
+******************
+#+end_example
+
+
+** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Cherry-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Cherry-count-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+counts_evolution(a_Cherry_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 3) or unclassified ("?") during the 120A trials of =Cherry= for tetrode D.
+#+RESULTS: Cherry-count-evolution-tetD
+[[file:locust20000214_tetD_fig/Cherry-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Cherry-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1000 :file Cherry-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+waveform_evolution(a_Cherry_tetD,threshold_factor)
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each unit during the 120 trials of =Cherry= for tetrode D.
+#+RESULTS: Cherry-waveform-evolution-tetD
+[[file:locust20000214_tetD_fig/Cherry-waveform-evolution-tetD.png]]
+
+The observed counting processes, inter spike intervals densities and raster plots are:
+
+#+NAME: Cherry-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1000 :file Cherry-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports both :results output graphics :session *R*
+cp_isi_raster(a_Cherry_tetD)
+#+END_SRC
+
+#+CAPTION: Observed counting processes, empirical inter spike interval distributions and raster plots for Cherry.
+#+RESULTS: Cherry-CP-and-ISI-dist-tetD
+[[file:locust20000214_tetD_fig/Cherry-CP-and-ISI-dist-tetD.png]]
+
+** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Cherry
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Cherry_tetD,
+     file=paste0("tetD_analysis/tetD_","Cherry","_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Cherry_tetD$spike_trains))
+    cat(a_Cherry_tetD$spike_trains[[c_idx]],
+        file=paste0("locust20000214_spike_trains/locust20000214_Cherry_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+
+* 60 trials with =Octaldehyde=
+
+We will carry out an analysis of the 60 trials from =Octaldehyde=. There are some brief but large artifacts during trials 11, 12 and 13 (undocumented in the =LabBook=), so we exclude those from the analysis. 
+** Do the job
+
+#+NAME: Octaldehyde-tetD
+#+BEGIN_SRC R :exports code :results output :session *R*
+stim_name = "Octaldehyde"
+a_Octaldehyde_tetD=smt(stim_name=stim_name,
+                        trial_nbs=c(1:10,14:60),
+                        centers=a_Cherry_tetD$centers,
+                        counts=a_Cherry_tetD$counts)
+#+END_SRC
+
+#+RESULTS: Octaldehyde-tetD
+#+begin_example
+***************
+Doing now trial 1 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1693   Min.   :1647   Min.   :1387   Min.   :-2529  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2290   Max.   :2327   Max.   :2512   Max.   :-1703  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      233        69       106        48        10 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1656   Min.   :1640   Min.   :1300   Min.   :-2535  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2347   Max.   :2318   Max.   :2481   Max.   :-1727  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      254        86       122        43         3 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1667   Min.   :1354   Min.   :-2534  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2322   Max.   :2314   Max.   :2493   Max.   :-1720  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      219        67        56        83        13 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1677   Min.   :1666   Min.   :1368   Min.   :-2550  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2292   Max.   :2357   Max.   :2463   Max.   :-1733  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      227        73        90        61         3 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1616   Min.   :1632   Min.   :1402   Min.   :-2514  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2322   Max.   :2348   Max.   :2470   Max.   :-1725  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      231        88        88        45        10 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1688   Min.   :1698   Min.   :1381   Min.   :-2546  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2312   Max.   :2291   Max.   :2469   Max.   :-1745  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      163        29        69        64         1 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1668   Min.   :1656   Min.   :1372   Min.   :-2504  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2308   Max.   :2321   Max.   :2498   Max.   :-1719  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      247        68       120        48        11 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1702   Min.   :1652   Min.   :1216   Min.   :-2545  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2316   Max.   :2333   Max.   :2490   Max.   :-1709  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      227        72        75        68        12 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1682   Min.   :1675   Min.   :1369   Min.   :-2512  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2283   Max.   :2316   Max.   :2466   Max.   :-1738  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      199        30       103        60         6 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1653   Min.   :1681   Min.   :1398   Min.   :-2535  
+ 1st Qu.:2014   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2331   Max.   :2325   Max.   :2442   Max.   :-1715  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      229        78        95        51         5 
+Trial 10 done!
+******************
+***************
+Doing now trial 11 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1697   Min.   :1656   Min.   :1333   Min.   :-2519  
+ 1st Qu.:2012   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2794   Max.   :2428   Max.   :2507   Max.   :-1625  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      275        55        84        79        57 
+Trial 11 done!
+******************
+***************
+Doing now trial 12 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1232   Min.   :1711   Min.   :1358   Min.   :-2520  
+ 1st Qu.:2007   1st Qu.:2012   1st Qu.:2019   1st Qu.:-2067  
+ Median :2046   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2086   3rd Qu.:2084   3rd Qu.:2083   3rd Qu.:-2006  
+ Max.   :3522   Max.   :2529   Max.   :2451   Max.   :-1462  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      326        25        60       123       118 
+Trial 12 done!
+******************
+***************
+Doing now trial 13 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1641   Min.   :1589   Min.   :1390   Min.   :-3156  
+ 1st Qu.:2003   1st Qu.:2010   1st Qu.:2018   1st Qu.:-2068  
+ Median :2045   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2089   3rd Qu.:2087   3rd Qu.:2085   3rd Qu.:-2004  
+ Max.   :3337   Max.   :2676   Max.   :2798   Max.   : -702  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      504        59       155       109       181 
+Trial 13 done!
+******************
+***************
+Doing now trial 14 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1720   Min.   :1613   Min.   :1292   Min.   :-2541  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2294   Max.   :2281   Max.   :2437   Max.   :-1753  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      132         9        43        72         8 
+Trial 14 done!
+******************
+***************
+Doing now trial 15 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1638   Min.   :1625   Min.   :1227   Min.   :-2579  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2338   Max.   :2332   Max.   :2547   Max.   :-1730  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      203        44        95        60         4 
+Trial 15 done!
+******************
+***************
+Doing now trial 16 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1664   Min.   :1666   Min.   :1330   Min.   :-2548  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2283   Max.   :2307   Max.   :2487   Max.   :-1708  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      181        28        64        80         9 
+Trial 16 done!
+******************
+***************
+Doing now trial 17 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1621   Min.   :1610   Min.   :1192   Min.   :-2563  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2326   Max.   :2323   Max.   :2530   Max.   :-1691  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      245        69       105        65         6 
+Trial 17 done!
+******************
+***************
+Doing now trial 18 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1669   Min.   :1671   Min.   :1364   Min.   :-2567  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2319   Max.   :2305   Max.   :2471   Max.   :-1732  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      214        45       109        53         7 
+Trial 18 done!
+******************
+***************
+Doing now trial 19 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1654   Min.   :1667   Min.   :1381   Min.   :-2521  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2281   Max.   :2342   Max.   :2465   Max.   :-1719  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      198        33        95        64         6 
+Trial 19 done!
+******************
+***************
+Doing now trial 20 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1683   Min.   :1693   Min.   :1387   Min.   :-2514  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2299   Max.   :2335   Max.   :2464   Max.   :-1715  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      226        53        94        73         6 
+Trial 20 done!
+******************
+***************
+Doing now trial 21 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1671   Min.   :1706   Min.   :1389   Min.   :-2517  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2378   Max.   :2307   Max.   :2515   Max.   :-1686  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      202        38        99        57         8 
+Trial 21 done!
+******************
+***************
+Doing now trial 22 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1647   Min.   :1639   Min.   :1186   Min.   :-2556  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2341   Max.   :2337   Max.   :2513   Max.   :-1717  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      274        98        96        75         5 
+Trial 22 done!
+******************
+***************
+Doing now trial 23 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1672   Min.   :1684   Min.   :1369   Min.   :-2518  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2066  
+ Median :2048   Median :2050   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2274   Max.   :2317   Max.   :2474   Max.   :-1714  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      201        35        97        58        11 
+Trial 23 done!
+******************
+***************
+Doing now trial 24 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1660   Min.   :1669   Min.   :1349   Min.   :-2531  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2315   Max.   :2342   Max.   :2494   Max.   :-1728  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      236        63        92        74         7 
+Trial 24 done!
+******************
+***************
+Doing now trial 25 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1664   Min.   :1631   Min.   :1362   Min.   :-2522  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2324   Max.   :2313   Max.   :2535   Max.   :-1712  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      231        81        92        49         9 
+Trial 25 done!
+******************
+***************
+Doing now trial 26 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1677   Min.   :1639   Min.   :1349   Min.   :-2518  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2295   Max.   :2338   Max.   :2462   Max.   :-1707  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      182        41        73        60         8 
+Trial 26 done!
+******************
+***************
+Doing now trial 27 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1674   Min.   :1664   Min.   :1359   Min.   :-2530  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2277   Max.   :2308   Max.   :2444   Max.   :-1739  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      193        61        75        50         7 
+Trial 27 done!
+******************
+***************
+Doing now trial 28 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1702   Min.   :1628   Min.   :1208   Min.   :-2530  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2302   Max.   :2314   Max.   :2458   Max.   :-1701  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      232        60       104        62         6 
+Trial 28 done!
+******************
+***************
+Doing now trial 29 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1702   Min.   :1629   Min.   :1355   Min.   :-2542  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2284   Max.   :2299   Max.   :2461   Max.   :-1741  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      231        41       115        68         7 
+Trial 29 done!
+******************
+***************
+Doing now trial 30 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1602   Min.   :1627   Min.   :1261   Min.   :-2549  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2036  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2337   Max.   :2305   Max.   :2466   Max.   :-1741  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      279        55       155        65         4 
+Trial 30 done!
+******************
+***************
+Doing now trial 31 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1657   Min.   :1312   Min.   :-2550  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2286   Max.   :2313   Max.   :2510   Max.   :-1726  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      164        40        55        62         7 
+Trial 31 done!
+******************
+***************
+Doing now trial 32 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1659   Min.   :1663   Min.   :1402   Min.   :-2536  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2304   Max.   :2308   Max.   :2478   Max.   :-1743  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      244        48       124        67         5 
+Trial 32 done!
+******************
+***************
+Doing now trial 33 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1671   Min.   :1710   Min.   :1372   Min.   :-2507  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2284   Max.   :2343   Max.   :2480   Max.   :-1724  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      199        50        85        55         9 
+Trial 33 done!
+******************
+***************
+Doing now trial 34 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1664   Min.   :1690   Min.   :1377   Min.   :-2524  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2084   3rd Qu.:-2007  
+ Max.   :2329   Max.   :2367   Max.   :2533   Max.   :-1726  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      292        82       126        73        11 
+Trial 34 done!
+******************
+***************
+Doing now trial 35 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1659   Min.   :1640   Min.   :1397   Min.   :-2523  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2273   Max.   :2324   Max.   :2508   Max.   :-1725  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      171        23        56        87         5 
+Trial 35 done!
+******************
+***************
+Doing now trial 36 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1617   Min.   :1579   Min.   :1260   Min.   :-2564  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2300   Max.   :2304   Max.   :2509   Max.   :-1691  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      259        54       105        91         9 
+Trial 36 done!
+******************
+***************
+Doing now trial 37 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1632   Min.   :1303   Min.   :-2534  
+ 1st Qu.:2015   1st Qu.:2015   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2326   Max.   :2370   Max.   :2504   Max.   :-1686  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      250        65       116        61         8 
+Trial 37 done!
+******************
+***************
+Doing now trial 38 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1658   Min.   :1626   Min.   :1385   Min.   :-2530  
+ 1st Qu.:2015   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2339   Max.   :2299   Max.   :2537   Max.   :-1716  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      216        47       100        60         9 
+Trial 38 done!
+******************
+***************
+Doing now trial 39 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1660   Min.   :1679   Min.   :1336   Min.   :-2536  
+ 1st Qu.:2015   1st Qu.:2015   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2083   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2321   Max.   :2323   Max.   :2478   Max.   :-1686  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      265        60       137        61         7 
+Trial 39 done!
+******************
+***************
+Doing now trial 40 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1663   Min.   :1662   Min.   :1278   Min.   :-2528  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2313   Max.   :2312   Max.   :2514   Max.   :-1712  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      276        90       119        62         5 
+Trial 40 done!
+******************
+***************
+Doing now trial 41 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1667   Min.   :1641   Min.   :1358   Min.   :-2528  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2309   Max.   :2307   Max.   :2476   Max.   :-1722  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      260        64       117        73         6 
+Trial 41 done!
+******************
+***************
+Doing now trial 42 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1667   Min.   :1595   Min.   :1270   Min.   :-2614  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2322   Max.   :2346   Max.   :2497   Max.   :-1704  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      256        83       111        50        12 
+Trial 42 done!
+******************
+***************
+Doing now trial 43 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1698   Min.   :1660   Min.   :1357   Min.   :-2524  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2330   Max.   :2357   Max.   :2492   Max.   :-1708  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      218        64        86        61         7 
+Trial 43 done!
+******************
+***************
+Doing now trial 44 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1681   Min.   :1667   Min.   :1383   Min.   :-2558  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2309   Max.   :2357   Max.   :2527   Max.   :-1719  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      232        72        85        66         9 
+Trial 44 done!
+******************
+***************
+Doing now trial 45 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1638   Min.   :1669   Min.   :1368   Min.   :-2525  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2318   Max.   :2331   Max.   :2509   Max.   :-1730  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      199        85        60        49         5 
+Trial 45 done!
+******************
+***************
+Doing now trial 46 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1651   Min.   :1600   Min.   :1397   Min.   :-2518  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2283   Max.   :2346   Max.   :2468   Max.   :-1714  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      234        78        85        63         8 
+Trial 46 done!
+******************
+***************
+Doing now trial 47 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1722   Min.   :1668   Min.   :1419   Min.   :-2510  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2312   Max.   :2288   Max.   :2436   Max.   :-1770  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      180        13       101        53        13 
+Trial 47 done!
+******************
+***************
+Doing now trial 48 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1716   Min.   :1681   Min.   :1383   Min.   :-2518  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2344   Max.   :2325   Max.   :2477   Max.   :-1732  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      208        38        77        86         7 
+Trial 48 done!
+******************
+***************
+Doing now trial 49 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1662   Min.   :1650   Min.   :1246   Min.   :-2538  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2309   Max.   :2317   Max.   :2493   Max.   :-1732  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      246        60       110        72         4 
+Trial 49 done!
+******************
+***************
+Doing now trial 50 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1692   Min.   :1676   Min.   :1337   Min.   :-2493  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2290   Max.   :2304   Max.   :2482   Max.   :-1736  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      267        66       129        66         6 
+Trial 50 done!
+******************
+***************
+Doing now trial 51 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1685   Min.   :1652   Min.   :1393   Min.   :-2519  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2066  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2341   Max.   :2344   Max.   :2448   Max.   :-1715  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      240        56       114        63         7 
+Trial 51 done!
+******************
+***************
+Doing now trial 52 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1649   Min.   :1596   Min.   :1287   Min.   :-2528  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2316   Max.   :2315   Max.   :2490   Max.   :-1709  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      216        70        85        52         9 
+Trial 52 done!
+******************
+***************
+Doing now trial 53 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1611   Min.   :1615   Min.   :1184   Min.   :-2530  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2050   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2295   Max.   :2382   Max.   :2469   Max.   :-1733  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      250        86       100        57         7 
+Trial 53 done!
+******************
+***************
+Doing now trial 54 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1649   Min.   :1622   Min.   :1389   Min.   :-2535  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2019   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2050   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2007  
+ Max.   :2308   Max.   :2304   Max.   :2455   Max.   :-1662  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      293        83       141        65         4 
+Trial 54 done!
+******************
+***************
+Doing now trial 55 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1693   Min.   :1682   Min.   :1411   Min.   :-2518  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2281   Max.   :2315   Max.   :2501   Max.   :-1739  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      222        46        94        78         4 
+Trial 55 done!
+******************
+***************
+Doing now trial 56 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1693   Min.   :1691   Min.   :1414   Min.   :-2504  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2080   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2295   Max.   :2306   Max.   :2449   Max.   :-1721  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      167        43        58        52        14 
+Trial 56 done!
+******************
+***************
+Doing now trial 57 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1696   Min.   :1678   Min.   :1401   Min.   :-2508  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2320   Max.   :2344   Max.   :2499   Max.   :-1719  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      187        68        54        58         7 
+Trial 57 done!
+******************
+***************
+Doing now trial 58 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1679   Min.   :1673   Min.   :1409   Min.   :-2502  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2051   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2301   Max.   :2318   Max.   :2470   Max.   :-1726  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      200        61        64        72         3 
+Trial 58 done!
+******************
+***************
+Doing now trial 59 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1702   Min.   :1677   Min.   :1408   Min.   :-2481  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2049   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2083   3rd Qu.:-2008  
+ Max.   :2267   Max.   :2343   Max.   :2546   Max.   :-1683  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      240        47       129        57         7 
+Trial 59 done!
+******************
+***************
+Doing now trial 60 of Octaldehyde
+The five number summary is:
+      ch10           ch11           ch13           ch14      
+ Min.   :1710   Min.   :1689   Min.   :1410   Min.   :-2535  
+ 1st Qu.:2015   1st Qu.:2016   1st Qu.:2020   1st Qu.:-2065  
+ Median :2047   Median :2050   Median :2052   Median :-2036  
+ Mean   :2047   Mean   :2049   Mean   :2051   Mean   :-2037  
+ 3rd Qu.:2081   3rd Qu.:2082   3rd Qu.:2082   3rd Qu.:-2008  
+ Max.   :2306   Max.   :2314   Max.   :2503   Max.   :-1693  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3         ? 
+      221        44       104        62        11 
+Trial 60 done!
+******************
+#+end_example
+
+
+** Diagnostic plots
+
+The counts evolution is:
+
+#+NAME: Octaldehyde-count-evolution-tetD
+#+HEADER: :width 800 :height 800 :file Octaldehyde-count-evolution-tetD.png
+#+BEGIN_SRC R :exports results :results output graphics :session *R*
+counts_evolution(a_Octaldehyde_tetD)
+#+END_SRC
+
+#+CAPTION: Evolution of the number of events attributed to each unit (1 to 3) or unclassified ("?") during the 60 trials of =Octaldehyde= for tetrodeD.
+#+RESULTS: Octaldehyde-count-evolution-tetD
+[[file:locust20000214_tetD_fig/Octaldehyde-count-evolution-tetD.png]]
+
+The waveform evolution is:
+
+#+NAME: Octaldehyde-waveform-evolution-tetD
+#+HEADER: :width 800 :height 1000 :file Octaldehyde-waveform-evolution-tetD.png
+#+BEGIN_SRC R :exports results :results output graphics :session *R*
+waveform_evolution(a_Octaldehyde_tetD,threshold_factor)
+#+END_SRC
+
+#+CAPTION: Evolution of the templates of each unit during the 60 trials of =Octaldehyde= for tetrodeD.
+#+RESULTS: Octaldehyde-waveform-evolution-tetD
+[[file:locust20000214_tetD_fig/Octaldehyde-waveform-evolution-tetD.png]]
+
+The observed counting processes, inter spike intervals densities and raster plots are:
+
+#+NAME: Octaldehyde-CP-and-ISI-dist-tetD
+#+HEADER: :width 800 :height 1000 :file Octaldehyde-CP-and-ISI-dist-tetD.png
+#+BEGIN_SRC R :exports results :results output graphics :session *R*
+cp_isi_raster(a_Octaldehyde_tetD)
+#+END_SRC
+
+#+CAPTION: Observed counting processes, empirical inter spike interval distributions and raster plots for Octaldehyde.
+#+RESULTS: Octaldehyde-CP-and-ISI-dist-tetD
+[[file:locust20000214_tetD_fig/Octaldehyde-CP-and-ISI-dist-tetD.png]]
+
+** Save results
+
+Before analyzing the next set of trials we save the output of =sort_many_trials= to disk with:
+
+#+NAME: save-counts-and-centers-to-disk-Octaldehyde
+#+BEGIN_SRC R :session *R* :results silent
+save(a_Octaldehyde_tetD,
+     file=paste0("tetD_analysis/tetD_",stim_name,"_summary_obj.rda"))
+#+END_SRC
+
+We write to disk the spike trains in text mode:
+
+#+NAME: write-spike-trains-tetD
+#+BEGIN_SRC R :session *R* :results silent
+for (c_idx in 1:length(a_Octaldehyde_tetD$spike_trains))
+    if (!is.null(a_Octaldehyde_tetD$spike_trains[[c_idx]]))
+        cat(a_Octaldehyde_tetD$spike_trains[[c_idx]],file=paste0("locust20000214_spike_trains/locust20000214_Octaldehyde_tetD_u",c_idx,".txt"),sep="\n")
+#+END_SRC
+

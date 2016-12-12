@@ -24,7 +24,7 @@ There is one directory per experiment on the dedicated [[https://github.com/chri
 - A directory named =locustXXX_spike_trains= that contains the individual spike trains.
 - A directory named =locustXXX_tetY_fig= that contains the figures of the =html= file.
 
-The spike trains in directory =locustXXX_spike_trains= are stored in ASCII format with one spike time per line. They are named =locustXXX_StimID_tetY_uZ.txt=, where =XXX= and =Y= are their previous meaning, =StimID= is a stimulation identifier (more precisely a =group= name in the =HDF5= data file) and =Z= is the unit number.
+The spike trains in directory =locustXXX_spike_trains= are stored in ASCII format with one spike time (in seconds) per line. They are named =locustXXX_StimID_tetY_uZ.txt=, where =XXX= and =Y= are their previous meaning, =StimID= is a stimulation identifier (more precisely a =group= name in the =HDF5= data file) and =Z= is the unit number. When several trials, like say 25 stimulation with citronelal, were recorded, the successive trials will be found one after the other and time 0 is defined as the start of the acquisition of the first trial.
 
 * The code
 
@@ -40,9 +40,12 @@ There are one or several =html= files (and =org= source files) per experiment--o
 - the raster plot (when that makes sense, that is when odors were applied). 
 
 Feel free to critisize the procedure and its results. If you manage to improve it, be cool and let me know!
+** locust20000214
+
+An experiment with a signle recorded tetrode and two well isolated neurons, see [[file:Locust_Analysis_with_R/locust20000421/Sorting_20000214_tetD.html][the description]] for details. In that experiment the inter trial interval was 30 s and only 10 s were recorded per trial. In the stored spike trains I have but the successive trials with a 10 s offest (corresponding to the acquisition time) and not with a 30 s (as described above, corresponding to the inter-trial interval). This makes the rater plot look nicer, nothing more.
 
 ** locust20000421 
-An experiment were two tetrodes with reasonnably good signals were recorded: [[file:Locust_Analysis_with_R/locust20000421/Sorting_20000421_tetD1.html][tetrode D1]] with a single unit that can be followed through the 21 different stimulation and [[file:Locust_Analysis_with_R/locust20000421/Sorting_20000421_tetD2.html][tetrode D2]] with two units that can be followed. The data for this experiment are "unstable" because, I think, the odors were presented at too high a rate, once every 10 seconds.
+An experiment were two tetrodes with reasonnably good signals were recorded: [[file:Locust_Analysis_with_R/locust20000421/Sorting_20000421_tetD1.html]tetrode D1]] with a single unit that can be followed through the 21 different stimulation and [[file:Locust_Analysis_with_R/locust20000421/Sorting_20000421_tetD2.html][tetrode D2]] with two units that can be followed. The data for this experiment are "unstable" because, I think, the odors were presented at too high a rate, once every 10 seconds.
 
 ** locust20010214
 

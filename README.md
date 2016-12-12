@@ -20,3 +20,6 @@ There are one or several `html` files (and `org` source files) per experiment--o
 
 Feel free to critisize the procedure and its results. If you manage to improve it, be cool and let me know!
 
+## Spike trains format
+
+The spike trains in directory `locustXXX_spike_trains` are stored in ASCII format with one spike time (in seconds) per line. They are named `locustXXX_StimID_tetY_uZ.txt`, where `XXX` gives the experiment data and `Y` the tetrode label, `StimID` is a stimulation identifier (more precisely a `group` name in the `HDF5` data file) and `Z` is the unit number. When several trials, like say 25 stimulation with citronelal, were recorded, the successive trials will be found one after the other and time 0 is defined as the start of the acquisition of the first trial.
