@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-12-12 lun. 13:07 -->
+<!-- 2016-12-13 mar. 15:42 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Sorting of the Locust Olfactory Pathway Datasets from Zenodo</title>
@@ -233,22 +233,23 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org47cfebc">1. Introduction</a></li>
-<li><a href="#org1a38637">2. The code</a></li>
-<li><a href="#org7404c11">3. The experiments</a>
+<li><a href="#orgaad600a">1. Introduction</a></li>
+<li><a href="#org4806763">2. The code</a></li>
+<li><a href="#org925e947">3. The experiments</a>
 <ul>
-<li><a href="#org77c5371">3.1. locust20000214</a></li>
-<li><a href="#orgde4a9e6">3.2. locust20000421</a></li>
-<li><a href="#org11b2a58">3.3. locust20010214</a></li>
-<li><a href="#org763799d">3.4. locust20010217</a></li>
+<li><a href="#orgb671ac6">3.1. locust20000214</a></li>
+<li><a href="#org2699d28">3.2. locust20000421</a></li>
+<li><a href="#org5903d04">3.3. locust20000613</a></li>
+<li><a href="#orgfbc1d22">3.4. locust20010214</a></li>
+<li><a href="#orgd9335da">3.5. locust20010217</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org47cfebc" class="outline-2">
-<h2 id="org47cfebc"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgaad600a" class="outline-2">
+<h2 id="orgaad600a"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 You will find here the codes necessary for reproducing the sorting of the extracellular recordings from the locust olfactory pathway available on zenodo (<a href="https://zenodo.org/record/21589">https://zenodo.org/record/21589</a>) as well as the sorting results (the spike trains).
@@ -275,8 +276,8 @@ The spike trains in directory <code>locustXXX_spike_trains</code> are stored in 
 </div>
 </div>
 
-<div id="outline-container-org1a38637" class="outline-2">
-<h2 id="org1a38637"><span class="section-number-2">2</span> The code</h2>
+<div id="outline-container-org4806763" class="outline-2">
+<h2 id="org4806763"><span class="section-number-2">2</span> The code</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 There is a <a href="R_Sorting_Code/sorting_with_r.html">"reference manual"</a> describing the <code>R</code> function specifically developed for spike sorting. A <a href="http://xtof.perso.math.cnrs.fr/locust.html">more detailed description</a> of what these function do is also available.
@@ -284,8 +285,8 @@ There is a <a href="R_Sorting_Code/sorting_with_r.html">"reference manual"</a> d
 </div>
 </div>
 
-<div id="outline-container-org7404c11" class="outline-2">
-<h2 id="org7404c11"><span class="section-number-2">3</span> The experiments</h2>
+<div id="outline-container-org925e947" class="outline-2">
+<h2 id="org925e947"><span class="section-number-2">3</span> The experiments</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 There are one or several <code>html</code> files (and <code>org</code> source files) per experiment&#x2013;one if a single tetrode was recorded and more if two or more were recorded&#x2013;. Each <code>html</code> file is an "sorting lab book", you will find there every command used to carry out the sorting together with comments and diagnostic plots. Each <code>HDF5</code> <code>group</code> in the data file is analyzed trial per trial. The templates are allowed to drift to track the units (see the  <a href="R_Sorting_Code/sorting_with_r.html">"reference manual"</a> for info on how this is done). The diagnostic plots show for each unit in the model:
@@ -303,8 +304,8 @@ There are one or several <code>html</code> files (and <code>org</code> source fi
 Feel free to critisize the procedure and its results. If you manage to improve it, be cool and let me know!
 </p>
 </div>
-<div id="outline-container-org77c5371" class="outline-3">
-<h3 id="org77c5371"><span class="section-number-3">3.1</span> locust20000214</h3>
+<div id="outline-container-orgb671ac6" class="outline-3">
+<h3 id="orgb671ac6"><span class="section-number-3">3.1</span> locust20000214</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 An experiment with a signle recorded tetrode and two well isolated neurons, see <a href="Locust_Analysis_with_R/locust20000214/Sorting_20000214_tetD.html">the description</a> for details. In that experiment the inter trial interval was 30 s and only 10 s were recorded per trial. In the stored spike trains I have but the successive trials with a 10 s offest (corresponding to the acquisition time) and not with a 30 s (as described above, corresponding to the inter-trial interval). This makes the rater plot look nicer, nothing more.
@@ -312,8 +313,8 @@ An experiment with a signle recorded tetrode and two well isolated neurons, see 
 </div>
 </div>
 
-<div id="outline-container-orgde4a9e6" class="outline-3">
-<h3 id="orgde4a9e6"><span class="section-number-3">3.2</span> locust20000421</h3>
+<div id="outline-container-org2699d28" class="outline-3">
+<h3 id="org2699d28"><span class="section-number-3">3.2</span> locust20000421</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 An experiment were two tetrodes with reasonnably good signals were recorded: <a href="Locust_Analysis_with_R/locust20000421/Sorting_20000421_tetD1.html">tetrode D1</a> with a single unit that can be followed through the 21 different stimulation and <a href="Locust_Analysis_with_R/locust20000421/Sorting_20000421_tetD2.html">tetrode D2</a> with two units that can be followed. The data for this experiment are "unstable" because, I think, the odors were presented at too high a rate, once every 10 seconds.
@@ -321,18 +322,27 @@ An experiment were two tetrodes with reasonnably good signals were recorded: <a 
 </div>
 </div>
 
-<div id="outline-container-org11b2a58" class="outline-3">
-<h3 id="org11b2a58"><span class="section-number-3">3.3</span> locust20010214</h3>
+<div id="outline-container-org5903d04" class="outline-3">
+<h3 id="org5903d04"><span class="section-number-3">3.3</span> locust20000613</h3>
 <div class="outline-text-3" id="text-3-3">
+<p>
+An experiment were only <a href="Locust_Analysis_with_R/locust20000613/locust20000613.html">tetrode D</a> was giving good data. The analysis of this experiment is interesting because between two sets of trials (between stimulation with pure and 100 times diluted Cis-3-Hexen-1-ol), one waveform drifts so much that the old template does not recognize it anymore. This shows up in the diagnostic plots and the model has to be adjusted (by hand). Overall, 4 well isolated units are followed.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfbc1d22" class="outline-3">
+<h3 id="orgfbc1d22"><span class="section-number-3">3.4</span> locust20010214</h3>
+<div class="outline-text-3" id="text-3-4">
 <p>
 This is probably the best experiment contained in the zenodo datasets collection. The <a href="Locust_Analysis_with_R/locust20010214/Sorting_20010214_tetB.html">details of the analysis of tetrode B</a> are available. 10 units are identified, but only the first seven are well isolated. There is both spontaneous activity and responses to many different odors.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org763799d" class="outline-3">
-<h3 id="org763799d"><span class="section-number-3">3.4</span> locust20010217</h3>
-<div class="outline-text-3" id="text-3-4">
+<div id="outline-container-orgd9335da" class="outline-3">
+<h3 id="orgd9335da"><span class="section-number-3">3.5</span> locust20010217</h3>
+<div class="outline-text-3" id="text-3-5">
 <p>
 Only spontaneous activity. The <a href="Locust_Analysis_with_R/locust20010217/Sorting_20010217_tetD.html">details of the analysis for tetrode D</a> are available. 10 units are identified but only 5 are good.
 </p>
@@ -342,7 +352,7 @@ Only spontaneous activity. The <a href="Locust_Analysis_with_R/locust20010217/So
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Christophe Pouzat</p>
-<p class="date">Created: 2016-12-12 lun. 13:07</p>
+<p class="date">Created: 2016-12-13 mar. 15:42</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

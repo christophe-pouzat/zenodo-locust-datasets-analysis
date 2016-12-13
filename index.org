@@ -47,6 +47,10 @@ An experiment with a signle recorded tetrode and two well isolated neurons, see 
 ** locust20000421 
 An experiment were two tetrodes with reasonnably good signals were recorded: [[file:Locust_Analysis_with_R/locust20000421/Sorting_20000421_tetD1.html][tetrode D1]] with a single unit that can be followed through the 21 different stimulation and [[file:Locust_Analysis_with_R/locust20000421/Sorting_20000421_tetD2.html][tetrode D2]] with two units that can be followed. The data for this experiment are "unstable" because, I think, the odors were presented at too high a rate, once every 10 seconds.
 
+** locust20000613
+
+An experiment were only [[file:Locust_Analysis_with_R/locust20000613/locust20000613.html][tetrode D]] was giving good data. The analysis of this experiment is interesting because between two sets of trials (between stimulation with pure and 100 times diluted Cis-3-Hexen-1-ol), one waveform drifts so much that the old template does not recognize it anymore. This shows up in the diagnostic plots and the model has to be adjusted (by hand). Overall, 4 well isolated units are followed.
+ 
 ** locust20010214
 
 This is probably the best experiment contained in the zenodo datasets collection. The [[file:Locust_Analysis_with_R/locust20010214/Sorting_20010214_tetB.html][details of the analysis of tetrode B]] are available. 10 units are identified, but only the first seven are well isolated. There is both spontaneous activity and responses to many different odors.
