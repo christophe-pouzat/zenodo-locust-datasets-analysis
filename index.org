@@ -49,7 +49,7 @@ An experiment were two tetrodes with reasonnably good signals were recorded: [[f
 
 ** locust20000613
 
-An experiment were only [[file:Locust_Analysis_with_R/locust20000613/locust20000613.html][tetrode D]] was giving good data. The analysis of this experiment is interesting because between two sets of trials (between stimulation with pure and 100 times diluted Cis-3-Hexen-1-ol), one waveform drifts so much that the old template does not recognize it anymore. This shows up in the diagnostic plots and the model has to be adjusted (by hand). Overall, 4 well isolated units are followed.
+An experiment were only [[file:Locust_Analysis_with_R/locust20000613/Sorting_20000613_tetD.html][tetrode D]] was giving good data. The analysis of this experiment is interesting because between two sets of trials (between stimulation with pure and 100 times diluted Cis-3-Hexen-1-ol), one waveform drifts so much that the old template does not recognize it anymore. This shows up in the diagnostic plots and the model has to be adjusted (by hand). Overall, 4 well isolated units are followed.
  
 ** locust20010214
 
