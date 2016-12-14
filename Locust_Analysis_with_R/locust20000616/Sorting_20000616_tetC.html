@@ -1,0 +1,2509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2016-12-14 mer. 13:15 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sorting data set 20000616 tetrode C (channels 9, 11, 13, 16)</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Christophe Pouzat" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Sorting data set 20000616 tetrode C (channels 9, 11, 13, 16)</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgdafe827">1. Introduction</a>
+<ul>
+<li><a href="#org07a6a13">1.1. Getting the data</a></li>
+<li><a href="#orga3aecad">1.2. Getting the code</a></li>
+</ul>
+</li>
+<li><a href="#org94aed48">2. Tetrode D (channels 9, 11, 13, 16) analysis</a>
+<ul>
+<li><a href="#orgade9b8e">2.1. Loading the data</a></li>
+<li><a href="#orgb95d173">2.2. Five number summary</a></li>
+<li><a href="#org71023a6">2.3. Plot the data</a></li>
+<li><a href="#org3599698">2.4. Data normalization</a></li>
+<li><a href="#org754af1c">2.5. Spike detection</a></li>
+<li><a href="#orgcffa00f">2.6. Cuts</a></li>
+<li><a href="#orgba8cf8a">2.7. Events</a></li>
+<li><a href="#orga9076e8">2.8. Removing obvious superposition</a></li>
+<li><a href="#org92a5b32">2.9. Dimension reduction</a></li>
+<li><a href="#org2aeadf2">2.10. Exporting for <code>GGobi</code></a></li>
+<li><a href="#orgab68857">2.11. kmeans clustering with 5</a></li>
+<li><a href="#org27f8364">2.12. Long cuts creation</a></li>
+<li><a href="#org255dfe6">2.13. Peeling</a>
+<ul>
+<li><a href="#orgfbdbbfc">2.13.1. Round 0</a></li>
+<li><a href="#org71b7110">2.13.2. Round 1</a></li>
+</ul>
+</li>
+<li><a href="#orgdff39d0">2.14. Getting the spike trains</a></li>
+<li><a href="#orgf3ba20f">2.15. Getting the inter spike intervals and the forward and backward recurrence times</a>
+<ul>
+<li><a href="#org0c83f4d">2.15.1. ISI distributions</a></li>
+<li><a href="#orgdf8c84f">2.15.2. Forward and Backward Recurrence Times</a></li>
+</ul>
+</li>
+<li><a href="#orgc0b8e38">2.16. Testing <code>all_at_once</code></a></li>
+</ul>
+</li>
+<li><a href="#org95b252a">3. Analyzing a sequence of trials</a>
+<ul>
+<li><a href="#org9ba0eee">3.1. Create directories were results get saved</a></li>
+<li><a href="#org55828ce">3.2. Define a "taylored" version of <code>sort_many_trials</code></a></li>
+</ul>
+</li>
+<li><a href="#orgee176bc">4. Systematic analysis of the 50 trials with "pure" <code>Cis-3-Hexen-1-ol</code></a>
+<ul>
+<li><a href="#org90aa57f">4.1. Doing the job</a></li>
+<li><a href="#orgfe0435a">4.2. Diagnostic plots</a></li>
+<li><a href="#org1515e99">4.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org26ac843">5. The second minute of spontaneous activity recording</a>
+<ul>
+<li><a href="#org3b8b7fa">5.1. Another taylored <code>sort_many_trials</code></a></li>
+<li><a href="#org96230e9">5.2. Do the job</a></li>
+<li><a href="#orgb4baae0">5.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org5f2f232">6. The third minute of spontaneous activity recording</a>
+<ul>
+<li><a href="#org97e04b8">6.1. Do the job</a></li>
+<li><a href="#org647b619">6.2. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org9c76003">7. 30 remaining trials with <code>Cis-3-Hexen-1-ol</code> diluted 100 times</a>
+<ul>
+<li><a href="#org2311982">7.1. Do the job</a></li>
+<li><a href="#org3cf99b0">7.2. Diagnostic plots</a></li>
+<li><a href="#org47d3d22">7.3. Save results</a></li>
+</ul>
+</li>
+<li><a href="#org06b184e">8. 50 trials with <code>Cis-3-hexen-1-ol</code> diluted 10 times</a>
+<ul>
+<li><a href="#orge8d413c">8.1. Do the job</a></li>
+<li><a href="#org53f6e69">8.2. Diagnostic plots</a></li>
+<li><a href="#org1894070">8.3. Save results</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgdafe827" class="outline-2">
+<h2 id="orgdafe827"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This is the description of how to do the (spike) sorting of tetrode C (channels 9, 11, 13, 16) from data set <code>locust20000616</code>.
+</p>
+</div>
+
+<div id="outline-container-org07a6a13" class="outline-3">
+<h3 id="org07a6a13"><span class="section-number-3">1.1</span> Getting the data</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+The data are in file <code>locust20000616.hdf5</code> located on <a href="https://zenodo.org/record/21589">zenodo</a> and can be downloaded interactivelly with a web browser or by typing at the command line:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh" id="org3b93c2d">wget https://zenodo.org/record/21589/files/locust20000616.hdf5
+</pre>
+</div>
+
+<p>
+In the sequel I will assume that <code>R</code> has been started in the directory where the data were downloaded (in other words, the working direcory should be the one containing the data.
+</p>
+
+<p>
+The data are in <a href="https://support.hdfgroup.org/HDF5/">HDF5</a> format and the easiest way to get them into <code>R</code> is to install the <code>rhdf5</code> package from <a href="http://www.bioconductor.org/packages/release/bioc/html/rhdf5.html">Bioconductor</a>. Once the installation is done, the library is loaded into <code>R</code> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7ca8102">library(rhdf5)
+</pre>
+</div>
+
+<p>
+We can then get a (long and detailed) listing of our data file content with (result not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org696612a">h5ls("locust20000616.hdf5")
+</pre>
+</div>
+
+<p>
+We can get the content of <code>LabBook</code> <code>metadata</code> <i>from the shell</i> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org12a82ad">h5dump -a "LabBook" locust20000616.hdf5
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga3aecad" class="outline-3">
+<h3 id="orga3aecad"><span class="section-number-3">1.2</span> Getting the code</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+The code can be sourced as follows:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc19e22f">source("https://raw.githubusercontent.com/christophe-pouzat/zenodo-locust-datasets-analysis/master/R_Sorting_Code/sorting_with_r.R")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org94aed48" class="outline-2">
+<h2 id="org94aed48"><span class="section-number-2">2</span> Tetrode D (channels 9, 11, 13, 16) analysis</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We now want to get our "model", that is a dictionnary of waveforms (one waveform per neuron and per recording site). To that end we are going to use <code>trial_01</code> (20 s of data) contained in the <code>Cis-3-Hexen-1-ol (10^-0) first</code> <code>Group</code> (in <code>HDF5</code> jargon). 
+</p>
+</div>
+
+<div id="outline-container-orgade9b8e" class="outline-3">
+<h3 id="orgade9b8e"><span class="section-number-3">2.1</span> Loading the data</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+So we start by loading the data from channels 9, 11, 13, 16 into <code>R</code>, using the 60 s of data contained in  <code>Spontaneous first</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf4c081f">lD = rbind(cbind(h5read("locust20000616.hdf5", "/Spontaneous first/ch09"),
+                 h5read("locust20000616.hdf5", "/Spontaneous first/ch11"),
+                 h5read("locust20000616.hdf5", "/Spontaneous first/ch13"),
+                 h5read("locust20000616.hdf5", "/Spontaneous first/ch16")))
+dim(lD)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">892858</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-orgb95d173" class="outline-3">
+<h3 id="orgb95d173"><span class="section-number-3">2.2</span> Five number summary</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+We get the <a href="https://en.wikipedia.org/wiki/Five-number_summary">Five number summary</a> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgac084c4">summary(lD,digits=2)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Min.   :1432</td>
+<td class="org-left">Min.   :1646</td>
+<td class="org-left">Min.   :1518</td>
+<td class="org-left">Min.   :1630</td>
+</tr>
+
+<tr>
+<td class="org-left">1st Qu.:2013</td>
+<td class="org-left">1st Qu.:2016</td>
+<td class="org-left">1st Qu.:2013</td>
+<td class="org-left">1st Qu.:2003</td>
+</tr>
+
+<tr>
+<td class="org-left">Median :2050</td>
+<td class="org-left">Median :2050</td>
+<td class="org-left">Median :2050</td>
+<td class="org-left">Median :2050</td>
+</tr>
+
+<tr>
+<td class="org-left">Mean   :2049</td>
+<td class="org-left">Mean   :2049</td>
+<td class="org-left">Mean   :2049</td>
+<td class="org-left">Mean   :2049</td>
+</tr>
+
+<tr>
+<td class="org-left">3rd Qu.:2086</td>
+<td class="org-left">3rd Qu.:2083</td>
+<td class="org-left">3rd Qu.:2087</td>
+<td class="org-left">3rd Qu.:2095</td>
+</tr>
+
+<tr>
+<td class="org-left">Max.   :2508</td>
+<td class="org-left">Max.   :2362</td>
+<td class="org-left">Max.   :2398</td>
+<td class="org-left">Max.   :2388</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+The minimum is on the first channel. This suggests that the largest spikes are going to be found here (remember that spikes are going mainly downwards).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org71023a6" class="outline-3">
+<h3 id="org71023a6"><span class="section-number-3">2.3</span> Plot the data</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+We "convert" the data matrix <code>lD</code> into a <code>time series</code> object with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf0c7c53">lD = ts(lD,start=0,freq=15e3)
+</pre>
+</div>
+
+<p>
+We can then plot the whole data with (not shown since it makes a very figure):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd5e832d">plot(lD)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3599698" class="outline-3">
+<h3 id="org3599698"><span class="section-number-3">2.4</span> Data normalization</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+As always we normalize such that the <a href="https://en.wikipedia.org/wiki/Median_absolute_deviation">median absolute deviation</a> (MAD) becomes 1:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0f0a0f9">lD.mad = apply(lD,2,mad)
+lD = t((t(lD)-apply(lD,2,median))/lD.mad)
+lD = ts(lD,start=0,freq=15e3)
+</pre>
+</div>
+
+<p>
+Once this is done we explore interactively the data with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org2a09eaa">explore(lD,col=c("black","grey70"))
+</pre>
+</div>
+
+<p>
+There are many neurons. The signal to noise ratio is OK. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-org754af1c" class="outline-3">
+<h3 id="org754af1c"><span class="section-number-3">2.5</span> Spike detection</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+Since the spikes are mainly going downwards, we will detect valleys instead of peaks:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3a4d5d1">lDf = -lD
+filter_length = 3
+threshold_factor = 4
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf.mad = apply(lDf,2,mad)
+lDf_mad_original = lDf.mad
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) &lt; thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp0 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp0
+</pre>
+</div>
+
+<pre class="example">
+eventsPos object with indexes of 1444 events. 
+  Mean inter event interval: 618.21 sampling points, corresponding SD: 686.65 sampling points 
+  Smallest and largest inter event intervals: 18 and 7814 sampling points.
+</pre>
+
+
+
+<p>
+Every time a filter length / threshold combination is tried, the detection is checked interactively with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge97c5f3">explore(sp0,lD,col=c("black","grey50"))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcffa00f" class="outline-3">
+<h3 id="orgcffa00f"><span class="section-number-3">2.6</span> Cuts</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+We proceed as usual to get the cut length right:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0c97aa3">evts = mkEvents(sp0,lD,49,50)
+evts.med = median(evts)
+evts.mad = apply(evts,1,mad)
+plot_range = range(c(evts.med,evts.mad))
+plot(evts.med,type="n",ylab="Amplitude",
+     ylim=plot_range)
+abline(v=seq(0,400,10),col="grey")
+abline(h=c(0,1),col="grey")
+lines(evts.med,lwd=2)
+lines(evts.mad,col=2,lwd=2)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/tetC_cut_length.png" alt="tetC_cut_length.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Setting the cut length for the data from tetrode C (channels 9, 11, 13, 16). We see that we need 20 points before the peak and 20 after.</p>
+</div>
+
+<p>
+We see that we need roughly 20 points before the peak and 20 after.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgba8cf8a" class="outline-3">
+<h3 id="orgba8cf8a"><span class="section-number-3">2.7</span> Events</h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+We now cut our events:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orga6777a7">evts = mkEvents(sp0,lD,19,20)
+summary(evts)
+</pre>
+</div>
+
+<pre class="example">
+events object deriving from data set: lD.
+ Events defined as cuts of 40 sampling points on each of the 4 recording sites.
+ The 'reference' time of each event is located at point 20 of the cut.
+ There are 1444 events in the object.
+</pre>
+
+
+<p>
+We can as usual visualize the first 200 events with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgde1be7a">evts[,1:200]
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/first_200_evts_tetC.png" alt="first_200_evts_tetC.png" />
+</p>
+<p><span class="figure-number">Figure 2: </span>First 200 events for the data from tetrode C (channels 1, 3, 5, 7).</p>
+</div>
+
+<p>
+There are few superposition and the best way to detect them without excluding good events seems to look for too large negative deviations on both sides of the central valley.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga9076e8" class="outline-3">
+<h3 id="orga9076e8"><span class="section-number-3">2.8</span> Removing obvious superposition</h3>
+<div class="outline-text-3" id="text-2-8">
+<p>
+We define function <code>goodEvtsFct</code> with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgd23c050">goodEvtsFct = function(samp,thr=3) {
+    samp.med = apply(samp,1,median)
+    samp.mad = apply(samp,1,mad)
+    under &lt;- samp.med &lt; 0
+    samp.r &lt;- apply(samp,2,function(x) {x[under] &lt;- 0;x})
+    apply(samp.r,2,function(x) all(x-samp.med &gt; -thr*samp.mad))
+}
+</pre>
+</div>
+
+<p>
+We apply it with a threshold of 4 times the MAD:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0c3cb2c">goodEvts = goodEvtsFct(evts,4)
+</pre>
+</div>
+
+<p>
+If we look at all the remaining "good" events with (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf0b3905">evts[,goodEvts]
+</pre>
+</div>
+
+<p>
+and at all the "bad" ones (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org0d95c4b">evts[,!goodEvts]
+</pre>
+</div>
+
+<p>
+we see that our sample cleaning does its job.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org92a5b32" class="outline-3">
+<h3 id="org92a5b32"><span class="section-number-3">2.9</span> Dimension reduction</h3>
+<div class="outline-text-3" id="text-2-9">
+<p>
+We do a <code>PCA</code> on our good events set:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org1929c5c">evts.pc = prcomp(t(evts[,goodEvts]))
+</pre>
+</div>
+
+<p>
+We look at the projections on the first 4 principle components:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb17b5fa">panel.dens = function(x,...) {
+  usr = par("usr")
+  on.exit(par(usr))
+  par(usr = c(usr[1:2], 0, 1.5) )
+  d = density(x, adjust=0.5)
+  x = d$x
+  y = d$y
+  y = y/max(y)
+  lines(x, y, col="grey50", ...)
+}
+pairs(evts.pc$x[,1:4],pch=".",gap=0,diag.panel=panel.dens)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/evts-proj-first-4-pc-tetC.png" alt="evts-proj-first-4-pc-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 3: </span>Events from tetrode C (channels 9, 10, 11, 12) projected onto the first 4 PCs.</p>
+</div>
+
+<p>
+I see at least 4/5 clusters. We can also look at the projections on the PC pairs defined by the next 4 PCs:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgba542c1">pairs(evts.pc$x[,5:8],pch=".",gap=0,diag.panel=panel.dens)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/evts-proj-next-4-pc-tetC.png" alt="evts-proj-next-4-pc-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 4: </span>Events from tetrode C (channels 9, 10, 11, 12) projected onto PC 5 to 8.</p>
+</div>
+
+<p>
+There is not much structure left beyond the 4th PC.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2aeadf2" class="outline-3">
+<h3 id="org2aeadf2"><span class="section-number-3">2.10</span> Exporting for <code>GGobi</code></h3>
+<div class="outline-text-3" id="text-2-10">
+<p>
+We export the events projected onto the first 8 principle components in <code>csv</code> format:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org486f6c9">write.csv(evts.pc$x[,1:8],file="tetC_evts.csv")
+</pre>
+</div>
+
+<p>
+Using the <code>rotation</code> display of <code>GGobi</code> with the first 3 principle components and the <code>2D tour</code> with the first 4 components I see 5 clusters or more (depending on the sampling jitter effect). So we will start with a <code>kmeans</code> with ( centers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgab68857" class="outline-3">
+<h3 id="orgab68857"><span class="section-number-3">2.11</span> kmeans clustering with 5</h3>
+<div class="outline-text-3" id="text-2-11">
+<p>
+I use here the whole waveform (for the <code>kmeans</code>) but nothing changes if I use <code>evts.pc$x[,1:4]</code> as I usually do:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5e5e9a7">nbc=5
+set.seed(20110928,kind="Mersenne-Twister")
+km = kmeans(t(evts[,goodEvts]),centers=nbc,iter.max=100,nstart=100)
+label = km$cluster
+cluster.med = sapply(1:nbc, function(cIdx) median(evts[,goodEvts][,label==cIdx]))
+sizeC = sapply(1:nbc,function(cIdx) sum(abs(cluster.med[,cIdx])))
+newOrder = sort.int(sizeC,decreasing=TRUE,index.return=TRUE)$ix
+cluster.mad = sapply(1:nbc, function(cIdx) {ce = t(evts[,goodEvts]);ce = ce[label==cIdx,];apply(ce,2,mad)})
+cluster.med = cluster.med[,newOrder]
+cluster.mad = cluster.mad[,newOrder]
+labelb = sapply(1:nbc, function(idx) (1:nbc)[newOrder==idx])[label]
+</pre>
+</div>
+
+
+<p>
+We write a new <code>csv</code> file with the data and the labels:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org893eb65">write.csv(cbind(evts.pc$x[,1:4],labelb),file="tetC_sorted.csv")
+</pre>
+</div>
+
+<p>
+It gives almost what was expected (one splitting ).
+</p>
+
+<p>
+We get a plot showing the events attributed to each of the 5 units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfd8d37a">layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,1,1,1))
+for (i in (1:nbc)) plot(evts[,goodEvts][,labelb==i],y.bar=5)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/kmeans-5-evts-first-five-tetC.png" alt="kmeans-5-evts-first-five-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 5: </span>The events of five clusters of tetrode C</p>
+</div>
+
+<p>
+The events of clusters 2 and 3 look very similar (if one abstracts from the few events from cluster 1 wrongly attributed to 2), so I fuse them:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org02335e7">nbc=4
+labelb[labelb==3]=2
+labelb[labelb==4]=3
+labelb[labelb==5]=4
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org27f8364" class="outline-3">
+<h3 id="org27f8364"><span class="section-number-3">2.12</span> Long cuts creation</h3>
+<div class="outline-text-3" id="text-2-12">
+<p>
+For the peeling process we need templates that start and end at 0 (we will otherwise generate artifacts when we subtract). We proceed "as usual" with (I tried first with the default value for parameters <code>before</code> and <code>after</code> but I reduced their values after looking at the centers, see the next figure):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb64f170">c_before = 49
+c_after = 80
+centers = lapply(1:nbc, function(i)
+    mk_center_list(sp0[goodEvts][labelb==i],lD,
+                   before=c_before,after=c_after))
+names(centers) = paste("Cluster",1:nbc)
+</pre>
+</div>
+
+
+<p>
+We then make sure that our cuts are long enough by looking at them:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org137e2d7">layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,4,1,1))
+the_range=c(min(sapply(centers,function(l) min(l$center))),
+            max(sapply(centers,function(l) max(l$center))))
+for (i in 1:nbc) {
+    template = centers[[i]]$center
+    plot(template,lwd=2,col=2,
+         ylim=the_range,type="l",ylab="")
+    abline(h=0,col="grey50")
+    abline(v=(1:2)*(c_before+c_after)+1,col="grey50")
+    lines(filter(template,rep(1,filter_length)/filter_length),
+          col=1,lty=3,lwd=2)
+    abline(h=-threshold_factor,col="grey",lty=2,lwd=2)
+    lines(centers[[i]]$centerD,lwd=2,col=4)
+}
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/centers-4u-tetC.png" alt="centers-4u-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 6: </span>The four templates (red) together with their first derivative (blue) all with the same scale. The dashed black curve show the templates filtered with the filter used during spike detection and the horizontal dashed grey line shows the detection threshold.</p>
+</div>
+
+<p>
+Units 1 and 2 should be reliably detected, we should miss some events from clusters 3 and 4.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org255dfe6" class="outline-3">
+<h3 id="org255dfe6"><span class="section-number-3">2.13</span> Peeling</h3>
+<div class="outline-text-3" id="text-2-13">
+<p>
+We can now do the peeling.
+</p>
+</div>
+
+<div id="outline-container-orgfbdbbfc" class="outline-4">
+<h4 id="orgfbdbbfc"><span class="section-number-4">2.13.1</span> Round 0</h4>
+<div class="outline-text-4" id="text-2-13-1">
+<p>
+We classify, predict, subtract and check how many non-classified events we get:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org9eea0e8">round0 = lapply(as.vector(sp0),classify_and_align_evt,
+                data=lD,centers=centers,
+                before=c_before,after=c_after)
+pred0 = predict_data(round0,centers,data_length = dim(lD)[1])
+lD_1 = lD - pred0
+sum(sapply(round0, function(l) l[[1]] == '?'))
+</pre>
+</div>
+
+<pre class="example">
+23
+</pre>
+
+<p>
+We can see the difference before / after peeling for the data between 0.9 and 1.0 s:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org20e6986">ii = 1:1500 + 0.9*15000
+tt = ii/15000
+par(mar=c(1,1,1,1))
+plot(tt, lD[ii,1], axes = FALSE,
+     type="l",ylim=c(-50,10),
+     xlab="",ylab="")
+lines(tt, lD_1[ii,1], col='red')
+lines(tt, lD[ii,2]-15, col='black')
+lines(tt, lD_1[ii,2]-15, col='red')
+lines(tt, lD[ii,3]-25, col='black')
+lines(tt, lD_1[ii,3]-25, col='red')
+lines(tt, lD[ii,4]-40, col='black')
+lines(tt, lD_1[ii,4]-40, col='red')
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/peeling-0-4u-tetC.png" alt="peeling-0-4u-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 7: </span>The first peeling illustrated on 100 ms of data, the raw data are in black and the first subtration in red.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org71b7110" class="outline-4">
+<h4 id="org71b7110"><span class="section-number-4">2.13.2</span> Round 1</h4>
+<div class="outline-text-4" id="text-2-13-2">
+<p>
+We keep going, using the subtracted data <code>lD_1</code> as "raw data", detecting on all sites using the original <code>MAD</code> for normalization:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc3876c8">lDf = -lD_1
+lDf = filter(lDf,rep(1,filter_length)/filter_length)
+lDf[is.na(lDf)] = 0
+lDf = t(t(lDf)/lDf_mad_original)
+thrs = threshold_factor*c(1,1,1,1)
+bellow.thrs = t(t(lDf) &lt; thrs)
+lDfr = lDf
+lDfr[bellow.thrs] = 0
+remove(lDf)
+sp1 = peaks(apply(lDfr,1,sum),15)
+remove(lDfr)
+sp1
+</pre>
+</div>
+
+<pre class="example">
+eventsPos object with indexes of 132 events. 
+  Mean inter event interval: 6705.77 sampling points, corresponding SD: 8439.31 sampling points 
+  Smallest and largest inter event intervals: 26 and 42503 sampling points.
+</pre>
+
+
+<p>
+We classify, predict, subtract and check how many non-classified events we get:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org790034e">round1 = lapply(as.vector(sp1),classify_and_align_evt,
+                data=lD_1,centers=centers,
+                before=c_before,after=c_after)
+pred1 = predict_data(round1,centers,data_length = dim(lD)[1])
+lD_2 = lD_1 - pred1
+sum(sapply(round1, function(l) l[[1]] == '?'))
+</pre>
+</div>
+
+<pre class="example">
+26
+</pre>
+
+<p>
+We look at what's left with (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org11f67ca">explore(sp1,lD_2,col=c("black","grey50"))
+</pre>
+</div>
+
+<p>
+That looks fine and we stop here.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdff39d0" class="outline-3">
+<h3 id="orgdff39d0"><span class="section-number-3">2.14</span> Getting the spike trains</h3>
+<div class="outline-text-3" id="text-2-14">
+<div class="org-src-container">
+<pre class="src src-R" id="org1819c20">round_all = c(round0,round1)
+spike_trains = lapply(paste("Cluster",1:nbc),
+                      function(cn) sort(sapply(round_all[sapply(round_all,
+                                                           function(l) l[[1]]==cn)],
+                                          function(l) l[[2]]+l[[3]])))
+names(spike_trains) = paste("Cluster",1:nbc)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf3ba20f" class="outline-3">
+<h3 id="orgf3ba20f"><span class="section-number-3">2.15</span> Getting the inter spike intervals and the forward and backward recurrence times</h3>
+<div class="outline-text-3" id="text-2-15">
+</div><div id="outline-container-org0c83f4d" class="outline-4">
+<h4 id="org0c83f4d"><span class="section-number-4">2.15.1</span> ISI distributions</h4>
+<div class="outline-text-4" id="text-2-15-1">
+<p>
+We first get the <code>ISI</code> (inter spike intervals) of each unit:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7708a74">isi = sapply(spike_trains, diff)
+names(isi) = names(spike_trains)
+</pre>
+</div>
+
+<p>
+We get the ISI ECDF for the five units with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org59f705f">layout(matrix(1:(nbc+nbc %% 2),nr=ceiling(nbc/2)))
+par(mar=c(4,5,6,1))
+for (cn in names(isi)) plot_isi(isi[[cn]],main=cn)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/isi-ecdf-4u-tetC.png" alt="isi-ecdf-4u-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 8: </span>ISI ECDF for the four units.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdf8c84f" class="outline-4">
+<h4 id="orgdf8c84f"><span class="section-number-4">2.15.2</span> Forward and Backward Recurrence Times</h4>
+<div class="outline-text-4" id="text-2-15-2">
+<p>
+The forward recurrence time (<code>FRT</code>) between neuron A and B is the elapsed time between a spike in A and the next spike in B. The backward recurrence time (<code>BRT</code>) is the same thing except that we look for the former spike in B. If A and B are not correlated, the expected density of the FRT is the survival function (1-CDF) of the ISI from B divided by the mean ISI of B (the same holds for the BRT under the null hypothesis after taking the opposite). All that is correct if the data are <i>stationary</i>.
+</p>
+
+<p>
+On the data at hand that gives:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org4fb5d13">layout_matrix = matrix(0,nr=nbc,nc=nbc)
+counter = 1
+for (i in 1:nbc)
+    for (j in 1:nbc)
+        if (i != j) {
+            layout_matrix[i,j] = counter
+            counter = counter +1
+        }
+layout(layout_matrix)
+par(mar=c(4,3,4,1))
+for (i in 1:nbc)
+    for (j in 1:nbc)
+        if (i != j)
+            test_rt(spike_trains[[i]],
+                    spike_trains[[j]],
+                    ylab="",main=paste("Units",i,"and",j))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/rt-test-4u-tetC.png" alt="rt-test-4u-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 9: </span>Graphical tests of the Backward and Forward Reccurrence Times distrution agaisnt the null hypothesis (no interaction). If the null is correct, the curves should be IID draws from a standard normal distribution.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc0b8e38" class="outline-3">
+<h3 id="orgc0b8e38"><span class="section-number-3">2.16</span> Testing <code>all_at_once</code></h3>
+<div class="outline-text-3" id="text-2-16">
+<p>
+We test the function with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgaf22d61">## We need again an un-normalized version of the data
+ref_data = rbind(cbind(h5read("locust20000616.hdf5", "/Spontaneous first/ch09"),
+                       h5read("locust20000616.hdf5", "/Spontaneous first/ch11"),
+                       h5read("locust20000616.hdf5", "/Spontaneous first/ch13"),
+                       h5read("locust20000616.hdf5", "/Spontaneous first/ch16")))
+## We can now use our function
+aao=all_at_once(data=ref_data, centers, thres=threshold_factor*c(1,1,1,1), 
+                filter_length_1=filter_length, filter_length=filter_length, 
+                minimalDist_1=15, minimalDist=15, 
+                before=c_before, after=c_after, 
+                detection_cycle=c(0,0), verbose=2)
+</pre>
+</div>
+
+<pre class="example">
+The five number summary is:
+       V1             V2             V3             V4      
+ Min.   :1432   Min.   :1646   Min.   :1518   Min.   :1630  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2086   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2508   Max.   :2362   Max.   :2398   Max.   :2388  
+
+Doing now round 0 detecting on all sites
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+     1443       284       411       285       440        23 
+
+Doing now round 1 detecting on all sites
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      132         3         0         9        94        26 
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+     1564       287       411       294       534        38
+</pre>
+
+
+
+<p>
+We see that we are getting back the numbers we obtained before step by step.
+</p>
+
+<p>
+We can compare the "old" and "new" centers with (not shown):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgffc2d1c">layout(matrix(1:nbc,nr=nbc))
+par(mar=c(1,4,1,1))
+for (i in 1:nbc) {
+    plot(centers[[i]]$center,lwd=2,col=2,
+         ylim=the_range,type="l")
+    abline(h=0,col="grey50")
+    abline(v=(c_before+c_after)+1,col="grey50")
+    lines(aao$centers[[i]]$center,lwd=1,col=4)
+}
+</pre>
+</div>
+
+<p>
+They are not exactly identical since the new version is computed with all events (superposed or not) attributed to each neuron.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org95b252a" class="outline-2">
+<h2 id="org95b252a"><span class="section-number-2">3</span> Analyzing a sequence of trials</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-org9ba0eee" class="outline-3">
+<h3 id="org9ba0eee"><span class="section-number-3">3.1</span> Create directories were results get saved</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+We will carry out an analysis of sequences of many trials with a given odor. At the end of the analysis of the sequence we will save some intermediate <code>R</code> object in a directory we are now creating.:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orge971bd9">if (!dir.exists("tetC_analysis"))
+    dir.create("tetC_analysis")
+</pre>
+</div>
+
+<p>
+We will moreover save the individual spike trains in text format in a directory:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgaa57e64">if (!dir.exists("locust20000616_spike_trains"))
+    dir.create("locust20000616_spike_trains")
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org55828ce" class="outline-3">
+<h3 id="org55828ce"><span class="section-number-3">3.2</span> Define a "taylored" version of <code>sort_many_trials</code></h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+In order to save space and to avoid typos, we define next a taylored version of <code>sort_many_trials</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org683a6a9">smt = function(stim_name,
+               trial_nbs,
+               centers,
+               counts) {
+    sort_many_trials(inter_trial_time=20*15000,
+                     get_data_fct=function(i,s)
+                         get_data(i,s,
+                                  channels = c("ch09","ch11","ch13","ch16"),
+                                  file="locust20000616.hdf5"),
+                     stim_name=stim_name,
+                     trial_nbs=trial_nbs,
+                     centers=centers,
+                     counts=counts,
+                     all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                filter_length_1=filter_length, filter_length=filter_length, 
+                                                minimalDist_1=15, minimalDist=15, 
+                                                before=c_before, after=c_after, 
+                                                detection_cycle=c(0,0), verbose=1),
+                     layout_matrix=matrix(c(1,1:5),nr=3),new_weight_in_update=0.01
+                     )
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgee176bc" class="outline-2">
+<h2 id="orgee176bc"><span class="section-number-2">4</span> Systematic analysis of the 50 trials with "pure" <code>Cis-3-Hexen-1-ol</code></h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-org90aa57f" class="outline-3">
+<h3 id="org90aa57f"><span class="section-number-3">4.1</span> Doing the job</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-R" id="orgd3404ee">a_Cis_3_Hexen_1_ol_0_tetC=smt(stim_name="Cis-3-Hexen-1-ol (10^-0)",
+                              trial_nbs=1:50,
+                              centers=aao$centers,
+                              counts=aao$counts)
+</pre>
+</div>
+
+<pre class="example">
+***************
+Doing now trial 1 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1391   Min.   :1600   Min.   :1602   Min.   :1663  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2086   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2567   Max.   :2391   Max.   :2442   Max.   :2391  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      515        69       132       112       182        20 
+Trial 1 done!
+******************
+***************
+Doing now trial 2 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1470   Min.   :1666   Min.   :1604   Min.   :1664  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2086   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2461   Max.   :2347   Max.   :2374   Max.   :2360  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      467        64       102       110       170        21 
+Trial 2 done!
+******************
+***************
+Doing now trial 3 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1361   Min.   :1672   Min.   :1644   Min.   :1650  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2049  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2086   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2435   Max.   :2369   Max.   :2355   Max.   :2392  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      472       107        96        93       166        10 
+Trial 3 done!
+******************
+***************
+Doing now trial 4 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1480   Min.   :1610   Min.   :1550   Min.   :1625  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2051   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2086   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2493   Max.   :2372   Max.   :2371   Max.   :2382  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      470        85       112        92       153        28 
+Trial 4 done!
+******************
+***************
+Doing now trial 5 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1476   Min.   :1685   Min.   :1663   Min.   :1636  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2086   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2505   Max.   :2350   Max.   :2349   Max.   :2373  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      464        70       130       103       136        25 
+Trial 5 done!
+******************
+***************
+Doing now trial 6 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1486   Min.   :1659   Min.   :1614   Min.   :1655  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2560   Max.   :2374   Max.   :2455   Max.   :2399  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      430        60       133        87       136        14 
+Trial 6 done!
+******************
+***************
+Doing now trial 7 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1467   Min.   :1687   Min.   :1646   Min.   :1659  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2086   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2468   Max.   :2358   Max.   :2361   Max.   :2374  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      470       111        98        84       159        18 
+Trial 7 done!
+******************
+***************
+Doing now trial 8 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1507   Min.   :1654   Min.   :1675   Min.   :1633  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2086   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2465   Max.   :2393   Max.   :2381   Max.   :2368  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      488        66       131       105       157        29 
+Trial 8 done!
+******************
+***************
+Doing now trial 9 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1503   Min.   :1607   Min.   :1649   Min.   :1647  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2531   Max.   :2394   Max.   :2363   Max.   :2364  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      467        63       118       123       144        19 
+Trial 9 done!
+******************
+***************
+Doing now trial 10 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1460   Min.   :1687   Min.   :1649   Min.   :1607  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2500   Max.   :2374   Max.   :2379   Max.   :2401  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      398        69        76       109       125        19 
+Trial 10 done!
+******************
+***************
+Doing now trial 11 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1505   Min.   :1669   Min.   :1661   Min.   :1640  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2459   Max.   :2365   Max.   :2360   Max.   :2382  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      407        90        72       110       115        20 
+Trial 11 done!
+******************
+***************
+Doing now trial 12 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1490   Min.   :1702   Min.   :1661   Min.   :1651  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2550   Max.   :2410   Max.   :2354   Max.   :2379  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      410        72        89        97       126        26 
+Trial 12 done!
+******************
+***************
+Doing now trial 13 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1501   Min.   :1529   Min.   :1640   Min.   :1638  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2430   Max.   :2386   Max.   :2413   Max.   :2404  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      436        80        67       118       154        17 
+Trial 13 done!
+******************
+***************
+Doing now trial 14 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1496   Min.   :1642   Min.   :1623   Min.   :1623  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2472   Max.   :2360   Max.   :2347   Max.   :2425  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      410        57        95       105       128        25 
+Trial 14 done!
+******************
+***************
+Doing now trial 15 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1480   Min.   :1571   Min.   :1656   Min.   :1631  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2459   Max.   :2432   Max.   :2385   Max.   :2411  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      465        85       122       110       123        25 
+Trial 15 done!
+******************
+***************
+Doing now trial 16 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1493   Min.   :1620   Min.   :1649   Min.   :1682  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2431   Max.   :2356   Max.   :2349   Max.   :2383  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      456        80       107       110       137        22 
+Trial 16 done!
+******************
+***************
+Doing now trial 17 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1444   Min.   :1692   Min.   :1673   Min.   :1595  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2523   Max.   :2337   Max.   :2342   Max.   :2396  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      442        77       119        92       129        25 
+Trial 17 done!
+******************
+***************
+Doing now trial 18 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1460   Min.   :1616   Min.   :1585   Min.   :1596  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2439   Max.   :2346   Max.   :2394   Max.   :2381  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      447        74       108       117       115        33 
+Trial 18 done!
+******************
+***************
+Doing now trial 19 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1484   Min.   :1675   Min.   :1679   Min.   :1665  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2049  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2094  
+ Max.   :2441   Max.   :2357   Max.   :2346   Max.   :2413  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      410        50       114       109       125        12 
+Trial 19 done!
+******************
+***************
+Doing now trial 20 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1483   Min.   :1687   Min.   :1692   Min.   :1629  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2051   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2449   Max.   :2380   Max.   :2370   Max.   :2393  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      437        77       121        97       118        24 
+Trial 20 done!
+******************
+***************
+Doing now trial 21 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1500   Min.   :1683   Min.   :1687   Min.   :1623  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2049  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2447   Max.   :2337   Max.   :2348   Max.   :2381  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      361        84        47        99       110        21 
+Trial 21 done!
+******************
+***************
+Doing now trial 22 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1478   Min.   :1662   Min.   :1674   Min.   :1617  
+ 1st Qu.:2013   1st Qu.:2015   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2051   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2086   3rd Qu.:2084   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2555   Max.   :2358   Max.   :2358   Max.   :2410  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      496        69       163       116       119        29 
+Trial 22 done!
+******************
+***************
+Doing now trial 23 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1510   Min.   :1628   Min.   :1659   Min.   :1557  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2459   Max.   :2359   Max.   :2349   Max.   :2393  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      418        67       112       110       111        18 
+Trial 23 done!
+******************
+***************
+Doing now trial 24 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1431   Min.   :1620   Min.   :1527   Min.   :1542  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2485   Max.   :2363   Max.   :2360   Max.   :2415  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      472        84       102       132       125        29 
+Trial 24 done!
+******************
+***************
+Doing now trial 25 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1515   Min.   :1553   Min.   :1651   Min.   :1585  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2013   1st Qu.:2004  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2094  
+ Max.   :2439   Max.   :2356   Max.   :2346   Max.   :2390  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      387        74        58       113       117        25 
+Trial 25 done!
+******************
+***************
+Doing now trial 26 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1519   Min.   :1681   Min.   :1704   Min.   :1618  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2458   Max.   :2436   Max.   :2352   Max.   :2401  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      434        63       105       121       120        25 
+Trial 26 done!
+******************
+***************
+Doing now trial 27 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1393   Min.   :1683   Min.   :1660   Min.   :1622  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2490   Max.   :2338   Max.   :2365   Max.   :2410  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      469        86        76       121       152        34 
+Trial 27 done!
+******************
+***************
+Doing now trial 28 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1522   Min.   :1619   Min.   :1691   Min.   :1588  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2500   Max.   :2351   Max.   :2377   Max.   :2411  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      470        51       113       118       164        24 
+Trial 28 done!
+******************
+***************
+Doing now trial 29 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1413   Min.   :1605   Min.   :1656   Min.   :1556  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2514   Max.   :2397   Max.   :2415   Max.   :2418  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      450        82        92       107       150        19 
+Trial 29 done!
+******************
+***************
+Doing now trial 30 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1283   Min.   :1579   Min.   :1602   Min.   :1527  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2583   Max.   :2350   Max.   :2357   Max.   :2516  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      442        64       108       109       127        34 
+Trial 30 done!
+******************
+***************
+Doing now trial 31 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1486   Min.   :1589   Min.   :1636   Min.   :1546  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2484   Max.   :2349   Max.   :2373   Max.   :2444  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      442        48       138       105       126        25 
+Trial 31 done!
+******************
+***************
+Doing now trial 32 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1336   Min.   :1591   Min.   :1617   Min.   :1532  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2087   3rd Qu.:2095  
+ Max.   :2492   Max.   :2395   Max.   :2357   Max.   :2425  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      428        74       131       101        98        24 
+Trial 32 done!
+******************
+***************
+Doing now trial 33 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1515   Min.   :1647   Min.   :1674   Min.   :1615  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2455   Max.   :2341   Max.   :2349   Max.   :2378  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      418        58       121        92       122        25 
+Trial 33 done!
+******************
+***************
+Doing now trial 34 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1445   Min.   :1558   Min.   :1598   Min.   :1567  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2581   Max.   :2428   Max.   :2365   Max.   :2408  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      433        68       122       117       106        20 
+Trial 34 done!
+******************
+***************
+Doing now trial 35 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1506   Min.   :1614   Min.   :1678   Min.   :1571  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2094  
+ Max.   :2460   Max.   :2372   Max.   :2370   Max.   :2423  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      417        73        80       117       117        30 
+Trial 35 done!
+******************
+***************
+Doing now trial 36 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1521   Min.   :1682   Min.   :1692   Min.   :1662  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2004  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2094  
+ Max.   :2495   Max.   :2332   Max.   :2355   Max.   :2453  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      391        64        71       117       114        25 
+Trial 36 done!
+******************
+***************
+Doing now trial 37 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1468   Min.   :1640   Min.   :1605   Min.   :1638  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2486   Max.   :2355   Max.   :2376   Max.   :2402  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      439        63       117       120       115        24 
+Trial 37 done!
+******************
+***************
+Doing now trial 38 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1478   Min.   :1677   Min.   :1712   Min.   :1649  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2488   Max.   :2355   Max.   :2396   Max.   :2430  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      432        66       112       111       114        29 
+Trial 38 done!
+******************
+***************
+Doing now trial 39 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1489   Min.   :1636   Min.   :1657   Min.   :1632  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2465   Max.   :2347   Max.   :2352   Max.   :2427  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      369        80        83        81       100        25 
+Trial 39 done!
+******************
+***************
+Doing now trial 40 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1500   Min.   :1635   Min.   :1679   Min.   :1604  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2433   Max.   :2348   Max.   :2352   Max.   :2395  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      432        72        93       115       131        21 
+Trial 40 done!
+******************
+***************
+Doing now trial 41 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1507   Min.   :1704   Min.   :1692   Min.   :1631  
+ 1st Qu.:2014   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2508   Max.   :2335   Max.   :2356   Max.   :2401  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      395        64       109       100        99        23 
+Trial 41 done!
+******************
+***************
+Doing now trial 42 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1466   Min.   :1615   Min.   :1701   Min.   :1592  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2494   Max.   :2401   Max.   :2337   Max.   :2407  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      424        89       109        92       113        21 
+Trial 42 done!
+******************
+***************
+Doing now trial 43 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1496   Min.   :1675   Min.   :1639   Min.   :1629  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2470   Max.   :2331   Max.   :2378   Max.   :2463  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      402        91        97        75       119        20 
+Trial 43 done!
+******************
+***************
+Doing now trial 44 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1400   Min.   :1617   Min.   :1646   Min.   :1505  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2507   Max.   :2367   Max.   :2337   Max.   :2405  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      421        86       116        92       108        19 
+Trial 44 done!
+******************
+***************
+Doing now trial 45 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1493   Min.   :1698   Min.   :1660   Min.   :1642  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2451   Max.   :2357   Max.   :2337   Max.   :2413  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      395        75        67       110       117        26 
+Trial 45 done!
+******************
+***************
+Doing now trial 46 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1493   Min.   :1681   Min.   :1660   Min.   :1610  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2004  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2094  
+ Max.   :2449   Max.   :2369   Max.   :2345   Max.   :2452  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      368        84        78        59       121        26 
+Trial 46 done!
+******************
+***************
+Doing now trial 47 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1441   Min.   :1653   Min.   :1653   Min.   :1503  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2505   Max.   :2396   Max.   :2388   Max.   :2437  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      414        86        71       104       130        23 
+Trial 47 done!
+******************
+***************
+Doing now trial 48 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1495   Min.   :1651   Min.   :1683   Min.   :1638  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2004  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2094  
+ Max.   :2457   Max.   :2339   Max.   :2346   Max.   :2399  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      331        71        59        92        93        16 
+Trial 48 done!
+******************
+***************
+Doing now trial 49 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1464   Min.   :1692   Min.   :1679   Min.   :1606  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2004  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2094  
+ Max.   :2459   Max.   :2366   Max.   :2357   Max.   :2397  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      371        65        72       103       103        28 
+Trial 49 done!
+******************
+***************
+Doing now trial 50 of Cis-3-Hexen-1-ol (10^-0)
+The five number summary is:
+      ch09           ch11           ch13           ch16     
+ Min.   :1504   Min.   :1677   Min.   :1658   Min.   :1609  
+ 1st Qu.:2013   1st Qu.:2016   1st Qu.:2013   1st Qu.:2003  
+ Median :2050   Median :2050   Median :2050   Median :2050  
+ Mean   :2049   Mean   :2049   Mean   :2049   Mean   :2049  
+ 3rd Qu.:2085   3rd Qu.:2083   3rd Qu.:2086   3rd Qu.:2095  
+ Max.   :2463   Max.   :2358   Max.   :2358   Max.   :2398  
+
+Global counts at classification's end:
+    Total Cluster 1 Cluster 2 Cluster 3 Cluster 4         ? 
+      412        64       104        94       128        22 
+Trial 50 done!
+******************
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgfe0435a" class="outline-3">
+<h3 id="orgfe0435a"><span class="section-number-3">4.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org5f43e90">counts_evolution(a_Cis_3_Hexen_1_ol_0_tetC)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/Cis_3_Hexen_1_ol_0-count-evolution-tetC.png" alt="Cis_3_Hexen_1_ol_0-count-evolution-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 10: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 50 trials with "pure" <code>Cis_3_Hexen_1_ol</code> for tetrode C.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgb2b3b6f">waveform_evolution(a_Cis_3_Hexen_1_ol_0_tetC,threshold_factor)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/Cis_3_Hexen_1_ol_0-waveform-evolution-tetC.png" alt="Cis_3_Hexen_1_ol_0-waveform-evolution-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 11: </span>Evolution of the templates of each unit during the 50 trials with "pure" <code>Cis_3_Hexen_1_ol</code> for tetrode C.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org17bb41b">cp_isi_raster(a_Cis_3_Hexen_1_ol_0_tetC)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/Cis_3_Hexen_1_ol_0-CP-and-ISI-dist-tetC.png" alt="Cis_3_Hexen_1_ol_0-CP-and-ISI-dist-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 12: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for "pure" <code>Cis_3_Hexen_1_ol</code>.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1515e99" class="outline-3">
+<h3 id="org1515e99"><span class="section-number-3">4.3</span> Save results</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org13c6866">save(a_Cis_3_Hexen_1_ol_0_tetC,
+     file=paste0("tetC_analysis/tetC_","Cis_3_Hexen_1_ol_0","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgf1cc2ee">for (c_idx in 1:length(a_Cis_3_Hexen_1_ol_0_tetC$spike_trains))
+    cat(a_Cis_3_Hexen_1_ol_0_tetC$spike_trains[[c_idx]],
+        file=paste0("locust20000616_spike_trains/locust20000616_Cis_3_Hexen_1_ol_0_tetC_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org26ac843" class="outline-2">
+<h2 id="org26ac843"><span class="section-number-2">5</span> The second minute of spontaneous activity recording</h2>
+<div class="outline-text-2" id="text-5">
+</div><div id="outline-container-org3b8b7fa" class="outline-3">
+<h3 id="org3b8b7fa"><span class="section-number-3">5.1</span> Another taylored <code>sort_many_trials</code></h3>
+<div class="outline-text-3" id="text-5-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org894ae54">smt2 = function(stim_name,
+                centers,
+                counts) {
+    sort_many_trials(inter_trial_time=60*15000,
+                     get_data_fct=function(i,s) {
+                         prefix=paste0("/",s, "/")
+                         rbind(cbind(h5read("locust20000616.hdf5",paste0(prefix,"ch09")),
+                                     h5read("locust20000616.hdf5",paste0(prefix,"ch11")),
+                                     h5read("locust20000616.hdf5",paste0(prefix,"ch13")),
+                                     h5read("locust20000616.hdf5",paste0(prefix,"ch16"))))
+                     },
+                     stim_name=stim_name,
+                     trial_nbs=1,
+                     centers=centers,
+                     counts=counts,
+                     all_at_once_call_list=list(thres=threshold_factor*c(1,1,1,1), 
+                                                filter_length_1=filter_length, filter_length=filter_length, 
+                                                minimalDist_1=15, minimalDist=15, 
+                                                before=c_before, after=c_after, 
+                                                detection_cycle=c(0,0), verbose=1),
+                     layout_matrix=matrix(c(1,1:5),nr=3),new_weight_in_update=0.01
+                     )
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org96230e9" class="outline-3">
+<h3 id="org96230e9"><span class="section-number-3">5.2</span> Do the job</h3>
+<div class="outline-text-3" id="text-5-2">
+<div class="org-src-container">
+<pre class="src src-R" id="org7f96bc6">a_Spontaenous_2_tetC=smt2(stim_name="Spontaneous second",
+                          centers=a_Cis_3_Hexen_1_ol_0_tetC$centers,
+                          counts=a_Cis_3_Hexen_1_ol_0_tetC$counts)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb4baae0" class="outline-3">
+<h3 id="orgb4baae0"><span class="section-number-3">5.3</span> Save results</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org8cad77a">save(a_Spontaenous_2_tetC,
+     file=paste0("tetC_analysis/tetC_","Spontaneous_2","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgacb3095">for (c_idx in 1:length(a_Spontaenous_2_tetC$spike_trains))
+    cat(a_Spontaenous_2_tetC$spike_trains[[c_idx]],
+        file=paste0("locust20000616_spike_trains/locust20000616_Spontaneous_2_tetC_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-org5f2f232" class="outline-2">
+<h2 id="org5f2f232"><span class="section-number-2">6</span> The third minute of spontaneous activity recording</h2>
+<div class="outline-text-2" id="text-6">
+</div><div id="outline-container-org97e04b8" class="outline-3">
+<h3 id="org97e04b8"><span class="section-number-3">6.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-6-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org1b19c01">a_Spontaneous_3_tetC=smt2(stim_name="Spontaneous third",
+                          centers=a_Spontaenous_2_tetC$centers,
+                          counts=a_Spontaenous_2_tetC$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org647b619" class="outline-3">
+<h3 id="org647b619"><span class="section-number-3">6.2</span> Save results</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org32fc192">save(a_Spontaneous_3_tetC,
+     file=paste0("tetC_analysis/tetC_","Spontaneous_3","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org7999939">for (c_idx in 1:length(a_Spontaneous_3_tetC$spike_trains))
+    cat(a_Spontaneous_3_tetC$spike_trains[[c_idx]],
+        file=paste0("locust20000616_spike_trains/locust20000616_Spontaneous_3_tetC_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-org9c76003" class="outline-2">
+<h2 id="org9c76003"><span class="section-number-2">7</span> 30 remaining trials with <code>Cis-3-Hexen-1-ol</code> diluted 100 times</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+As mentioned in the <code>LabBook</code>, there are only 30 remaining trials among 50.
+</p>
+</div>
+
+<div id="outline-container-org2311982" class="outline-3">
+<h3 id="org2311982"><span class="section-number-3">7.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+We only write the command in the <code>html</code> file, not its output, the diagnostic plots in the next subsection should be enough to judge if everything went fine or not.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org21b8d1e">a_Cis_3_Hexen_1_ol_2_tetC=smt(stim_name="Cis-3-Hexen-1-ol (10^-2)",
+                              trial_nbs=1:30,
+                              centers=a_Spontaneous_3_tetC$centers,
+                              counts=a_Spontaneous_3_tetC$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org3cf99b0" class="outline-3">
+<h3 id="org3cf99b0"><span class="section-number-3">7.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+The counts evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org935a0af">counts_evolution(a_Cis_3_Hexen_1_ol_2_tetC)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/Cis_3_Hexen_1_ol_2-count-evolution-tetC.png" alt="Cis_3_Hexen_1_ol_2-count-evolution-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 13: </span>Evolution of the number of events attributed to each unit (1 to 4) or unclassified ("?") during the 30 remaining trials <code>Cis_3_Hexen_1_ol</code> diluted 100 times for tetrode C.</p>
+</div>
+
+
+<p>
+The waveform evolution is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgab7bc04">waveform_evolution(a_Cis_3_Hexen_1_ol_2_tetC,threshold_factor)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/Cis_3_Hexen_1_ol_2-waveform-evolution-tetC.png" alt="Cis_3_Hexen_1_ol_2-waveform-evolution-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 14: </span>Evolution of the templates of each unit during the 30 remaining trials <code>Cis_3_Hexen_1_ol</code> diluted 100 times for tetrode C.</p>
+</div>
+
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org3bc448f">cp_isi_raster(a_Cis_3_Hexen_1_ol_2_tetC)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/Cis_3_Hexen_1_ol_2-CP-and-ISI-dist-tetC.png" alt="Cis_3_Hexen_1_ol_2-CP-and-ISI-dist-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 15: </span>Observed counting processes, empirical inter spike interval distributions and raster plots for the 30 remaining trials <code>Cis_3_Hexen_1_ol</code> diluted 100 times for tetrode C.</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org47d3d22" class="outline-3">
+<h3 id="org47d3d22"><span class="section-number-3">7.3</span> Save results</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org144e031">save(a_Cis_3_Hexen_1_ol_2_tetC,
+     file=paste0("tetC_analysis/tetC_","Cis_3_Hexen_1_ol_2","_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgc06a4d2">for (c_idx in 1:length(a_Cis_3_Hexen_1_ol_2_tetC$spike_trains))
+    cat(a_Cis_3_Hexen_1_ol_2_tetC$spike_trains[[c_idx]],
+        file=paste0("locust20000616_spike_trains/locust20000616_Cis_3_Hexen_1_ol_2_tetC_u",c_idx,".txt"),sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org06b184e" class="outline-2">
+<h2 id="org06b184e"><span class="section-number-2">8</span> 50 trials with <code>Cis-3-hexen-1-ol</code> diluted 10 times</h2>
+<div class="outline-text-2" id="text-8">
+</div><div id="outline-container-orge8d413c" class="outline-3">
+<h3 id="orge8d413c"><span class="section-number-3">8.1</span> Do the job</h3>
+<div class="outline-text-3" id="text-8-1">
+<div class="org-src-container">
+<pre class="src src-R" id="org2b40095">stim_name = "Cis-3-Hexen-1-ol (10^-1)"
+a_Cis_3_Hexen_1_ol_1_tetC=smt(stim_name=stim_name,
+                              trial_nbs=1:50,
+                              centers=a_Cis_3_Hexen_1_ol_2_tetC$centers,
+                              counts=a_Cis_3_Hexen_1_ol_2_tetC$counts)
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org53f6e69" class="outline-3">
+<h3 id="org53f6e69"><span class="section-number-3">8.2</span> Diagnostic plots</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+The counts evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/Cis_3_Hexen_1_ol_1-count-evolution-tetC.png" alt="Cis_3_Hexen_1_ol_1-count-evolution-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 16: </span>Evolution of the number of events attributed to each unit (1 to 3) or unclassified ("?") during the 50 trials of <code>Cis-3-Hexen-1-ol</code> diluted 10 times for tetrode C.</p>
+</div>
+
+<p>
+The waveform evolution is:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/Cis_3_Hexen_1_ol_1-waveform-evolution-tetC.png" alt="Cis_3_Hexen_1_ol_1-waveform-evolution-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 17: </span>Evolution of the templates of each unit during the 50 trials of <code>Cis-3-Hexen-1-ol</code> diluted 10 times for tetrode C.</p>
+</div>
+
+<p>
+The observed counting processes, inter spike intervals densities and raster plots are:
+</p>
+
+
+<div class="figure">
+<p><img src="locust20000616_tetD_fig/Cis_3_Hexen_1_ol_1-CP-and-ISI-dist-tetC.png" alt="Cis_3_Hexen_1_ol_1-CP-and-ISI-dist-tetC.png" />
+</p>
+<p><span class="figure-number">Figure 18: </span>Observed counting processes, empirical inter spike interval distributions and raster plots during the 60 trials of <code>Cis_3_Hexen_1_ol_1</code> for tetrodeD.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1894070" class="outline-3">
+<h3 id="org1894070"><span class="section-number-3">8.3</span> Save results</h3>
+<div class="outline-text-3" id="text-8-3">
+<p>
+Before analyzing the next set of trials we save the output of <code>sort_many_trials</code> to disk with:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="org56f3f76">save(a_Cis_3_Hexen_1_ol_1_tetC,
+     file=paste0("tetC_analysis/tetC_",stim_name,"_summary_obj.rda"))
+</pre>
+</div>
+
+<p>
+We write to disk the spike trains in text mode:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R" id="orgfd670b8">for (c_idx in 1:length(a_Cis_3_Hexen_1_ol_1_tetC$spike_trains))
+    if (!is.null(a_Cis_3_Hexen_1_ol_1_tetC$spike_trains[[c_idx]]))
+        cat(a_Cis_3_Hexen_1_ol_1_tetC$spike_trains[[c_idx]],
+            file=paste0("locust20000616_spike_trains/locust20000616_Cis_3_Hexen_1_ol_1_tetC_u",c_idx,".txt"),
+            sep="\n")
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Christophe Pouzat</p>
+<p class="date">Created: 2016-12-14 mer. 13:15</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
