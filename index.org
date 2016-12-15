@@ -24,7 +24,7 @@ There is one directory per experiment on the dedicated [[https://github.com/chri
 - A directory named =locustXXX_spike_trains= that contains the individual spike trains.
 - A directory named =locustXXX_tetY_fig= that contains the figures of the =html= file.
 
-The spike trains in directory =locustXXX_spike_trains= are stored in ASCII format with one spike time (in seconds) per line. They are named =locustXXX_StimID_tetY_uZ.txt=, where =XXX= and =Y= are their previous meaning, =StimID= is a stimulation identifier (more precisely a =group= name in the =HDF5= data file) and =Z= is the unit number. When several trials, like say 25 stimulation with citronelal, were recorded, the successive trials will be found one after the other and time 0 is defined as the start of the acquisition of the first trial.
+The spike trains in directory =locustXXX_spike_trains= are stored in ASCII format with one spike time (in seconds) per line. They are named =locustXXX_StimID_tetY_uZ.txt=, where =XXX= and =Y= are their previous meaning, =StimID= is a stimulation identifier (more precisely a =group= name in the =HDF5= data file) and =Z= is the unit number. When several trials were recorded, like say 25 stimulation with citronellal, the successive trials will be found one after the other and time 0 is defined as the start of the acquisition of the first trial.
 
 * The code
 
@@ -51,6 +51,8 @@ An experiment were two tetrodes with reasonnably good signals were recorded: [[f
 
 An experiment were only [[file:Locust_Analysis_with_R/locust20000613/Sorting_20000613_tetD.html][tetrode D]] was giving good data. The analysis of this experiment is interesting because between two sets of trials (between stimulation with pure and 100 times diluted Cis-3-Hexen-1-ol), one waveform drifts so much that the old template does not recognize it anymore. This shows up in the diagnostic plots and the model has to be adjusted (by hand). Overall, 4 well isolated units are followed.
  
+** locust20000616
+An experiment one can forget, [[file:Locust_Analysis_with_R/locust20000616/Sorting_20000616_tetC.html][tetrode C]] has 4 units, two of them are well isolated and the odor responses are not very stable.
 ** locust20010214
 
 This is probably the best experiment contained in the zenodo datasets collection. The [[file:Locust_Analysis_with_R/locust20010214/Sorting_20010214_tetB.html][details of the analysis of tetrode B]] are available. 10 units are identified, but only the first seven are well isolated. There is both spontaneous activity and responses to many different odors.
